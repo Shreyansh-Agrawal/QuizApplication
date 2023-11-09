@@ -2,25 +2,20 @@
 
 import logging
 import sqlite3
+import time
 from typing import List, Tuple
 
 from config.display_menu import DisplayMessage, Headers
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from controllers.helpers import quiz_helper as QuizHelper
+from controllers.helpers import start_quiz_helper as StartQuizHelper
 from database.database_access import DatabaseAccess as DAO
 from models.quiz import Category
 from utils import validations
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
 
 logger = logging.getLogger(__name__)
-
-
-def get_all_categories() -> List[Tuple]:
-    '''Return all Quiz Categories'''
-
-    data = DAO.read_from_database(Queries.GET_ALL_CATEGORIES)
-    return data
 
 
 def get_all_questions() -> List[Tuple]:
@@ -33,7 +28,7 @@ def get_all_questions() -> List[Tuple]:
 def get_questions_by_category() -> List[Tuple]:
     '''Return quiz questions by category'''
 
-    categories = get_all_categories()
+    categories = QuizHelper.get_all_categories()
 
     logger.debug('Get Questions by Category')
 
@@ -42,6 +37,8 @@ def get_questions_by_category() -> List[Tuple]:
         regex_pattern=RegexPattern.NUMERIC_PATTERN,
         error_msg=DisplayMessage.INVALID_CHOICE
     )
+    
+    user_choice = int(user_choice)
     if user_choice > len(categories) or user_choice-1 < 0:
         raise DataNotFoundError('No such Category! Please choose from above!!')
 
@@ -50,13 +47,6 @@ def get_questions_by_category() -> List[Tuple]:
     print(DisplayMessage.DISPLAY_QUES_IN_A_CATEGORY_MSG.format(name=category_name))
 
     data = DAO.read_from_database(Queries.GET_QUESTIONS_BY_CATEGORY, (category_name, ))
-    return data
-
-
-def get_random_questions_by_category(category: str) -> List[Tuple]:
-    '''Return random questions by category'''
-
-    data = DAO.read_from_database(Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY, (category, ))
     return data
 
 
@@ -83,7 +73,7 @@ def create_category(username: str) -> None:
         prompt='Enter New Category Name: ',
         regex_pattern=RegexPattern.NAME_PATTERN,
         error_msg=DisplayMessage.INVALID_TEXT.format(Headers.NAME)
-    )
+    ).title()
 
     category = Category(category_data)
 
@@ -99,35 +89,7 @@ def create_category(username: str) -> None:
 def create_question(username: str) -> None:
     '''Add Questions in a Category'''
 
-    categories = get_all_categories()
-
-    logger.debug('Creating Question')
-    print(DisplayMessage.CREATE_QUES_MSG)
-
-    user_choice = validations.regex_validator(
-        prompt='Choose a Category: ',
-        regex_pattern=RegexPattern.NUMERIC_PATTERN,
-        error_msg=DisplayMessage.INVALID_CHOICE
-    )
-    if user_choice > len(categories) or user_choice-1 < 0:
-        raise DataNotFoundError('No such Category! Please choose from above!!')
-
-    category_name = categories[user_choice-1][0]
-
-    category_id = DAO.read_from_database(Queries.GET_CATEGORY_ID_BY_NAME, (category_name, ))
-    admin_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
-    admin_id = admin_data[0][0]
-
-    question_data = {}
-    question_data['category_id'] = category_id[0][0]
-    question_data['admin_id'] = admin_id
-    question_data['admin_username'] = username
-    question_data['question_text'] = validations.regex_validator(
-        prompt='Enter Question Text: ',
-        regex_pattern=RegexPattern.QUES_TEXT_PATTERN,
-        error_msg=DisplayMessage.INVALID_TEXT.format(Headers.QUES)
-    )
-
+    question_data = QuizHelper.get_question_data(username)
     question = QuizHelper.create_option(question_data)
 
     try:
@@ -142,7 +104,7 @@ def create_question(username: str) -> None:
 def update_category_by_name() -> None:
     '''Update a category by category name'''
 
-    categories = get_all_categories()
+    categories = QuizHelper.get_all_categories()
 
     logger.debug('Updating a Category')
     print(DisplayMessage.UPDATE_CATEGORY_MSG)
@@ -153,6 +115,7 @@ def update_category_by_name() -> None:
         error_msg=DisplayMessage.INVALID_CHOICE
     )
 
+    user_choice = int(user_choice)
     if user_choice > len(categories) or user_choice-1 < 0:
         raise DataNotFoundError('No such Category! Please choose from above!!')
 
@@ -161,7 +124,7 @@ def update_category_by_name() -> None:
         prompt='Enter updated category name: ',
         regex_pattern=RegexPattern.NAME_PATTERN,
         error_msg=DisplayMessage.INVALID_TEXT.format(Headers.NAME)
-    )
+    ).title()
 
     DAO.write_to_database(Queries.UPDATE_CATEGORY_BY_NAME, (new_category_name, category_name))
 
@@ -172,7 +135,7 @@ def update_category_by_name() -> None:
 def delete_category_by_name() -> None:
     '''Delete a category by category name'''
 
-    categories = get_all_categories()
+    categories = QuizHelper.get_all_categories()
 
     logger.debug('Deleting a Category')
     print(DisplayMessage.DELETE_CATEGORY_MSG)
@@ -183,6 +146,7 @@ def delete_category_by_name() -> None:
         error_msg=DisplayMessage.INVALID_CHOICE
     )
 
+    user_choice = int(user_choice)
     if user_choice > len(categories) or user_choice-1 < 0:
         raise DataNotFoundError('No such Category! Please choose from above!!')
 
@@ -202,22 +166,37 @@ def delete_category_by_name() -> None:
     print(DisplayMessage.DELETE_CATEGORY_SUCCESS_MSG.format(name=category_name))
 
 
-def start_quiz(category: str, username: str) -> None:
+def start_quiz(username: str, category: str = None) -> None:
     '''Start a New Quiz'''
 
     logger.debug('Stating Quiz for: %s', username)
-    data = get_random_questions_by_category(category)
-    if len(data) < 10:
-        raise DataNotFoundError('Not enough questions! Please try some other category...')
+    if not category:
+        data = StartQuizHelper.get_random_questions()
+    else:
+        data = StartQuizHelper.get_random_questions_by_category(category)
 
+    if len(data) < 10:
+        raise DataNotFoundError('Not enough questions!')
+
+    end_time = time.time() + 5*60
     score = 0
     # Display question, take user's response and calculate score one by one
     for question_no, question_data in enumerate(data, 1):
         question_id, question_text, question_type, correct_answer = question_data
         options_data = DAO.read_from_database(Queries.GET_OPTIONS_FOR_MCQ, (question_id, ))
-        QuizHelper.display_question(question_no, question_text, question_type, options_data)
 
-        user_answer = QuizHelper.get_user_response(question_type)
+        remaining_time = end_time - time.time()
+        if remaining_time <= 0:
+            print('\nTime\'s up!')
+            break
+
+        mins = int(remaining_time//60)
+        seconds = int(remaining_time % 60)
+        print(f'\nTime remaining: {mins}:{seconds} mins')
+
+        StartQuizHelper.display_question(question_no, question_text, question_type, options_data)
+
+        user_answer = StartQuizHelper.get_user_response(question_type)
 
         if question_type.lower() == 'mcq':
             user_answer = options_data[user_answer-1][0]
@@ -226,5 +205,5 @@ def start_quiz(category: str, username: str) -> None:
             score += 10
 
     print(DisplayMessage.DISPLAY_SCORE_MSG.format(score=score))
-    QuizHelper.save_quiz_score(username, score)
+    StartQuizHelper.save_quiz_score(username, score)
     logger.debug('Quiz Completed for: %s', username)

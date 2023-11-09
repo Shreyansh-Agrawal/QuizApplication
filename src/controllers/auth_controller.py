@@ -61,7 +61,7 @@ def signup() -> str:
         prompt='Enter your name: ',
         regex_pattern=RegexPattern.NAME_PATTERN,
         error_msg=DisplayMessage.INVALID_TEXT.format(Headers.NAME)
-    )
+    ).title()
     user_data['email'] = validations.regex_validator(
         prompt='Enter your email: ',
         regex_pattern=RegexPattern.EMAIL_PATTERN,

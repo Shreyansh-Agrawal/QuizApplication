@@ -43,7 +43,7 @@ def create_admin() -> None:
         prompt='Enter admin name: ',
         regex_pattern=RegexPattern.NAME_PATTERN,
         error_msg=DisplayMessage.INVALID_TEXT.format(Headers.NAME)
-    )
+    ).title()
     admin_data['email'] = validations.regex_validator(
         prompt='Enter admin email: ',
         regex_pattern=RegexPattern.EMAIL_PATTERN,

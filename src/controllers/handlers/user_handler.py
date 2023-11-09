@@ -50,7 +50,7 @@ def handle_create_admin() -> None:
     try:
         UserController.create_admin()
     except LoginError as e:
-        logger.debug(e)
+        logger.warning(e)
         print(e)
 
 
@@ -60,5 +60,5 @@ def handle_delete_user_by_email(role: str) -> None:
     try:
         UserController.delete_user_by_email(role)
     except DataNotFoundError as e:
-        logger.debug(e)
+        logger.warning(e)
         print(e)

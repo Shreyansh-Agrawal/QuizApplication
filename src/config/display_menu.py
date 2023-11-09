@@ -23,7 +23,7 @@ class DisplayMessage:
     DELETE_CATEGORY_SUCCESS_MSG = '\nCategory: {name} deleted!\n'
     DISPLAY_SCORE_MSG = '\nYou Scored: {score}'
     TF_OPTION_MSG = '   1. True\n   2. False'
-    MCQ_WRONG_OPTION_MSG = 'Please enter a number from 1 to 4: '
+    MCQ_WRONG_OPTION_MSG = 'Please enter a number from 1 to 4 ... '
     TF_WRONG_OPTION_MSG = 'Please enter either 1 or 2...'
     CREATE_ADMIN_MSG = '\n-----Create a new Admin-----\n'
     CREATE_ADMIN_SUCCESS_MSG = '\nAdmin created successfully!\n'
@@ -151,11 +151,22 @@ Enter your choice: '''
 
 
     QUESTION_TYPE_PROMPTS = '''
+Enter -
         1> Multiple Choice Question Type
         2> True or False Type
         3> One Word Type
 
 Select Question Type: '''
+
+
+    SELECT_MODE_PROMPTS = '''
+Enter -
+        1> Simple (Choose a Category)
+        2> Random (Questions Across All Categories)
+
+        Press q to Go Back
+
+Select Mode: '''
 
     ATTEMPT_LIMIT = 3
 
@@ -167,7 +178,7 @@ class Headers:
     NAME='Name'
     EMAIL='Email'
     REG_DATE='Registration Date'
-    CATEGORY='Categories'
+    CATEGORY='Category'
     QUES='Question'
     QUES_TYPE='Question Type'
     ANS='Answer'

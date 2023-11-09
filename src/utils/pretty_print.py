@@ -11,7 +11,7 @@ from config.display_menu import DisplayMessage
 logger = logging.getLogger(__name__)
 
 
-def pretty_print(data: List[Tuple], headers: List) -> None:
+def pretty_print(data: List[Tuple], headers: Tuple) -> None:
     '''Method to pretty print using tabulate'''
 
     row_id = list(range(1, len(data) + 1))

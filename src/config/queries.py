@@ -97,6 +97,13 @@ class Queries:
         INNER JOIN options ON questions.question_id = options.question_id
         WHERE options.isCorrect = 1 AND category_name = ?
     '''
+    GET_RANDOM_QUESTIONS = '''
+        SELECT questions.question_id, question_text, question_type, option_text
+        FROM questions
+        INNER JOIN options ON questions.question_id = options.question_id
+        WHERE options.isCorrect = 1
+        ORDER BY RANDOM() LIMIT 10
+    '''
     GET_RANDOM_QUESTIONS_BY_CATEGORY = '''
         SELECT questions.question_id, question_text, question_type, option_text
         FROM questions 

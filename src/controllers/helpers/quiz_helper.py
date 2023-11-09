@@ -1,18 +1,60 @@
-'''Helper functions for Starting Quiz'''
+'''Helper functions for Managing Quiz'''
 
 import logging
-from datetime import datetime, timezone
 from typing import Dict, List, Tuple
 
-from config.display_menu import Prompts
-from config.display_menu import DisplayMessage, Headers
+from config.display_menu import DisplayMessage, Headers, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from database.database_access import DatabaseAccess as DAO
 from models.quiz import Option, Question
 from utils import validations
+from utils.custom_error import DataNotFoundError
 
 logger = logging.getLogger(__name__)
+
+
+def get_all_categories() -> List[Tuple]:
+    '''Return all Quiz Categories'''
+
+    data = DAO.read_from_database(Queries.GET_ALL_CATEGORIES)
+    return data
+
+
+def get_question_data(username: str) -> Dict:
+    '''Takes input of question details'''
+    categories = get_all_categories()
+
+    logger.debug('Creating Question')
+    print(DisplayMessage.CREATE_QUES_MSG)
+
+    user_choice = validations.regex_validator(
+        prompt='Choose a Category: ',
+        regex_pattern=RegexPattern.NUMERIC_PATTERN,
+        error_msg=DisplayMessage.INVALID_CHOICE
+    )
+
+    user_choice = int(user_choice)
+    if user_choice > len(categories) or user_choice-1 < 0:
+        raise DataNotFoundError('No such Category! Please choose from above!!')
+
+    category_name = categories[user_choice-1][0]
+
+    category_id = DAO.read_from_database(Queries.GET_CATEGORY_ID_BY_NAME, (category_name, ))
+    admin_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
+    admin_id = admin_data[0][0]
+
+    question_data = {}
+    question_data['category_id'] = category_id[0][0]
+    question_data['admin_id'] = admin_id
+    question_data['admin_username'] = username
+    question_data['question_text'] = validations.regex_validator(
+        prompt='Enter Question Text: ',
+        regex_pattern=RegexPattern.QUES_TEXT_PATTERN,
+        error_msg=DisplayMessage.INVALID_TEXT.format(Headers.QUES)
+    ).title()
+    
+    return question_data
 
 
 def create_option(question_data: Dict) -> Question:
@@ -44,7 +86,7 @@ def create_option(question_data: Dict) -> Question:
                 prompt='Enter Answer: ',
                 regex_pattern=RegexPattern.OPTION_TEXT_PATTERN,
                 error_msg=DisplayMessage.INVALID_TEXT.format(Headers.OPTION)
-            )
+            ).title()
             option_data['is_correct'] = 1
             option = Option(option_data)
             question.add_option(option)
@@ -55,7 +97,7 @@ def create_option(question_data: Dict) -> Question:
                     prompt='Enter Other Option: ',
                     regex_pattern=RegexPattern.OPTION_TEXT_PATTERN,
                     error_msg=DisplayMessage.INVALID_TEXT.format(Headers.OPTION)
-                )
+                ).title()
                 option_data['is_correct'] = 0
                 option = Option(option_data)
                 question.add_option(option)
@@ -66,7 +108,7 @@ def create_option(question_data: Dict) -> Question:
                 prompt='Enter Answer: ',
                 regex_pattern=RegexPattern.OPTION_TEXT_PATTERN,
                 error_msg=DisplayMessage.INVALID_TEXT.format(Headers.OPTION)
-            )
+            ).title()
             option_data['is_correct'] = 1
 
             option = Option(option_data)
@@ -76,71 +118,3 @@ def create_option(question_data: Dict) -> Question:
             return None
 
     return question
-
-
-def display_question(question_no: int, question: str, question_type: str, options_data: List[Tuple]) -> None:
-    '''Display question and its options to user'''
-
-    print(f'\n{question_no}) {question}')
-
-    if question_type.lower() == 'mcq':
-        options = [option[0] for option in options_data]
-
-        for count, option in enumerate(options, 1):
-            print(f'    {count}. {option}')
-
-    elif question_type.lower() == 't/f':
-        print(DisplayMessage.TF_OPTION_MSG)
-
-
-def get_user_response(question_type: str) -> str:
-    '''Gets user response according to question type'''
-
-    if question_type.lower() == 'mcq':
-        while True:
-            user_choice = validations.regex_validator(
-                prompt='Choose an option: ',
-                regex_pattern=RegexPattern.NUMERIC_PATTERN,
-                error_msg=DisplayMessage.INVALID_CHOICE
-            )
-            if user_choice not in range(1, 5):
-                print(DisplayMessage.MCQ_WRONG_OPTION_MSG)
-                continue
-            return user_choice
-
-    elif question_type.lower() == 't/f':
-        while True:
-            user_choice = validations.regex_validator(
-                prompt='Choose an option: ',
-                regex_pattern=RegexPattern.NUMERIC_PATTERN,
-                error_msg=DisplayMessage.INVALID_CHOICE
-            )
-            match user_choice:
-                case 1:
-                    return 'true'
-                case 2:
-                    return 'false'
-                case _:
-                    print(DisplayMessage.TF_WRONG_OPTION_MSG)
-    else:
-        user_answer = validations.regex_validator(
-            prompt='-> Enter your answer: ',
-            regex_pattern=RegexPattern.OPTION_TEXT_PATTERN,
-            error_msg=DisplayMessage.INVALID_TEXT.format(Headers.OPTION)
-        )
-        return user_answer
-
-
-def save_quiz_score(username: str, score: int) -> None:
-    '''Saving User's Quiz Score'''
-
-    logger.debug('Saving score for: %s', username)
-    user_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
-    user_id = user_data[0][0]
-    score_id = validations.validate_id(entity='score')
-
-    time = datetime.now(timezone.utc) # current utc time
-    timestamp = time.strftime('%Y-%m-%d %H:%M:%S') # yyyy-mm-dd
-
-    DAO.write_to_database(Queries.INSERT_USER_QUIZ_SCORE, (score_id, user_id, score, timestamp))
-    logger.debug('Score saved for: %s', username)

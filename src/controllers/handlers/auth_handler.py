@@ -48,7 +48,7 @@ def handle_signup() -> str:
         username = Authenticate.signup()
     except LoginError as e:
         print(e)
-        logger.debug(e)
+        logger.warning(e)
         return None
 
     logger.debug('SignUp Successful')
