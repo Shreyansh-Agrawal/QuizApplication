@@ -173,7 +173,7 @@ Select Mode: '''
 
 class Headers:
     '''Contains all the headings as class variables'''
-    
+
     USERNAME='Username'
     NAME='Name'
     EMAIL='Email'

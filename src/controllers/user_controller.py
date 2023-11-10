@@ -1,10 +1,10 @@
 '''Controllers for Operations related to Users: SuperAdmin, Admin, User'''
 
 import logging
+import random
 import sqlite3
+import string
 from typing import List, Tuple
-
-from password_generator import PasswordGenerator
 
 from config.display_menu import DisplayMessage, Headers
 from config.queries import Queries
@@ -54,9 +54,8 @@ def create_admin() -> None:
         regex_pattern=RegexPattern.USERNAME_PATTERN,
         error_msg=DisplayMessage.INVALID_TEXT.format(Headers.USERNAME)
     )
-    pwo = PasswordGenerator()
-    pwo.excludeschars = "!@#$%^&*()./?'"
-    password = pwo.non_duplicate_password(7)
+    characters = string.ascii_letters + string.digits + '@#$&'
+    password = ''.join(random.choice(characters) for _ in range(6))
     admin_data['password'] = password
 
     admin = Admin(admin_data)

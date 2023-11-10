@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e67bc31628a0f7e772081b667833ab1821bcdb099982b9c5a0d0d1174e0c8e3e"
+            "sha256": "08d7a243ab12cab4e6cc74edb2f92b64e5daa587d2c4ef7afcc97ab250551cf2"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -98,14 +98,6 @@
             "markers": "python_version >= '3.8'",
             "version": "==1.0.0"
         },
-        "random-password-generator": {
-            "hashes": [
-                "sha256:d8a8e2c0420fdd2c096bc7948f62701cb36761aea42e59c9a504d02f0e359d43",
-                "sha256:da9ce21a9b6a99dfda940596fe417a55470a2e0343fae56dea785f431780d8a9"
-            ],
-            "index": "pypi",
-            "version": "==2.2.0"
-        },
         "shortuuid": {
             "hashes": [
                 "sha256:27ea8f28b1bd0bf8f15057a3ece57275d2059d2b0bb02854f02189962c13b6aa",
@@ -134,11 +126,11 @@
         },
         "tomlkit": {
             "hashes": [
-                "sha256:38e1ff8edb991273ec9f6181244a6a391ac30e9f5098e7535640ea6be97a7c86",
-                "sha256:712cbd236609acc6a3e2e97253dfc52d4c2082982a88f61b640ecf0817eab899"
+                "sha256:df32fab589a81f0d7dc525a4267b6d7a64ee99619cbd1eeb0fae32c1dd426977",
+                "sha256:eeea7ac7563faeab0a1ed8fe12c2e5a51c61f933f2502f7e9db0241a65163ad0"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==0.12.1"
+            "version": "==0.12.2"
         }
     },
     "develop": {}

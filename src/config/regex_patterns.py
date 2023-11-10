@@ -2,7 +2,7 @@
 
 class RegexPattern:
     '''Contains regex patterns as class variables'''
-    
+
     NAME_PATTERN = r'[A-Za-z\s]{2,25}'
     EMAIL_PATTERN = r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}'
     USERNAME_PATTERN = r'[A-Za-z0-9._]{2,30}'

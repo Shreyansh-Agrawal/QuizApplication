@@ -37,7 +37,7 @@ def get_questions_by_category() -> List[Tuple]:
         regex_pattern=RegexPattern.NUMERIC_PATTERN,
         error_msg=DisplayMessage.INVALID_CHOICE
     )
-    
+
     user_choice = int(user_choice)
     if user_choice > len(categories) or user_choice-1 < 0:
         raise DataNotFoundError('No such Category! Please choose from above!!')
@@ -178,8 +178,10 @@ def start_quiz(username: str, category: str = None) -> None:
     if len(data) < 10:
         raise DataNotFoundError('Not enough questions!')
 
+    print(DisplayMessage.QUIZ_START_MSG)
     end_time = time.time() + 5*60
     score = 0
+
     # Display question, take user's response and calculate score one by one
     for question_no, question_data in enumerate(data, 1):
         question_id, question_text, question_type, correct_answer = question_data

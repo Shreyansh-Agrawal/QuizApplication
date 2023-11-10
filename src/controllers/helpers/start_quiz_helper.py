@@ -41,7 +41,6 @@ def select_category():
 
     categories = [(tup[0], ) for tup in data]
     pretty_print(data=categories, headers=(Headers.CATEGORY, ))
-    print(DisplayMessage.QUIZ_START_MSG)
 
     user_choice = validations.regex_validator(
         prompt='Choose a Category: ',

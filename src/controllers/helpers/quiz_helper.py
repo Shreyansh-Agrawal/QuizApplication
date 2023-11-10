@@ -53,7 +53,7 @@ def get_question_data(username: str) -> Dict:
         regex_pattern=RegexPattern.QUES_TEXT_PATTERN,
         error_msg=DisplayMessage.INVALID_TEXT.format(Headers.QUES)
     ).title()
-    
+
     return question_data
 
 

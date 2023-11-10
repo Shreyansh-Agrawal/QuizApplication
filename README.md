@@ -62,6 +62,7 @@ QuizApp/
 │   │   ├── display_menu.py
 │   │   ├── queries.py
 │   │   ├── questions.json
+│   │   ├── regex_patterns.py
 │   ├── controllers/
 │   │   ├── handlers/
 │   │   │   ├── auth_handler.py
@@ -70,6 +71,7 @@ QuizApp/
 │   │   │   ├── user_handler.py
 │   │   ├── helpers/
 │   │   │   ├── quiz_helper.py
+│   │   │   ├── start_quiz_helper.py
 │   │   ├── auth_controller.py
 │   │   ├── quiz_controller.py
 │   │   ├── user_controller.py
