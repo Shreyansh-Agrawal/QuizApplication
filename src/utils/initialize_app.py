@@ -40,7 +40,7 @@ class Initializer:
         super_admin_data['password'] = hashed_password
         super_admin = SuperAdmin(super_admin_data)
         try:
-            super_admin.save_user_to_database()
+            super_admin.save_to_database()
         except sqlite3.IntegrityError as e:
             raise DuplicateEntryError('Super Admin Already exists!') from e
 

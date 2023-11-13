@@ -12,18 +12,18 @@ from utils.custom_error import DataNotFoundError
 logger = logging.getLogger(__name__)
 
 
-def manage_users_menu() -> None:
-    '''Admin: manage users menu'''
+def manage_players_menu() -> None:
+    '''Admin: manage players menu'''
 
-    logger.info('Running Admin: Manage Users Menu')
+    logger.info('Running Admin: Manage Players Menu')
     while True:
-        user_sub_choice = input(Prompts.ADMIN_MANAGE_USER_PROMPTS)
+        user_sub_choice = input(Prompts.ADMIN_MANAGE_PLAYER_PROMPTS)
 
         match user_sub_choice:
             case '1':
-                UserHandler.display_users_by_role('user')
+                UserHandler.display_users_by_role(role='player')
             case '2':
-                UserHandler.handle_delete_user_by_email(role='user')
+                UserHandler.handle_delete_user_by_email(role='player')
             case 'q':
                 break
             case _:

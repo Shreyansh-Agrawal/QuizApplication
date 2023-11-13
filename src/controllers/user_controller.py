@@ -1,4 +1,4 @@
-'''Controllers for Operations related to Users: SuperAdmin, Admin, User'''
+'''Controllers for Operations related to Users: SuperAdmin, Admin, Player'''
 
 import logging
 import random
@@ -18,10 +18,10 @@ from utils.pretty_print import pretty_print
 logger = logging.getLogger(__name__)
 
 
-def get_user_scores_by_username(username: str) -> List[Tuple]:
+def get_player_scores_by_username(username: str) -> List[Tuple]:
     '''Return user's scores'''
 
-    data = DAO.read_from_database(Queries.GET_USER_SCORES_BY_USERNAME, (username, ))
+    data = DAO.read_from_database(Queries.GET_PLAYER_SCORES_BY_USERNAME, (username, ))
     return data
 
 
@@ -61,7 +61,7 @@ def create_admin() -> None:
     admin = Admin(admin_data)
 
     try:
-        admin.save_user_to_database()
+        admin.save_to_database()
     except sqlite3.IntegrityError as e:
         raise LoginError('\nUser already exists! Try with different credentials...') from e
 
@@ -70,7 +70,7 @@ def create_admin() -> None:
 
 
 def delete_user_by_email(role: str) -> None:
-    '''Delete a User'''
+    '''Delete a Player'''
 
     data = get_all_users_by_role(role)
     if not data:
@@ -96,5 +96,5 @@ def delete_user_by_email(role: str) -> None:
 
     DAO.write_to_database(Queries.DELETE_USER_BY_EMAIL, (email, ))
 
-    logger.debug('User deleted')
+    logger.debug('Player deleted')
     print(DisplayMessage.DELETE_USER_SUCCESS_MSG.format(user=role.title(), email=email))

@@ -24,7 +24,7 @@ def display_categories(role: str, header: Tuple) -> None:
 
     print(DisplayMessage.CATEGORIES_MSG)
 
-    if role == 'user':
+    if role == 'player':
         data = [(tup[0], ) for tup in data]
 
     pretty_print(data=data, headers=header)

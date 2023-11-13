@@ -182,7 +182,7 @@ def start_quiz(username: str, category: str = None) -> None:
     end_time = time.time() + 5*60
     score = 0
 
-    # Display question, take user's response and calculate score one by one
+    # Display question, take player's response and calculate score one by one
     for question_no, question_data in enumerate(data, 1):
         question_id, question_text, question_type, correct_answer = question_data
         options_data = DAO.read_from_database(Queries.GET_OPTIONS_FOR_MCQ, (question_id, ))
@@ -198,12 +198,12 @@ def start_quiz(username: str, category: str = None) -> None:
 
         StartQuizHelper.display_question(question_no, question_text, question_type, options_data)
 
-        user_answer = StartQuizHelper.get_user_response(question_type)
+        player_answer = StartQuizHelper.get_player_response(question_type)
 
         if question_type.lower() == 'mcq':
-            user_answer = options_data[user_answer-1][0]
+            player_answer = options_data[player_answer-1][0]
 
-        if user_answer.lower() == correct_answer.lower():
+        if player_answer.lower() == correct_answer.lower():
             score += 10
 
     print(DisplayMessage.DISPLAY_SCORE_MSG.format(score=score))

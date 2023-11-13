@@ -1,6 +1,6 @@
 # QuizApp
 
-This is a Python-based console application for a Quiz. The application is designed to manage users, categories, questions, and quizzes. It provides functionality for Super Admins, Admins, and Users. You can use `pipenv` to manage your project dependencies.
+This is a Python-based console application for a Quiz. The application is designed to manage users, categories, questions, and quizzes. It provides functionality for Super Admins, Admins, and Players. You can use `pipenv` to manage your project dependencies.
 
 ## Getting Started
 
@@ -100,7 +100,7 @@ QuizApp/
 
 ## Models
 
-- **user.py**: Contains classes for users, including `Person`, `SuperAdmin`, `Admin`, and `User`.
+- **user.py**: Contains classes for users, including `User`, `SuperAdmin`, `Admin`, and `Player`.
 
 - **quiz.py**: Contains classes for quiz entities, such as `QuizEntity`, `Category`, `Option`, and `Question`.
 
@@ -110,7 +110,7 @@ QuizApp/
 
 - **quiz_controller.py**: Manages quiz-related operations, including managing categories, questions, and options.
 
-- **user_controller.py**: Manages user-related operations, catering to superadmins, admins, and regular users.
+- **user_controller.py**: Manages user-related operations, catering to superadmins, admins, and players.
 
 ## Database
 
@@ -118,7 +118,7 @@ The application employs an SQLite database with the following tables:
 
 - **Users**: Stores user information.
 - **Credentials**: Stores user credentials for authentication.
-- **Scores**: Stores user scores.
+- **Scores**: Stores player scores.
 - **Categories**: Stores quiz categories.
 - **Questions**: Stores quiz questions.
 - **Options**: Stores options for quiz questions.
@@ -133,13 +133,13 @@ The application employs an SQLite database with the following tables:
 
 ### Admin
 
-- **Manage Users**: Admins can view user data and delete user accounts.
+- **Manage Players**: Admins can view player data and delete player accounts.
 - **Manage Quizzes**: Admins can add new quiz categories, add questions, and view existing categories and questions.
 
-### User
+### Player
 
-- **Take a Quiz**: Users can participate in quizzes by selecting a category.
-- **View Leaderboard**: Users can see the quiz leaderboard.
-- **View Your Scores**: Users can view their own past quiz scores.
+- **Take a Quiz**: Players can participate in quizzes by selecting a category.
+- **View Leaderboard**: Players can see the quiz leaderboard.
+- **View Your Scores**: Players can view their own past quiz scores.
 
 Feel free to explore the project, and don't forget to set up your environment and database before running the application.

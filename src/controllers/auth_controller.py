@@ -9,7 +9,7 @@ from config.display_menu import DisplayMessage, Headers
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from database.database_access import DatabaseAccess as DAO
-from models.user import User
+from models.user import Player
 from utils import validations
 from utils.custom_error import LoginError
 
@@ -52,22 +52,22 @@ def login() -> Tuple:
 
 
 def signup() -> str:
-    '''Method for signup, only for user'''
+    '''Method for signup, only for player'''
 
     logger.debug('Signup Initiated')
 
-    user_data = {}
-    user_data['name'] = validations.regex_validator(
+    player_data = {}
+    player_data['name'] = validations.regex_validator(
         prompt='Enter your name: ',
         regex_pattern=RegexPattern.NAME_PATTERN,
         error_msg=DisplayMessage.INVALID_TEXT.format(Headers.NAME)
     ).title()
-    user_data['email'] = validations.regex_validator(
+    player_data['email'] = validations.regex_validator(
         prompt='Enter your email: ',
         regex_pattern=RegexPattern.EMAIL_PATTERN,
         error_msg=DisplayMessage.INVALID_TEXT.format(Headers.EMAIL)
     )
-    user_data['username'] = validations.regex_validator(
+    player_data['username'] = validations.regex_validator(
         prompt='Create your username: ',
         regex_pattern=RegexPattern.USERNAME_PATTERN,
         error_msg=DisplayMessage.INVALID_TEXT.format(Headers.USERNAME)
@@ -83,18 +83,18 @@ def signup() -> str:
             break
 
     hashed_password = hashlib.sha256(confirm_password.encode('utf-8')).hexdigest()
-    user_data['password'] = hashed_password
+    player_data['password'] = hashed_password
 
-    user = User(user_data)
+    player = Player(player_data)
 
     try:
-        user.save_user_to_database()
+        player.save_to_database()
     except sqlite3.IntegrityError as e:
         raise LoginError(
-            'User already exists! Login or Sign Up with different credentials...'
+            'Player already exists! Login or Sign Up with different credentials...'
         ) from e
 
     logger.debug('Signup Successful')
     print(DisplayMessage.SIGNUP_SUCCESS_MSG)
 
-    return user_data['username']
+    return player_data['username']

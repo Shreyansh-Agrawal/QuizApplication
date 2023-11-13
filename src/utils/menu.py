@@ -16,7 +16,7 @@ def super_admin_menu(username: str) -> None:
     '''Menu for Super Admin'''
 
     logger.info('Running Super Admin Menu')
-    print(DisplayMessage.SUPER_ADMIN_MSG)
+    print(DisplayMessage.DASHBOARD_MSG.format(user='Super Admin'))
     print(DisplayMessage.USER_WELCOME_MSG.format(user=username.lower()))
 
     while True:
@@ -39,7 +39,7 @@ def admin_menu(username: str, is_password_changed: int) -> None:
     '''Menu for Admin'''
 
     logger.info('Running Admin Menu')
-    print(DisplayMessage.ADMIN_MSG)
+    print(DisplayMessage.DASHBOARD_MSG.format(user='Admin'))
     print(DisplayMessage.USER_WELCOME_MSG.format(user=username.lower()))
 
     AuthHandler.handle_first_login(username, is_password_changed)
@@ -49,8 +49,8 @@ def admin_menu(username: str, is_password_changed: int) -> None:
 
         match user_choice:
             case '1':
-                print(DisplayMessage.MANAGE_USERS_MSG)
-                MenuHandler.manage_users_menu()
+                print(DisplayMessage.MANAGE_PLAYERS_MSG)
+                MenuHandler.manage_players_menu()
             case '2':
                 print(DisplayMessage.MANAGE_QUIZ_MSG)
                 MenuHandler.manage_quizzes_menu(username)
@@ -60,15 +60,15 @@ def admin_menu(username: str, is_password_changed: int) -> None:
                 print(DisplayMessage.WRONG_INPUT_MSG)
 
 
-def user_menu(username: str) -> None:
-    '''Menu for User'''
+def player_menu(username: str) -> None:
+    '''Menu for Player'''
 
-    logger.info('Running User Menu')
-    print(DisplayMessage.USER_MSG)
+    logger.info('Running Player Menu')
+    print(DisplayMessage.DASHBOARD_MSG.format(user='Player'))
     print(DisplayMessage.USER_WELCOME_MSG.format(user=username.lower()))
 
     while True:
-        user_choice = input(Prompts.USER_PROMPTS)
+        user_choice = input(Prompts.PLAYER_PROMPTS)
 
         match user_choice:
             case '1':
@@ -76,7 +76,7 @@ def user_menu(username: str) -> None:
             case '2':
                 QuizHandler.display_leaderboard()
             case '3':
-                UserHandler.display_user_score(username)
+                UserHandler.display_player_score(username)
             case 'q':
                 break
             case _:
@@ -94,8 +94,8 @@ def assign_menu(data) -> None:
             super_admin_menu(username)
         case 'admin':
             admin_menu(username, is_password_changed)
-        case 'user':
-            user_menu(username)
+        case 'player':
+            player_menu(username)
         case _:
             print(DisplayMessage.INVALID_ROLE_MSG, role)
 
@@ -119,7 +119,7 @@ def start() -> None:
                 username = AuthHandler.handle_signup()
                 if not username:
                     continue
-                user_menu(username)
+                player_menu(username)
             case 'q':
                 break
             case _:

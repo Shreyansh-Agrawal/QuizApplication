@@ -54,12 +54,10 @@ class DisplayMessage:
     HIGHEST_SCORE_MSG = '\nHighest Score: {score}\n'
     CREATE_SUPER_ADMIN_SUCCESS_MSG = 'Super Admin created!'
     INITIALIZATION_SUCCESS_MSG = '\nInitialization Complete!\n'
-    SUPER_ADMIN_MSG = '----Super Admin Dashboard----'
     USER_WELCOME_MSG = '\n----Welcome {user}----\n'
-    ADMIN_MSG = '----Admin Dashboard----'
-    MANAGE_USERS_MSG = '\n----Manage Users----\n'
+    MANAGE_PLAYERS_MSG = '\n----Manage Players----\n'
     MANAGE_QUIZ_MSG = '\n----Manage Quizzes----\n'
-    USER_MSG = '\n----User Dashboard----\n'
+    DASHBOARD_MSG = '\n----{user} Dashboard----\n'
     INVALID_ROLE_MSG = 'Invalid Role!: '
     TABULATE_ERROR_MSG = 'Could not pretty print...\n'
     TRY_AGAIN_MSG = '\n{error} Please try again...\n'
@@ -92,18 +90,18 @@ Enter your choice: '''
 
     ADMIN_PROMPTS = '''
 Enter -
-        1> Manage Users
+        1> Manage Players
         2> Manage Quizzes
         
         Press q to Logout
 
 Enter your choice: '''
 
-    ADMIN_MANAGE_USER_PROMPTS = '''
+    ADMIN_MANAGE_PLAYER_PROMPTS = '''
 Enter -
-        1> View All Users
-        2> Delete a User
-        
+        1> View All Players
+        2> Delete a Player
+
         Press q to Go Back
 
 Enter your choice: '''
@@ -139,7 +137,7 @@ Enter -
 
 Enter your choice: '''
 
-    USER_PROMPTS = '''
+    PLAYER_PROMPTS = '''
 Enter -
         1> Take a Quiz
         2> View Leaderboard

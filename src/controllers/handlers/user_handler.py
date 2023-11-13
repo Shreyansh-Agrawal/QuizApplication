@@ -1,4 +1,4 @@
-'''Handlers related to generic users: Super Admin, Admin, User'''
+'''Handlers related to generic users: Super Admin, Admin, Player'''
 
 import logging
 
@@ -27,11 +27,11 @@ def display_users_by_role(role: str) -> None:
     )
 
 
-def display_user_score(username: str) -> None:
-    '''Display past scores of user'''
+def display_player_score(username: str) -> None:
+    '''Display past scores of player'''
 
     logger.debug('Display score for: %s', username)
-    data = UserController.get_user_scores_by_username(username)
+    data = UserController.get_player_scores_by_username(username)
 
     if not data:
         print(DisplayMessage.QUIZ_DATA_NOT_FOUND_MSG)

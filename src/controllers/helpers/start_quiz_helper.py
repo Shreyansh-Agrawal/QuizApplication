@@ -31,28 +31,27 @@ def get_random_questions_by_category(category: str) -> List[Tuple]:
     return data
 
 
-def select_category():
-    '''Takes in user input for category'''
+def select_category() -> str:
+    '''Takes in player input for category'''
 
-    try:
-        data = QuizHelper.get_all_categories()
-    except DataNotFoundError as e:
-        raise e
+    data = QuizHelper.get_all_categories()
+    if not data:
+        raise DataNotFoundError('No Category Added!')
 
     categories = [(tup[0], ) for tup in data]
     pretty_print(data=categories, headers=(Headers.CATEGORY, ))
 
-    user_choice = validations.regex_validator(
+    player_choice = validations.regex_validator(
         prompt='Choose a Category: ',
         regex_pattern=RegexPattern.NUMERIC_PATTERN,
         error_msg=DisplayMessage.INVALID_CHOICE
     )
 
-    user_choice = int(user_choice)
-    if user_choice > len(categories) or user_choice-1 < 0:
+    player_choice = int(player_choice)
+    if player_choice > len(categories) or player_choice-1 < 0:
         raise DataNotFoundError(DisplayMessage.CATEGORY_NOT_FOUND_MSG)
 
-    category = categories[user_choice-1][0]
+    category = categories[player_choice-1][0]
 
     for data in categories:
         if data[0] == category:
@@ -64,7 +63,7 @@ def select_category():
 
 
 def display_question(question_no: int, question: str, question_type: str, options_data: List[Tuple]) -> None:
-    '''Display question and its options to user'''
+    '''Display question and its options to player'''
 
     print(f'\n{question_no}) {question}')
 
@@ -78,33 +77,33 @@ def display_question(question_no: int, question: str, question_type: str, option
         print(DisplayMessage.TF_OPTION_MSG)
 
 
-def get_user_response(question_type: str) -> str:
-    '''Gets user response according to question type'''
+def get_player_response(question_type: str) -> str:
+    '''Gets player response according to question type'''
 
     if question_type.lower() == 'mcq':
         while True:
-            user_choice = validations.regex_validator(
+            player_choice = validations.regex_validator(
                 prompt='Choose an option: ',
                 regex_pattern=RegexPattern.NUMERIC_PATTERN,
                 error_msg=DisplayMessage.INVALID_CHOICE
             )
 
-            user_choice = int(user_choice)
-            if user_choice not in range(1, 5):
+            player_choice = int(player_choice)
+            if player_choice not in range(1, 5):
                 print(DisplayMessage.MCQ_WRONG_OPTION_MSG)
                 continue
-            return user_choice
+            return player_choice
 
     elif question_type.lower() == 't/f':
         while True:
-            user_choice = validations.regex_validator(
+            player_choice = validations.regex_validator(
                 prompt='Choose an option: ',
                 regex_pattern=RegexPattern.NUMERIC_PATTERN,
                 error_msg=DisplayMessage.INVALID_CHOICE
             )
 
-            user_choice = int(user_choice)
-            match user_choice:
+            player_choice = int(player_choice)
+            match player_choice:
                 case 1:
                     return 'true'
                 case 2:
@@ -112,24 +111,24 @@ def get_user_response(question_type: str) -> str:
                 case _:
                     print(DisplayMessage.TF_WRONG_OPTION_MSG)
     else:
-        user_answer = validations.regex_validator(
+        player_answer = validations.regex_validator(
             prompt='-> Enter your answer: ',
             regex_pattern=RegexPattern.OPTION_TEXT_PATTERN,
             error_msg=DisplayMessage.INVALID_TEXT.format(Headers.OPTION)
         )
-        return user_answer
+        return player_answer
 
 
 def save_quiz_score(username: str, score: int) -> None:
-    '''Saving User's Quiz Score'''
+    '''Saving Player's Quiz Score'''
 
     logger.debug('Saving score for: %s', username)
-    user_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
-    user_id = user_data[0][0]
+    player_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
+    user_id = player_data[0][0]
     score_id = validations.validate_id(entity='score')
 
     time = datetime.now(timezone.utc) # current utc time
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S') # yyyy-mm-dd
 
-    DAO.write_to_database(Queries.INSERT_USER_QUIZ_SCORE, (score_id, user_id, score, timestamp))
+    DAO.write_to_database(Queries.INSERT_PLAYER_QUIZ_SCORE, (score_id, user_id, score, timestamp))
     logger.debug('Score saved for: %s', username)

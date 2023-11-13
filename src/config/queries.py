@@ -39,10 +39,10 @@ class InitializationQueries:
     CREATE_SCORES_TABLE = '''
         CREATE TABLE IF NOT EXISTS scores (
             score_id TEXT PRIMARY KEY,
-            user_id TEXT,
+            player_id TEXT,
             score INTEGER,
             timestamp TEXT,
-            FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE CASCADE
+            FOREIGN KEY (player_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE CASCADE
         )'''
     CREATE_USERS_TABLE = '''
         CREATE TABLE IF NOT EXISTS users (
@@ -63,7 +63,7 @@ class Queries:
     INSERT_OPTION = 'INSERT INTO options VALUES (?, ?, ?, ?)'
     INSERT_QUESTION = 'INSERT INTO questions VALUES (?, ?, ?, ?, ?, ?)'
     INSERT_USER_DATA = 'INSERT INTO users VALUES (?, ?, ?, ?, ?)'
-    INSERT_USER_QUIZ_SCORE = 'INSERT INTO scores VALUES (?, ?, ?, ?)'
+    INSERT_PLAYER_QUIZ_SCORE = 'INSERT INTO scores VALUES (?, ?, ?, ?)'
     GET_ALL_CATEGORIES = '''
         SELECT category_name, admin_username 
         FROM categories ORDER BY category_name'''
@@ -84,7 +84,7 @@ class Queries:
     GET_LEADERBOARD = '''
         SELECT username, MAX(score), timestamp 
         FROM scores
-        INNER JOIN credentials ON scores.user_id = credentials.user_id
+        INNER JOIN credentials ON scores.player_id = credentials.user_id
         GROUP BY username
         ORDER BY score DESC, timestamp ASC
         LIMIT 10
@@ -129,10 +129,10 @@ class Queries:
         INNER JOIN credentials ON users.user_id = credentials.user_id
         WHERE username = ?
     '''
-    GET_USER_SCORES_BY_USERNAME = '''
+    GET_PLAYER_SCORES_BY_USERNAME = '''
         SELECT timestamp, score 
         FROM scores 
-        INNER JOIN credentials ON scores.user_id = credentials.user_id
+        INNER JOIN credentials ON scores.player_id = credentials.user_id
         WHERE username = ?
         ORDER BY timestamp DESC
     '''

@@ -81,7 +81,7 @@ def create_option(question_data: Dict) -> Question:
     match question_data['question_type']:
         case 'MCQ':
             option_data = {}
-            option_data['question_id'] = question.question_id
+            option_data['question_id'] = question.entity_id
             option_data['option_text'] = validations.regex_validator(
                 prompt='Enter Answer: ',
                 regex_pattern=RegexPattern.OPTION_TEXT_PATTERN,
@@ -92,7 +92,7 @@ def create_option(question_data: Dict) -> Question:
             question.add_option(option)
 
             for _ in range(3):
-                option_data['question_id'] = question.question_id
+                option_data['question_id'] = question.entity_id
                 option_data['option_text'] = validations.regex_validator(
                     prompt='Enter Other Option: ',
                     regex_pattern=RegexPattern.OPTION_TEXT_PATTERN,
@@ -103,7 +103,7 @@ def create_option(question_data: Dict) -> Question:
                 question.add_option(option)
         case 'T/F' | 'ONE WORD':
             option_data = {}
-            option_data['question_id'] = question.question_id
+            option_data['question_id'] = question.entity_id
             option_data['option_text'] = validations.regex_validator(
                 prompt='Enter Answer: ',
                 regex_pattern=RegexPattern.OPTION_TEXT_PATTERN,
