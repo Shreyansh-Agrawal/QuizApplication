@@ -9,10 +9,9 @@ from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from controllers.helpers import quiz_helper as QuizHelper
 from database.database_access import DatabaseAccess as DAO
-from utils.custom_error import DataNotFoundError
 from utils import validations
+from utils.custom_error import DataNotFoundError
 from utils.pretty_print import pretty_print
-
 
 logger = logging.getLogger(__name__)
 
@@ -120,7 +119,7 @@ def get_player_response(question_type: str) -> str:
 
 
 def save_quiz_score(username: str, score: int) -> None:
-    '''Saving Player's Quiz Score'''
+    '''Save Player's Quiz Score'''
 
     logger.debug('Saving score for: %s', username)
     player_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))

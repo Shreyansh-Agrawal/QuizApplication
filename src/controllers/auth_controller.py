@@ -91,7 +91,7 @@ def signup() -> str:
         player.save_to_database()
     except sqlite3.IntegrityError as e:
         raise LoginError(
-            'Player already exists! Login or Sign Up with different credentials...'
+            'User already exists! Login or Sign Up with different credentials...'
         ) from e
 
     logger.debug('Signup Successful')

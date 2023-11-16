@@ -14,6 +14,7 @@ from database.database_access import DatabaseAccess as DAO
 from models.quiz import Category
 from utils import validations
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
+from utils.pretty_print import pretty_print
 
 logger = logging.getLogger(__name__)
 
@@ -181,6 +182,7 @@ def start_quiz(username: str, category: str = None) -> None:
     print(DisplayMessage.QUIZ_START_MSG)
     end_time = time.time() + 5*60
     score = 0
+    player_responses = []
 
     # Display question, take player's response and calculate score one by one
     for question_no, question_data in enumerate(data, 1):
@@ -192,9 +194,11 @@ def start_quiz(username: str, category: str = None) -> None:
             print('\nTime\'s up!')
             break
 
-        mins = int(remaining_time//60)
+        mins = int(remaining_time // 60)
+        formatted_mins = str(mins).zfill(2)
         seconds = int(remaining_time % 60)
-        print(f'\nTime remaining: {mins}:{seconds} mins')
+        formatted_seconds = str(seconds).zfill(2)
+        print(f'\nTime remaining: {formatted_mins}:{formatted_seconds} mins')
 
         StartQuizHelper.display_question(question_no, question_text, question_type, options_data)
 
@@ -206,6 +210,10 @@ def start_quiz(username: str, category: str = None) -> None:
         if player_answer.lower() == correct_answer.lower():
             score += 10
 
+        player_responses.append((question_text, player_answer, correct_answer))
+
     print(DisplayMessage.DISPLAY_SCORE_MSG.format(score=score))
+    print('\n-----REVIEW YOUR RESPONSES-----\n')
+    pretty_print(data=player_responses, headers=(Headers.QUES, Headers.PLAYER_ANS, Headers.ANS))
     StartQuizHelper.save_quiz_score(username, score)
     logger.debug('Quiz Completed for: %s', username)
