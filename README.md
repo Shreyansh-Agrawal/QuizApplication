@@ -24,13 +24,13 @@ SUPER_ADMIN_PASSWORD=YourSuperAdminPassword
 1. Clone this repository:
 
 ```bash
-https://github.com/Shreyansh-Agrawal/QuizApp.git
+https://github.com/Shreyansh-Agrawal/QuizApplication.git
 ```
 
 2. Navigate to the project directory:
 
 ```bash
-cd QuizApp
+cd QuizApplication
 ```
 
 3. Install project dependencies using pipenv:
