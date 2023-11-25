@@ -54,12 +54,13 @@ pipenv run python .\src\app.py
 ### Project Structure
 
 ```bash
-QuizApp/
+QuizApplication/
 ├── documents/
 │   ├── documentation.pdf
 ├── src/
 │   ├── config/
-│   │   ├── display_menu.py
+│   │   ├── file_paths.py
+│   │   ├── message_prompts.py
 │   │   ├── queries.py
 │   │   ├── questions.json
 │   │   ├── regex_patterns.py
@@ -90,11 +91,46 @@ QuizApp/
 │   │   ├── pretty_print.py
 │   │   ├── validations.py
 │   ├── app.py
+├── tests/
+│   ├── test_config/
+│   │   ├── test_file_paths.py
+│   │   ├── test_message_prompts.py
+│   │   ├── test_queries.py
+│   │   ├── test_questions.json
+│   │   ├── test_regex_patterns.py
+│   ├── test_controllers/
+│   │   ├── test_handlers/
+│   │   │   ├── test_auth_handler.py
+│   │   │   ├── test_menu_handler.py
+│   │   │   ├── test_quiz_handler.py
+│   │   │   ├── test_user_handler.py
+│   │   ├── test_helpers/
+│   │   │   ├── test_quiz_helper.py
+│   │   │   ├── test_start_quiz_helper.py
+│   │   ├── test_auth_controller.py
+│   │   ├── test_quiz_controller.py
+│   │   ├── test_user_controller.py
+│   ├── test_database/
+│   │   ├── test_database_access.py
+│   │   ├── test_database_connection.py
+│   ├── test_models/
+│   │   ├── test_quiz.py
+│   │   ├── test_user.py
+│   ├── test_utils/
+│   │   ├── test_custom_error.py
+│   │   ├── test_initialize_app.py
+│   │   ├── test_json_to_db_loader.py
+│   │   ├── test_menu.py
+│   │   ├── test_pretty_print.py
+│   │   ├── test_validations.py
+│   ├── conftest.py
+│   ├── test_app.py
 ├── .env
 ├── .gitignore
 ├── logs.log
 ├── Pipfile
 ├── Pipfile.lock
+├── pytest.ini
 ├── README.md
 ```
 
@@ -128,7 +164,7 @@ The application employs an SQLite database with the following tables:
 ### Super Admin
 
 - **Create Admin Account**: Super Admins can create new admin accounts.
-- **View Admins**: Super Admins can view a list of admins, either all or by specific admin ID.
+- **View Admins**: Super Admins can view a list of admins.
 - **Delete Admin Details**: Super Admins can delete admin accounts.
 
 ### Admin
@@ -138,7 +174,7 @@ The application employs an SQLite database with the following tables:
 
 ### Player
 
-- **Take a Quiz**: Players can participate in quizzes by selecting a category.
+- **Take a Quiz**: Players can participate in quizzes by selecting a category or can play a random quiz.
 - **View Leaderboard**: Players can see the quiz leaderboard.
 - **View Your Scores**: Players can view their own past quiz scores.
 
