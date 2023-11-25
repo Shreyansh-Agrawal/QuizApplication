@@ -7,7 +7,7 @@
 
 import logging
 
-from config.display_menu import DisplayMessage, LogMessage
+from config.message_prompts import DisplayMessage, LogMessage
 from utils.initialize_app import Initializer
 from utils.menu import start
 

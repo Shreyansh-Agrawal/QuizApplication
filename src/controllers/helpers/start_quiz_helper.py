@@ -4,7 +4,7 @@ import logging
 from datetime import datetime, timezone
 from typing import List, Tuple
 
-from config.display_menu import DisplayMessage, Headers, LogMessage
+from config.message_prompts import DisplayMessage, Headers, LogMessage
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from controllers.helpers import quiz_helper as QuizHelper

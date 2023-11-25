@@ -2,7 +2,7 @@
 
 import logging
 
-from config.display_menu import DisplayMessage, Headers, LogMessage, Prompts
+from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
 from controllers.handlers import quiz_handler as QuizHandler
 from controllers.handlers import user_handler as UserHandler
 from utils import json_to_db_loader
@@ -71,7 +71,7 @@ def manage_questions_menu(username: str) -> None:
             case '3':
                 QuizHandler.handle_create_question(created_by=username)
             case '4':
-                json_to_db_loader.load_questions_from_json(created_by_admin_username=username)
+                json_to_db_loader.load_quiz_data_from_json(created_by_admin_username=username)
                 print(DisplayMessage.LOAD_QUES_MSG)
             case 'q':
                 break
@@ -82,7 +82,7 @@ def manage_questions_menu(username: str) -> None:
 def manage_quizzes_menu(username: str) -> None:
     '''Admin: manage quizzes menu'''
 
-    logger.info(LogMessage.RUNNING_ADMIN_MENU, Headers.QUIZES)
+    logger.info(LogMessage.RUNNING_ADMIN_MENU, Headers.QUIZZES)
     while True:
         user_sub_choice = input(Prompts.ADMIN_MANAGE_QUIZZES_PROMPTS)
 

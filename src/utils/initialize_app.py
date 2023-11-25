@@ -8,7 +8,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from config.display_menu import DisplayMessage, Headers, LogMessage
+from config.message_prompts import DisplayMessage, Headers, LogMessage
 from config.queries import InitializationQueries
 from database.database_access import DatabaseAccess as DAO
 from models.user import SuperAdmin

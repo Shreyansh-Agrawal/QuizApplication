@@ -2,7 +2,7 @@
 
 import logging
 
-from config.display_menu import DisplayMessage, Headers, LogMessage, Prompts
+from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
 from controllers.handlers import auth_handler as AuthHandler
 from controllers.handlers import menu_handler as MenuHandler
 from controllers.handlers import quiz_handler as QuizHandler

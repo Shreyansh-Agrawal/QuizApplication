@@ -2,7 +2,7 @@
 
 import logging
 
-from config.display_menu import DisplayMessage, Headers, LogMessage
+from config.message_prompts import DisplayMessage, Headers, LogMessage
 from controllers import user_controller as UserController
 from utils.custom_error import DataNotFoundError, LoginError
 from utils.pretty_print import pretty_print

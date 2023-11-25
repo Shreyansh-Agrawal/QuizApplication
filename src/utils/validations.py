@@ -7,7 +7,7 @@ import maskpass
 import shortuuid
 
 from config.regex_patterns import RegexPattern
-from config.display_menu import DisplayMessage, Headers
+from config.message_prompts import DisplayMessage, Headers
 from utils.custom_error import InvalidInputError
 
 

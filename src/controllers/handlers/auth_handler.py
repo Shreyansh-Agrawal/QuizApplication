@@ -4,7 +4,7 @@ import hashlib
 import logging
 from typing import List, Tuple
 
-from config.display_menu import DisplayMessage, Prompts, LogMessage
+from config.message_prompts import DisplayMessage, Prompts, LogMessage
 from config.queries import Queries
 from controllers import auth_controller as Authenticate
 from database.database_access import DatabaseAccess as DAO

@@ -191,7 +191,7 @@ class Headers:
     SUPER_ADMIN='Super Admin'
     ADMIN='Admin'
     PLAYER='Player'
-    QUIZES='Quizes'
+    QUIZZES='Quizzes'
 
 
 class LogMessage:
@@ -231,3 +231,4 @@ class LogMessage:
     LEADERBOARD_DATA_NOT_FOUND='No Data in Leaderboard'
     QUES_DATA_NOT_FOUND='No Questions added'
     RUNNING_ADMIN_MENU='Running Admin: Manage %s Menu'
+    LOAD_QUIZ_DATA_FROM_JSON='Loading Quiz Data from JSON'

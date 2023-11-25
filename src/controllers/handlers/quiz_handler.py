@@ -3,7 +3,7 @@
 import logging
 from typing import Tuple
 
-from config.display_menu import DisplayMessage, Headers, LogMessage, Prompts
+from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
 from controllers import quiz_controller as QuizController
 from controllers.helpers import quiz_helper as QuizHelper
 from controllers.helpers import start_quiz_helper as StartQuizHelper

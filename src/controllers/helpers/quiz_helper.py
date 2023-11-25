@@ -3,7 +3,7 @@
 import logging
 from typing import Dict, List, Tuple
 
-from config.display_menu import DisplayMessage, Headers, LogMessage, Prompts
+from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from database.database_access import DatabaseAccess as DAO

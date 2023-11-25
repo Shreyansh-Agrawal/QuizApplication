@@ -6,7 +6,7 @@ from typing import List, Tuple
 
 from tabulate import tabulate
 
-from config.display_menu import DisplayMessage, LogMessage
+from config.message_prompts import DisplayMessage, LogMessage
 
 logger = logging.getLogger(__name__)
 
