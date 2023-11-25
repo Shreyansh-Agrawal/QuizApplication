@@ -2,7 +2,7 @@
 
 import logging
 
-from config.display_menu import DisplayMessage, Headers
+from config.display_menu import DisplayMessage, Headers, LogMessage
 from controllers import user_controller as UserController
 from utils.custom_error import DataNotFoundError, LoginError
 from utils.pretty_print import pretty_print
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 def display_users_by_role(role: str) -> None:
     '''Display users on console by role'''
 
-    logger.debug('Display all %ss', role)
+    logger.debug(LogMessage.DISPLAY_ALL_ENTITY, role)
     data = UserController.get_all_users_by_role(role)
 
     if not data:
@@ -30,7 +30,7 @@ def display_users_by_role(role: str) -> None:
 def display_player_score(username: str) -> None:
     '''Display past scores of player'''
 
-    logger.debug('Display score for: %s', username)
+    logger.debug(LogMessage.DISPLAY_QUIZ_SCORE, username)
     data = UserController.get_player_scores_by_username(username)
 
     if not data:

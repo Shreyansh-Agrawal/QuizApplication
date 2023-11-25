@@ -3,7 +3,7 @@
 import logging
 from typing import Dict, List, Tuple
 
-from config.display_menu import DisplayMessage, Headers, Prompts
+from config.display_menu import DisplayMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from database.database_access import DatabaseAccess as DAO
@@ -25,7 +25,7 @@ def get_question_data(username: str) -> Dict:
     '''Takes input of question details'''
     categories = get_all_categories()
 
-    logger.debug('Creating Question')
+    logger.debug(LogMessage.CREATE_ENTITY, Headers.QUES)
     print(DisplayMessage.CREATE_QUES_MSG)
 
     user_choice = validations.regex_validator(
@@ -114,7 +114,7 @@ def create_option(question_data: Dict) -> Question:
             option = Option(option_data)
             question.add_option(option)
         case _:
-            logger.exception('Invalid Ques Type!')
+            logger.exception(LogMessage.INVALID_QUES_TYPE)
             return None
 
     return question

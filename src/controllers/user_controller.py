@@ -6,7 +6,7 @@ import sqlite3
 import string
 from typing import List, Tuple
 
-from config.display_menu import DisplayMessage, Headers
+from config.display_menu import DisplayMessage, Headers, LogMessage
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from database.database_access import DatabaseAccess as DAO
@@ -35,7 +35,7 @@ def get_all_users_by_role(role: str) -> List[Tuple]:
 def create_admin() -> None:
     '''Create a new Admin Account'''
 
-    logger.debug('Creating Admin')
+    logger.debug(LogMessage.CREATE_ENTITY, Headers.ADMIN)
     print(DisplayMessage.CREATE_ADMIN_MSG)
 
     admin_data = {}
@@ -65,7 +65,7 @@ def create_admin() -> None:
     except sqlite3.IntegrityError as e:
         raise LoginError('\nUser already exists! Try with different credentials...') from e
 
-    logger.debug('Admin created')
+    logger.debug(LogMessage.CREATE_SUCCESS, Headers.ADMIN)
     print(DisplayMessage.CREATE_ADMIN_SUCCESS_MSG)
 
 
@@ -76,7 +76,7 @@ def delete_user_by_email(role: str) -> None:
     if not data:
         raise DataNotFoundError(f'No {role} Currently!')
 
-    logger.debug('Deleting %s', {role.title()})
+    logger.debug(LogMessage.DELETE_ENTITY, {role.title()})
     print(DisplayMessage.DELETE_USER_MSG.format(user=role.title()))
 
     pretty_print(data=data, headers=(Headers.USERNAME, Headers.NAME, Headers.EMAIL, Headers.REG_DATE))
@@ -96,5 +96,5 @@ def delete_user_by_email(role: str) -> None:
 
     DAO.write_to_database(Queries.DELETE_USER_BY_EMAIL, (email, ))
 
-    logger.debug('Player deleted')
+    logger.debug(LogMessage.DELETE_SUCCESS, Headers.PLAYER)
     print(DisplayMessage.DELETE_USER_SUCCESS_MSG.format(user=role.title(), email=email))

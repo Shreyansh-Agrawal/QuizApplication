@@ -5,7 +5,7 @@ import logging
 import sqlite3
 from typing import Tuple
 
-from config.display_menu import DisplayMessage, Headers
+from config.display_menu import DisplayMessage, Headers, LogMessage
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from database.database_access import DatabaseAccess as DAO
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 def login() -> Tuple:
     '''Method for user login'''
 
-    logger.debug('Login Initiated')
+    logger.debug(LogMessage.LOGIN_INITIATED)
 
     # validating credentials even during login to prevent any Injections
     username = validations.regex_validator(
@@ -45,7 +45,7 @@ def login() -> Tuple:
         print(DisplayMessage.AUTH_INVALIDATE_MSG)
         return ()
 
-    logger.debug('Login Successful')
+    logger.debug(LogMessage.LOGIN_SUCCESS)
     print(DisplayMessage.LOGIN_SUCCESS_MSG)
 
     return (username, role, is_password_changed)
@@ -54,7 +54,7 @@ def login() -> Tuple:
 def signup() -> str:
     '''Method for signup, only for player'''
 
-    logger.debug('Signup Initiated')
+    logger.debug(LogMessage.SIGNUP_INITIATED)
 
     player_data = {}
     player_data['name'] = validations.regex_validator(
@@ -94,7 +94,7 @@ def signup() -> str:
             'User already exists! Login or Sign Up with different credentials...'
         ) from e
 
-    logger.debug('Signup Successful')
+    logger.debug(LogMessage.SIGNUP_SUCCESS)
     print(DisplayMessage.SIGNUP_SUCCESS_MSG)
 
     return player_data['username']

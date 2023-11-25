@@ -8,7 +8,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from config.display_menu import DisplayMessage
+from config.display_menu import DisplayMessage, Headers, LogMessage
 from config.queries import InitializationQueries
 from database.database_access import DatabaseAccess as DAO
 from models.user import SuperAdmin
@@ -27,7 +27,7 @@ class Initializer:
     def create_super_admin() -> None:
         '''method to create a super admin '''
 
-        logger.debug('Creating Super Admin')
+        logger.debug(LogMessage.CREATE_ENTITY, Headers.SUPER_ADMIN)
 
         super_admin_data = {}
         super_admin_data['name'] = os.getenv('SUPER_ADMIN_NAME')
@@ -44,7 +44,7 @@ class Initializer:
         except sqlite3.IntegrityError as e:
             raise DuplicateEntryError('Super Admin Already exists!') from e
 
-        logger.debug('Created Super Admin')
+        logger.debug(LogMessage.CREATE_SUCCESS, Headers.SUPER_ADMIN)
         print(DisplayMessage.CREATE_SUPER_ADMIN_SUCCESS_MSG)
 
     @staticmethod
@@ -56,9 +56,9 @@ class Initializer:
         try:
             Initializer.create_super_admin()
         except DuplicateEntryError:
-            logger.debug('Super Admin Present')
+            logger.debug(LogMessage.SUPER_ADMIN_PRESENT)
 
-        logger.debug('Initialization Complete')
+        logger.debug(LogMessage.INITIALIZE_APP_SUCCESS)
         print(DisplayMessage.INITIALIZATION_SUCCESS_MSG)
 
 

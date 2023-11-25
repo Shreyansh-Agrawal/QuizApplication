@@ -2,8 +2,7 @@
 
 import logging
 
-from config.display_menu import Prompts
-from config.display_menu import DisplayMessage
+from config.display_menu import DisplayMessage, Headers, LogMessage, Prompts
 from controllers.handlers import auth_handler as AuthHandler
 from controllers.handlers import menu_handler as MenuHandler
 from controllers.handlers import quiz_handler as QuizHandler
@@ -15,8 +14,8 @@ logger = logging.getLogger(__name__)
 def super_admin_menu(username: str) -> None:
     '''Menu for Super Admin'''
 
-    logger.info('Running Super Admin Menu')
-    print(DisplayMessage.DASHBOARD_MSG.format(user='Super Admin'))
+    logger.info(LogMessage.RUNNING_USER_MENU, Headers.SUPER_ADMIN)
+    print(DisplayMessage.DASHBOARD_MSG.format(user=Headers.SUPER_ADMIN))
     print(DisplayMessage.USER_WELCOME_MSG.format(user=username.lower()))
 
     while True:
@@ -38,8 +37,8 @@ def super_admin_menu(username: str) -> None:
 def admin_menu(username: str, is_password_changed: int) -> None:
     '''Menu for Admin'''
 
-    logger.info('Running Admin Menu')
-    print(DisplayMessage.DASHBOARD_MSG.format(user='Admin'))
+    logger.info(LogMessage.RUNNING_USER_MENU, Headers.ADMIN)
+    print(DisplayMessage.DASHBOARD_MSG.format(user=Headers.ADMIN))
     print(DisplayMessage.USER_WELCOME_MSG.format(user=username.lower()))
 
     AuthHandler.handle_first_login(username, is_password_changed)
@@ -63,8 +62,8 @@ def admin_menu(username: str, is_password_changed: int) -> None:
 def player_menu(username: str) -> None:
     '''Menu for Player'''
 
-    logger.info('Running Player Menu')
-    print(DisplayMessage.DASHBOARD_MSG.format(user='Player'))
+    logger.info(LogMessage.RUNNING_USER_MENU, Headers.PLAYER)
+    print(DisplayMessage.DASHBOARD_MSG.format(user=Headers.PLAYER))
     print(DisplayMessage.USER_WELCOME_MSG.format(user=username.lower()))
 
     while True:
@@ -86,7 +85,7 @@ def player_menu(username: str) -> None:
 def assign_menu(data) -> None:
     '''Assign menu according to the role'''
 
-    logger.info('Assigning menu according to the role')
+    logger.info(LogMessage.ASSIGN_MENU)
     username, role, is_password_changed = data
 
     match role:
@@ -103,7 +102,7 @@ def assign_menu(data) -> None:
 def start() -> None:
     '''Menu for Login / Sign Up'''
 
-    logger.info('Running start()')
+    logger.info(LogMessage.RUNNING_START)
     print(DisplayMessage.APP_WELCOME_MSG)
 
     while True:

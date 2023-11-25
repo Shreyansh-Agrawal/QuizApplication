@@ -7,7 +7,7 @@
 
 import logging
 
-from config.display_menu import DisplayMessage
+from config.display_menu import DisplayMessage, LogMessage
 from utils.initialize_app import Initializer
 from utils.menu import start
 
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 if __name__ == '__main__':
-    logger.info('app.py running')
+    logger.info(LogMessage.SYSTEM_START)
 
     try:
         Initializer.initialize_app()
@@ -31,5 +31,5 @@ if __name__ == '__main__':
         logger.exception(e)
         print(e)
 
-    logger.info('Stopping Application')
+    logger.info(LogMessage.SYSTEM_STOP)
     print(DisplayMessage.EXIT_MSG)

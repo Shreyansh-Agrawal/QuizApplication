@@ -9,6 +9,7 @@ shortuuid = "*"
 maskpass = "*"
 tabulate = "*"
 python-dotenv = "*"
+pytest-mock = "*"
 
 [dev-packages]
 

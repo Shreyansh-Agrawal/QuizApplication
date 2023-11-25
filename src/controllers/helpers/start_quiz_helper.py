@@ -4,7 +4,7 @@ import logging
 from datetime import datetime, timezone
 from typing import List, Tuple
 
-from config.display_menu import DisplayMessage, Headers
+from config.display_menu import DisplayMessage, Headers, LogMessage
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from controllers.helpers import quiz_helper as QuizHelper
@@ -121,7 +121,7 @@ def get_player_response(question_type: str) -> str:
 def save_quiz_score(username: str, score: int) -> None:
     '''Save Player's Quiz Score'''
 
-    logger.debug('Saving score for: %s', username)
+    logger.debug(LogMessage.SAVE_QUIZ_SCORE, username)
     player_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
     user_id = player_data[0][0]
     score_id = validations.validate_id(entity='score')
@@ -130,4 +130,4 @@ def save_quiz_score(username: str, score: int) -> None:
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S') # yyyy-mm-dd
 
     DAO.write_to_database(Queries.INSERT_PLAYER_QUIZ_SCORE, (score_id, user_id, score, timestamp))
-    logger.debug('Score saved for: %s', username)
+    logger.debug(LogMessage.SAVE_QUIZ_SCORE_SUCCESS, username)

@@ -3,7 +3,7 @@
 import logging
 from typing import Tuple
 
-from config.display_menu import DisplayMessage, Headers, Prompts
+from config.display_menu import DisplayMessage, Headers, LogMessage, Prompts
 from controllers import quiz_controller as QuizController
 from controllers.helpers import quiz_helper as QuizHelper
 from controllers.helpers import start_quiz_helper as StartQuizHelper
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def display_categories(role: str, header: Tuple) -> None:
     '''Display Categories on Console'''
 
-    logger.debug('Display All Categories')
+    logger.debug(LogMessage.DISPLAY_ALL_ENTITY, Headers.CATEGORY)
     data = QuizHelper.get_all_categories()
 
     if not data:
@@ -33,11 +33,11 @@ def display_categories(role: str, header: Tuple) -> None:
 def display_all_questions() -> None:
     '''Display All Questions on Console'''
 
-    logger.debug('Display All Questions')
+    logger.debug(LogMessage.DISPLAY_ALL_ENTITY, Headers.QUES)
     data = QuizController.get_all_questions()
 
     if not data:
-        logger.debug('No Questions added')
+        logger.debug(LogMessage.QUES_DATA_NOT_FOUND)
         print(DisplayMessage.QUES_NOT_FOUND_MSG)
         return
 
@@ -51,7 +51,7 @@ def display_all_questions() -> None:
 def display_questions_by_category() -> None:
     '''Display Questions by Category on Console'''
 
-    logger.debug('Display Questions By Category')
+    logger.debug(LogMessage.DISPLAY_QUES_BY_CATEGORY)
 
     try:
         display_categories(role='admin', header=(Headers.CATEGORY, Headers.CREATED_BY))
@@ -77,7 +77,7 @@ def display_leaderboard() -> None:
     data = QuizController.get_leaderboard()
 
     if not data:
-        logger.debug('No Data in Leaderboard')
+        logger.debug(LogMessage.LEADERBOARD_DATA_NOT_FOUND)
         print(DisplayMessage.QUIZ_DATA_NOT_FOUND_MSG)
         return
 
@@ -88,7 +88,7 @@ def display_leaderboard() -> None:
 def handle_start_quiz(username: str) -> None:
     '''Handler for starting Quiz'''
 
-    logger.debug('Starting Quiz for: %s', username)
+    logger.debug(LogMessage.START_QUIZ, username)
 
     while True:
         print('\n-----SELECT QUIZ MODE-----')

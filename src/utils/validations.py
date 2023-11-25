@@ -58,7 +58,7 @@ def validate_id(entity: str) -> str:
 
 
 def validate_password(prompt: str) -> str:
-    ''' Checks password input: min length = 6'''
+    '''Checks password input: min length = 6'''
 
     result = False
     password = ''
@@ -75,7 +75,7 @@ def validate_password(prompt: str) -> str:
     return password
 
 
-def regex_validator(prompt, regex_pattern, error_msg) -> str:
+def regex_validator(prompt: str, regex_pattern: str, error_msg: str) -> str:
     '''Validates input using regex'''
 
     result = False

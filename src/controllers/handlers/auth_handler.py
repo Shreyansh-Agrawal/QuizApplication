@@ -4,7 +4,7 @@ import hashlib
 import logging
 from typing import List, Tuple
 
-from config.display_menu import DisplayMessage, Prompts
+from config.display_menu import DisplayMessage, Prompts, LogMessage
 from config.queries import Queries
 from controllers import auth_controller as Authenticate
 from database.database_access import DatabaseAccess as DAO
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def handle_login() -> List[Tuple]:
     '''Handles Login'''
 
-    logger.debug('Login started...')
+    logger.debug(LogMessage.LOGIN_INITIATED)
     print(DisplayMessage.LOGIN_MSG)
 
     attempts_remaining = Prompts.ATTEMPT_LIMIT
@@ -29,19 +29,19 @@ def handle_login() -> List[Tuple]:
 
         if attempts_remaining == 0:
             print(DisplayMessage.LOGIN_ATTEMPTS_EXHAUST_MSG)
-            logger.debug('Login attempts exhausted')
+            logger.debug(LogMessage.LOGIN_ATTEMPTS_EXHAUSTED)
             return None
 
         data = Authenticate.login()
 
-    logger.debug('Login Successful')
+    logger.debug(LogMessage.LOGIN_SUCCESS)
     return data
 
 
 def handle_signup() -> str:
     '''Handles Signup'''
 
-    logger.debug('SignUp started...')
+    logger.debug(LogMessage.SIGNUP_INITIATED)
     print(DisplayMessage.SIGNUP_MSG)
 
     try:
@@ -51,7 +51,7 @@ def handle_signup() -> str:
         logger.warning(e)
         return None
 
-    logger.debug('SignUp Successful')
+    logger.debug(LogMessage.SIGNUP_SUCCESS)
     print(DisplayMessage.REDIRECT_MSG)
     return username
 
@@ -61,7 +61,7 @@ def handle_first_login(username: str, is_password_changed: int) -> None:
 
     if not is_password_changed:
         print(DisplayMessage.CHANGE_PSWD_MSG)
-        logger.debug('Changing Default Admin Password')
+        logger.debug(LogMessage.CHANGE_DEFAULT_ADMIN_PSW)
 
         new_password = validations.validate_password(prompt='Enter New Password: ')
         confirm_password = ''
@@ -81,5 +81,5 @@ def handle_first_login(username: str, is_password_changed: int) -> None:
             (hashed_password, is_password_changed, username)
         )
 
-        logger.debug('Default Admin Password Changed')
+        logger.debug(LogMessage.CHANGE_DEFAULT_ADMIN_PSW_SUCCESS)
         print(DisplayMessage.CHANGE_PSWD_SUCCESS_MSG)

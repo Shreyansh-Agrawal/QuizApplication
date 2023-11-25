@@ -5,7 +5,7 @@ import sqlite3
 import time
 from typing import List, Tuple
 
-from config.display_menu import DisplayMessage, Headers
+from config.display_menu import DisplayMessage, Headers, LogMessage
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from controllers.helpers import quiz_helper as QuizHelper
@@ -31,7 +31,7 @@ def get_questions_by_category() -> List[Tuple]:
 
     categories = QuizHelper.get_all_categories()
 
-    logger.debug('Get Questions by Category')
+    logger.debug(LogMessage.GET_QUES_BY_CATEGORY)
 
     user_choice = validations.regex_validator(
         prompt='Choose a Category: ',
@@ -64,7 +64,7 @@ def create_category(username: str) -> None:
     admin_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
     admin_id = admin_data[0][0]
 
-    logger.debug('Creating Category')
+    logger.debug(LogMessage.CREATE_ENTITY, Headers.CATEGORY)
     print(DisplayMessage.CREATE_CATEGORY_MSG)
 
     category_data = {}
@@ -83,7 +83,7 @@ def create_category(username: str) -> None:
     except sqlite3.IntegrityError as e:
         raise DuplicateEntryError('\nCategory already exists!') from e
 
-    logger.debug('Category Created')
+    logger.debug(LogMessage.CREATE_SUCCESS, Headers.CATEGORY)
     print(DisplayMessage.CREATE_CATEGORY_SUCCESS_MSG)
 
 
@@ -98,7 +98,7 @@ def create_question(username: str) -> None:
     except sqlite3.IntegrityError as e:
         raise DuplicateEntryError('Question already exists!') from e
 
-    logger.debug('Question Created')
+    logger.debug(LogMessage.CREATE_SUCCESS, Headers.QUES)
     print(DisplayMessage.CREATE_QUES_SUCCESS_MSG)
 
 
@@ -107,7 +107,7 @@ def update_category_by_name() -> None:
 
     categories = QuizHelper.get_all_categories()
 
-    logger.debug('Updating a Category')
+    logger.debug(LogMessage.UPDATE_ENTITY, Headers.CATEGORY)
     print(DisplayMessage.UPDATE_CATEGORY_MSG)
 
     user_choice = validations.regex_validator(
@@ -129,7 +129,7 @@ def update_category_by_name() -> None:
 
     DAO.write_to_database(Queries.UPDATE_CATEGORY_BY_NAME, (new_category_name, category_name))
 
-    logger.debug('Category %s updated to %s', category_name, new_category_name)
+    logger.debug(LogMessage.UPDATE_CATEGORY_SUCCESS, category_name, new_category_name)
     print(DisplayMessage.UPDATE_CATEGORY_SUCCESS_MSG.format(name=category_name, new_name=new_category_name))
 
 
@@ -138,7 +138,7 @@ def delete_category_by_name() -> None:
 
     categories = QuizHelper.get_all_categories()
 
-    logger.debug('Deleting a Category')
+    logger.debug(LogMessage.DELETE_ENTITY, Headers.CATEGORY)
     print(DisplayMessage.DELETE_CATEGORY_MSG)
 
     user_choice = validations.regex_validator(
@@ -160,17 +160,17 @@ def delete_category_by_name() -> None:
             break
         return
 
-    logger.warning('Deleting the Category: %s', category_name)
+    logger.warning(LogMessage.DELETE_ENTITY, Headers.CATEGORY, category_name)
     DAO.write_to_database(Queries.DELETE_CATEGORY_BY_NAME, (category_name, ))
 
-    logger.debug('Category %s deleted', category_name)
+    logger.debug(LogMessage.DELETE_SUCCESS, Headers.CATEGORY, category_name)
     print(DisplayMessage.DELETE_CATEGORY_SUCCESS_MSG.format(name=category_name))
 
 
 def start_quiz(username: str, category: str = None) -> None:
     '''Start a New Quiz'''
 
-    logger.debug('Stating Quiz for: %s', username)
+    logger.debug(LogMessage.START_QUIZ, username)
     if not category:
         data = StartQuizHelper.get_random_questions()
     else:
@@ -216,4 +216,4 @@ def start_quiz(username: str, category: str = None) -> None:
     print('\n-----REVIEW YOUR RESPONSES-----\n')
     pretty_print(data=player_responses, headers=(Headers.QUES, Headers.PLAYER_ANS, Headers.ANS))
     StartQuizHelper.save_quiz_score(username, score)
-    logger.debug('Quiz Completed for: %s', username)
+    logger.debug(LogMessage.COMPLETE_QUIZ, username)
