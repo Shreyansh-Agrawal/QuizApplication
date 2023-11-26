@@ -15,7 +15,6 @@ def pretty_print(data: List[Tuple], headers: Tuple) -> None:
     '''Method to pretty print using tabulate'''
 
     row_id = list(range(1, len(data) + 1))
-
     headers = ('SNo.', *headers)
 
     try:

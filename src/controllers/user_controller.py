@@ -1,100 +1,48 @@
 '''Controllers for Operations related to Users: SuperAdmin, Admin, Player'''
 
 import logging
-import random
 import sqlite3
-import string
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage
 from config.queries import Queries
-from config.regex_patterns import RegexPattern
 from database.database_access import DatabaseAccess as DAO
 from models.user import Admin
-from utils import validations
-from utils.custom_error import DataNotFoundError, LoginError
-from utils.pretty_print import pretty_print
+from utils.custom_error import LoginError
 
 logger = logging.getLogger(__name__)
 
 
-def get_player_scores_by_username(username: str) -> List[Tuple]:
-    '''Return user's scores'''
+class UserController:
+    '''UserController class containing methods related to managing users'''
 
-    data = DAO.read_from_database(Queries.GET_PLAYER_SCORES_BY_USERNAME, (username, ))
-    return data
+    def get_player_scores_by_username(self, username: str) -> List[Tuple]:
+        '''Return user's scores'''
 
+        data = DAO.read_from_database(Queries.GET_PLAYER_SCORES_BY_USERNAME, (username, ))
+        return data
 
-def get_all_users_by_role(role: str) -> List[Tuple]:
-    '''Return all users with their details'''
+    def get_all_users_by_role(self, role: str) -> List[Tuple]:
+        '''Return all users with their details'''
 
-    data = DAO.read_from_database(Queries.GET_USER_BY_ROLE, (role, ))
-    return data
+        data = DAO.read_from_database(Queries.GET_USER_BY_ROLE, (role, ))
+        return data
 
+    def create_admin(self, admin_data: Dict) -> None:
+        '''Create a new Admin Account'''
 
-def create_admin() -> None:
-    '''Create a new Admin Account'''
+        admin = Admin(admin_data)
+        try:
+            admin.save_to_database()
+        except sqlite3.IntegrityError as e:
+            raise LoginError('User already exists! Try with different credentials...') from e
 
-    logger.debug(LogMessage.CREATE_ENTITY, Headers.ADMIN)
-    print(DisplayMessage.CREATE_ADMIN_MSG)
+        logger.debug(LogMessage.CREATE_SUCCESS, Headers.ADMIN)
+        print(DisplayMessage.CREATE_ADMIN_SUCCESS_MSG)
 
-    admin_data = {}
-    admin_data['name'] = validations.regex_validator(
-        prompt='Enter admin name: ',
-        regex_pattern=RegexPattern.NAME_PATTERN,
-        error_msg=DisplayMessage.INVALID_TEXT.format(Headers.NAME)
-    ).title()
-    admin_data['email'] = validations.regex_validator(
-        prompt='Enter admin email: ',
-        regex_pattern=RegexPattern.EMAIL_PATTERN,
-        error_msg=DisplayMessage.INVALID_TEXT.format(Headers.EMAIL)
-    )
-    admin_data['username'] = validations.regex_validator(
-        prompt='Create admin username: ',
-        regex_pattern=RegexPattern.USERNAME_PATTERN,
-        error_msg=DisplayMessage.INVALID_TEXT.format(Headers.USERNAME)
-    )
-    characters = string.ascii_letters + string.digits + '@#$&'
-    password = ''.join(random.choice(characters) for _ in range(6))
-    admin_data['password'] = password
+    def delete_user_by_email(self, role: str, email: str) -> None:
+        '''Delete a Player'''
 
-    admin = Admin(admin_data)
-
-    try:
-        admin.save_to_database()
-    except sqlite3.IntegrityError as e:
-        raise LoginError('\nUser already exists! Try with different credentials...') from e
-
-    logger.debug(LogMessage.CREATE_SUCCESS, Headers.ADMIN)
-    print(DisplayMessage.CREATE_ADMIN_SUCCESS_MSG)
-
-
-def delete_user_by_email(role: str) -> None:
-    '''Delete a Player'''
-
-    data = get_all_users_by_role(role)
-    if not data:
-        raise DataNotFoundError(f'No {role} Currently!')
-
-    logger.debug(LogMessage.DELETE_ENTITY, {role.title()})
-    print(DisplayMessage.DELETE_USER_MSG.format(user=role.title()))
-
-    pretty_print(data=data, headers=(Headers.USERNAME, Headers.NAME, Headers.EMAIL, Headers.REG_DATE))
-
-    email = validations.regex_validator(
-        prompt=f'\nEnter {role.title()} Email: ',
-        regex_pattern=RegexPattern.EMAIL_PATTERN,
-        error_msg=DisplayMessage.INVALID_TEXT.format(Headers.EMAIL)
-    )
-
-    for data in data:
-        if data[2] == email:
-            break
-    else:
-        print(DisplayMessage.DELETE_USER_FAIL_MSG.format(user=role.title()))
-        return
-
-    DAO.write_to_database(Queries.DELETE_USER_BY_EMAIL, (email, ))
-
-    logger.debug(LogMessage.DELETE_SUCCESS, Headers.PLAYER)
-    print(DisplayMessage.DELETE_USER_SUCCESS_MSG.format(user=role.title(), email=email))
+        DAO.write_to_database(Queries.DELETE_USER_BY_EMAIL, (email, ))
+        logger.debug(LogMessage.DELETE_SUCCESS, Headers.PLAYER)
+        print(DisplayMessage.DELETE_USER_SUCCESS_MSG.format(user=role.title(), email=email))

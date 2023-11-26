@@ -81,13 +81,16 @@ QuizApplication/
 │   │   ├── database_access.py
 │   │   ├── database_connection.py
 │   ├── models/
+│   │   ├── database_saver.py
 │   │   ├── quiz.py
+│   │   ├── user_manager.py
 │   │   ├── user.py
 │   ├── utils/
 │   │   ├── custom_error.py
 │   │   ├── initialize_app.py
 │   │   ├── json_to_db_loader.py
 │   │   ├── menu.py
+│   │   ├── password_hasher.py
 │   │   ├── pretty_print.py
 │   │   ├── validations.py
 │   ├── app.py
@@ -114,7 +117,9 @@ QuizApplication/
 │   │   ├── test_database_access.py
 │   │   ├── test_database_connection.py
 │   ├── test_models/
+│   │   ├── test_database_saver.py
 │   │   ├── test_quiz.py
+│   │   ├── test_user_manager.py
 │   │   ├── test_user.py
 │   ├── test_utils/
 │   │   ├── test_custom_error.py
@@ -122,6 +127,7 @@ QuizApplication/
 │   │   ├── test_json_to_db_loader.py
 │   │   ├── test_menu.py
 │   │   ├── test_pretty_print.py
+│   │   ├── test_password_hasher.py
 │   │   ├── test_validations.py
 │   ├── conftest.py
 │   ├── test_app.py
@@ -139,6 +145,10 @@ QuizApplication/
 - **user.py**: Contains classes for users, including `User`, `SuperAdmin`, `Admin`, and `Player`.
 
 - **quiz.py**: Contains classes for quiz entities, such as `QuizEntity`, `Category`, `Option`, and `Question`.
+
+- **database_saver.py**: Contains interface for `DatabaseSaver`.
+
+- **user_manager.py**: Contains classes responsible for saving users to the database, such as `UserManager`.
 
 ## Controllers
 

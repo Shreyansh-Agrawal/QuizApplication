@@ -1,6 +1,7 @@
 '''Menu Functions'''
 
 import logging
+from typing import Tuple
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
 from controllers.handlers import auth_handler as AuthHandler
@@ -82,7 +83,7 @@ def player_menu(username: str) -> None:
                 print(DisplayMessage.WRONG_INPUT_MSG)
 
 
-def assign_menu(data) -> None:
+def assign_menu(data: Tuple) -> None:
     '''Assign menu according to the role'''
 
     logger.info(LogMessage.ASSIGN_MENU)

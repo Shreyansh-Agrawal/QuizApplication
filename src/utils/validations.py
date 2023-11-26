@@ -21,7 +21,6 @@ def error_handling(func):
         except InvalidInputError as e:
             print(DisplayMessage.TRY_AGAIN_MSG.format(error=e))
             return False
-
         return res
 
     return wrapper

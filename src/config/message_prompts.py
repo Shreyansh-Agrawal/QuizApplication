@@ -210,6 +210,8 @@ class LogMessage:
     UPDATE_SUCCESS='%s Updated'
     DELETE_ENTITY='Deleting %s'
     DELETE_SUCCESS='%s Deleted'
+    DELETE_CATEGORY='Deleting Category %s'
+    DELETE_CATEGORY_SUCCESS='Category %s deleted'
     CHANGE_DEFAULT_ADMIN_PSW='Changing Default Admin Password'
     CHANGE_DEFAULT_ADMIN_PSW_SUCCESS='Default Admin Password Changed'
     UPDATE_CATEGORY_SUCCESS='Category %s updated to %s'
