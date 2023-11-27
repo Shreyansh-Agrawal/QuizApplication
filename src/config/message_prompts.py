@@ -219,7 +219,7 @@ class LogMessage:
     START_QUIZ='Starting Quiz for: %s'
     COMPLETE_QUIZ='Quiz Completed for: %s'
     RUNNING_USER_MENU='Running %s Menu'
-    RUNNING_START='Running start()'
+    RUNNING_AUTH_MENU='Running auth_menu'
     ASSIGN_MENU='Assigning menu according to the role'
     SUPER_ADMIN_PRESENT='Super Admin Present'
     TABULATE_ERROR='Tabulate error: %s'

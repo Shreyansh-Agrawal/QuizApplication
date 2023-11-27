@@ -93,14 +93,14 @@ def test_assign_menu(mocker, role, expected_func_call, caplog, capsys):
         expected_function = locals()[f'mock_{expected_func_call}']
 
         if expected_func_call == 'admin_menu':
-            expected_function.assert_called_once_with('test_user', 1)
+            expected_function.assert_called_once_with(data[0], data[2])
         else:
-            expected_function.assert_called_once_with('test_user')
+            expected_function.assert_called_once_with(data[0])
     else:
         assert DisplayMessage.INVALID_ROLE_MSG in captured.out
 
 
-def test_start(mocker, caplog, capsys):
+def test_auth_menu(mocker, caplog, capsys):
     '''Test function to test start function'''
 
     data = ('test_user', 'user', 1)
@@ -111,10 +111,10 @@ def test_start(mocker, caplog, capsys):
     mock_assign_menu = mocker.patch('src.utils.menu.assign_menu')
     mock_player_menu = mocker.patch('src.utils.menu.player_menu')
 
-    menu.start()
+    menu.auth_menu()
     captured = capsys.readouterr()
 
-    assert LogMessage.RUNNING_START in caplog.text
+    assert LogMessage.RUNNING_AUTH_MENU in caplog.text
     assert DisplayMessage.APP_WELCOME_MSG in captured.out
     mock_handle_login.assert_called_once()
     mock_handle_signup.assert_called_once()

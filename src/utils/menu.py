@@ -100,10 +100,10 @@ def assign_menu(data: Tuple) -> None:
             print(DisplayMessage.INVALID_ROLE_MSG, role)
 
 
-def start() -> None:
+def auth_menu() -> None:
     '''Menu for Login / Sign Up'''
 
-    logger.info(LogMessage.RUNNING_START)
+    logger.info(LogMessage.RUNNING_AUTH_MENU)
     print(DisplayMessage.APP_WELCOME_MSG)
 
     while True:
