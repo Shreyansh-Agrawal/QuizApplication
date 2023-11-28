@@ -29,10 +29,7 @@ class AuthController:
             return ()
 
         user_password, role, is_password_changed = user_data[0]
-        if not is_password_changed and user_password != password:
-            print(DisplayMessage.AUTH_INVALIDATE_MSG)
-            return ()
-        if is_password_changed and user_password != hashed_password:
+        if user_password != password and user_password != hashed_password:
             print(DisplayMessage.AUTH_INVALIDATE_MSG)
             return ()
 

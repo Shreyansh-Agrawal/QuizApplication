@@ -7,8 +7,8 @@ from typing import Dict, List, Tuple
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage
 from config.queries import Queries
-from controllers.helpers import quiz_helper as QuizHelper
-from controllers.helpers import start_quiz_helper as StartQuizHelper
+from controllers.helpers.create_quiz_helper import CreateQuizHelper
+from controllers.helpers.start_quiz_helper import StartQuizHelper
 from database.database_access import DatabaseAccess as DAO
 from models.quiz import Category
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
@@ -56,8 +56,9 @@ class QuizController:
     def create_question(self, username: str) -> None:
         '''Add Questions in a Category'''
 
-        question_data = QuizHelper.get_question_data(username)
-        question = QuizHelper.create_option(question_data)
+        create_quiz_helper = CreateQuizHelper()
+        question_data = create_quiz_helper.get_question_data(username)
+        question = create_quiz_helper.create_option(question_data)
 
         try:
             question.save_to_database()
@@ -92,10 +93,11 @@ class QuizController:
         '''Start a New Quiz'''
 
         logger.debug(LogMessage.START_QUIZ, username)
+        start_quiz_helper = StartQuizHelper()
         if not category:
-            data = StartQuizHelper.get_random_questions()
+            data = start_quiz_helper.get_random_questions()
         else:
-            data = StartQuizHelper.get_random_questions_by_category(category)
+            data = start_quiz_helper.get_random_questions_by_category(category)
 
         if len(data) < 10:
             raise DataNotFoundError('Not enough questions!')
@@ -121,9 +123,9 @@ class QuizController:
             formatted_seconds = str(seconds).zfill(2)
             print(f'\nTime remaining: {formatted_mins}:{formatted_seconds} mins')
 
-            StartQuizHelper.display_question(question_no, question_text, question_type, options_data)
+            start_quiz_helper.display_question(question_no, question_text, question_type, options_data)
 
-            player_answer = StartQuizHelper.get_player_response(question_type)
+            player_answer = start_quiz_helper.get_player_response(question_type)
 
             if question_type.lower() == 'mcq':
                 player_answer = options_data[player_answer-1][0]
@@ -136,5 +138,5 @@ class QuizController:
         print(DisplayMessage.DISPLAY_SCORE_MSG.format(score=score))
         print('\n-----REVIEW YOUR RESPONSES-----\n')
         pretty_print(data=player_responses, headers=(Headers.QUES, Headers.PLAYER_ANS, Headers.ANS))
-        StartQuizHelper.save_quiz_score(username, score)
+        start_quiz_helper.save_quiz_score(username, score)
         logger.debug(LogMessage.COMPLETE_QUIZ, username)

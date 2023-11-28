@@ -9,7 +9,7 @@ import logging
 
 from config.message_prompts import DisplayMessage, LogMessage
 from utils.initialize_app import Initializer
-from utils.menu import auth_menu
+from menu.main_menu import MainMenu
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)-d] %(message)s',
@@ -27,7 +27,7 @@ def start_quiz_app():
     logger.info(LogMessage.SYSTEM_START)
     try:
         Initializer.initialize_app()
-        auth_menu()
+        MainMenu.auth_menu()
     except Exception as e: # pylint: disable=broad-exception-caught
         logger.exception(e)
         print(e)

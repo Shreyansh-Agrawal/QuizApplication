@@ -14,11 +14,13 @@ logger = logging.getLogger(__name__)
 class DatabaseAccess:
     '''A class for database methods.'''
 
-    @staticmethod
-    def read_from_database(query: str, data: Tuple = None) -> List:
+    database_path = FilePaths.DATABASE_PATH
+
+    @classmethod
+    def read_from_database(cls, query: str, data: Tuple = None) -> List:
         '''Reads data from database.'''
 
-        with DatabaseConnection(FilePaths.DATABASE_PATH) as connection:
+        with DatabaseConnection(cls.database_path) as connection:
             cursor = connection.cursor()
             try:
                 if not data:
@@ -32,11 +34,11 @@ class DatabaseAccess:
 
             return cursor.fetchall()
 
-    @staticmethod
-    def write_to_database(query: str, data: Tuple = None) -> None:
+    @classmethod
+    def write_to_database(cls, query: str, data: Tuple = None) -> None:
         '''CREATE TABLE / Add / Update / Delete data from database.'''
 
-        with DatabaseConnection(FilePaths.DATABASE_PATH) as connection:
+        with DatabaseConnection(cls.database_path) as connection:
             cursor = connection.cursor()
             try:
                 cursor.execute(InitializationQueries.ENABLE_FOREIGN_KEYS)
