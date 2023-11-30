@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class AdminMenu:
-    '''AdminMenu class'''
+    '''Admin Menu class'''
 
     @classmethod
     def admin_menu(cls, username: str, is_password_changed: int) -> None:

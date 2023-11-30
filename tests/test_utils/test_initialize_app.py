@@ -1,10 +1,12 @@
 '''Test file for initialize_app.py'''
 
+import sqlite3
+
 import pytest
 
 from src.config.message_prompts import DisplayMessage, Headers, LogMessage
-from src.utils.custom_error import DuplicateEntryError
 from src.utils.initialize_app import InitializeDatabase, Initializer
+from utils.custom_error import DuplicateEntryError
 
 
 @pytest.mark.usefixtures('mock_env_variables')
@@ -27,7 +29,7 @@ def test_create_super_admin_failure(mocker):
     '''Test function to test create_super_admin method failure'''
 
     mock_super_admin = mocker.patch('src.utils.initialize_app.SuperAdmin')
-    mock_super_admin().save_to_database.side_effect = DuplicateEntryError('Super Admin Already exists!')
+    mock_super_admin().save_to_database.side_effect = sqlite3.IntegrityError('Super Admin Already exists!')
 
     with pytest.raises(DuplicateEntryError):
         Initializer.create_super_admin()
@@ -37,10 +39,13 @@ def test_initialize_app(mocker, capsys, caplog):
     '''Test function to test initialize_app method'''
 
     mocker.patch('src.utils.initialize_app.InitializeDatabase')
-    mocker.patch('src.utils.initialize_app.Initializer')
+    mock_initialize_app = mocker.patch('src.utils.initialize_app.Initializer')
+    mock_initialize_app.create_super_admin.side_effect = DuplicateEntryError('Super Admin Already exists!')
+
     Initializer.initialize_app()
     captured = capsys.readouterr()
 
+    assert LogMessage.SUPER_ADMIN_PRESENT in caplog.text
     assert LogMessage.INITIALIZE_APP_SUCCESS in caplog.text
     assert DisplayMessage.INITIALIZATION_SUCCESS_MSG in captured.out
 

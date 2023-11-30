@@ -25,7 +25,6 @@ class CreateQuizHelper:
 
     def get_question_data(self, username: str) -> Dict:
         '''Takes input of question details'''
-        categories = self.get_all_categories()
 
         logger.debug(LogMessage.CREATE_ENTITY, Headers.QUES)
         print(DisplayMessage.CREATE_QUES_MSG)
@@ -35,13 +34,12 @@ class CreateQuizHelper:
             regex_pattern=RegexPattern.NUMERIC_PATTERN,
             error_msg=DisplayMessage.INVALID_CHOICE
         )
-
         user_choice = int(user_choice)
+        categories = self.get_all_categories()
         if user_choice > len(categories) or user_choice-1 < 0:
             raise DataNotFoundError('No such Category! Please choose from above!!')
 
         category_name = categories[user_choice-1][0]
-
         category_id = DAO.read_from_database(Queries.GET_CATEGORY_ID_BY_NAME, (category_name, ))
         admin_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
         admin_id = admin_data[0][0]
@@ -58,8 +56,8 @@ class CreateQuizHelper:
 
         return question_data
 
-    def create_option(self, question_data: Dict) -> Question:
-        '''Create options, returns a question object'''
+    def get_question_type(self, question_data: Dict) -> Dict:
+        '''Get question type from user'''
 
         while True:
             question_type_input = input(Prompts.QUESTION_TYPE_PROMPTS)
@@ -77,6 +75,12 @@ class CreateQuizHelper:
                     print(DisplayMessage.INVALID_QUES_TYPE_MSG)
                     continue
 
+        return question_data
+
+    def create_option(self, question_data: Dict) -> Question:
+        '''Create options, returns a question object'''
+
+        question_data = self.get_question_type(question_data)
         question = Question(question_data)
 
         match question_data['question_type']:

@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class SuperAdminMenu:
-    '''SuperAdminMenu class'''
+    '''Super Admin Menu class'''
 
     @classmethod
     def super_admin_menu(cls, username: str) -> None:

@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class PlayerMenu:
-    '''PlayerMenu class'''
+    '''Player Menu class'''
 
     @classmethod
     def player_menu(cls, username: str) -> None:

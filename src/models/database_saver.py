@@ -9,4 +9,3 @@ class DatabaseSaver(ABC):
     @abstractmethod
     def save_to_database(self) -> None:
         '''Abstract method to save to the database'''
-        pass

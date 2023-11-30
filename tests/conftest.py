@@ -148,56 +148,6 @@ def mock_db_connection(mocker):
 
 
 @pytest.fixture
-def mock_read_from_database_valid_data():
-    '''Test Fixture to mock read_from_database method with valid data.'''
-
-    def func_with_data():
-        return [("John", "Doe"), ("Peter", "Pan")]
-
-    return func_with_data
-
-
-@pytest.fixture
-def mock_read_from_database_no_data():
-    '''Test Fixture to mock read_from_database method with no data.'''
-
-    def func_with_no_data():
-        return []
-
-    return func_with_no_data
-
-
-@pytest.fixture
-def mock_read_from_database_with_error():
-    '''Test Fixture to mock read_from_database method.'''
-
-    def func_with_error():
-        raise sqlite3.Error
-
-    return func_with_error
-
-
-@pytest.fixture
-def mock_write_to_database():
-    '''Test Fixture to mock write_to_database method.'''
-
-    def func_with_no_error():
-        pass
-
-    return func_with_no_error
-
-
-@pytest.fixture
-def mock_write_to_database_with_error():
-    '''Test Fixture to mock write_to_database method with error.'''
-
-    def func_with_error():
-        raise sqlite3.Error
-
-    return func_with_error
-
-
-@pytest.fixture
 def sample_json_data():
     '''Test Fixture to mock json data'''
 

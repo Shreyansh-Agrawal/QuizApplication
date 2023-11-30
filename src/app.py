@@ -37,4 +37,4 @@ def start_quiz_app():
 
 
 if __name__ == '__main__':
-    start_quiz_app()
+    start_quiz_app() # pragma: no cover

@@ -47,6 +47,7 @@ class DisplayMessage:
     QUIZ_DATA_NOT_FOUND_MSG = 'No data! Take a Quiz...'
     LEADERBOARD_MSG = '\n-----Leaderboard-----\n'
     QUIZ_START_MSG = '\n-----Quiz Starting-----\n'
+    REVIEW_RESPONSES_MSG = '\n-----REVIEW YOUR RESPONSES-----\n'
     CATEGORY_NOT_FOUND_MSG = 'No such Category! Please choose from above!!'
     USER_NOT_FOUND_MSG = 'No {user} Currently!'
     DISPLAY_USERS_MSG = '\n-----List of {user}s-----\n'

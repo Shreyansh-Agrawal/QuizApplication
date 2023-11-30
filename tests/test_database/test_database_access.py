@@ -43,6 +43,14 @@ class TestDatabaseAccess:
 
         assert mock_cursor.execute.call_count == 2
 
+    def test_write_to_database_success_no_data(self, mock_db_connection):
+        '''Test method to test write_to_database success with no data'''
+
+        mock_cursor = mock_db_connection
+        DatabaseAccess.write_to_database(self.query)
+
+        assert mock_cursor.execute.call_count == 2
+
     def test_write_to_database_error(self, mock_db_connection, caplog):
         '''Test method to test write_to_database error'''
 

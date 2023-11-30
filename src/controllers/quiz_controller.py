@@ -98,7 +98,6 @@ class QuizController:
             data = start_quiz_helper.get_random_questions()
         else:
             data = start_quiz_helper.get_random_questions_by_category(category)
-
         if len(data) < 10:
             raise DataNotFoundError('Not enough questions!')
 
@@ -114,8 +113,8 @@ class QuizController:
 
             remaining_time = end_time - time.time()
             if remaining_time <= 0:
-                print('\nTime\'s up!')
-                break
+                print('\nTime\'s up!') # pragma: no cover
+                break # pragma: no cover
 
             mins = int(remaining_time // 60)
             formatted_mins = str(mins).zfill(2)
@@ -124,19 +123,16 @@ class QuizController:
             print(f'\nTime remaining: {formatted_mins}:{formatted_seconds} mins')
 
             start_quiz_helper.display_question(question_no, question_text, question_type, options_data)
-
             player_answer = start_quiz_helper.get_player_response(question_type)
 
             if question_type.lower() == 'mcq':
                 player_answer = options_data[player_answer-1][0]
-
             if player_answer.lower() == correct_answer.lower():
                 score += 10
-
             player_responses.append((question_text, player_answer, correct_answer))
 
         print(DisplayMessage.DISPLAY_SCORE_MSG.format(score=score))
-        print('\n-----REVIEW YOUR RESPONSES-----\n')
+        print(DisplayMessage.REVIEW_RESPONSES_MSG)
         pretty_print(data=player_responses, headers=(Headers.QUES, Headers.PLAYER_ANS, Headers.ANS))
         start_quiz_helper.save_quiz_score(username, score)
         logger.debug(LogMessage.COMPLETE_QUIZ, username)

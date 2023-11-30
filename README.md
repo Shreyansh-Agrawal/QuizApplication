@@ -67,11 +67,10 @@ QuizApplication/
 │   ├── controllers/
 │   │   ├── handlers/
 │   │   │   ├── auth_handler.py
-│   │   │   ├── menu_handler.py
 │   │   │   ├── quiz_handler.py
 │   │   │   ├── user_handler.py
 │   │   ├── helpers/
-│   │   │   ├── quiz_helper.py
+│   │   │   ├── create_quiz_helper.py
 │   │   │   ├── start_quiz_helper.py
 │   │   ├── auth_controller.py
 │   │   ├── quiz_controller.py
@@ -80,6 +79,11 @@ QuizApplication/
 │   │   ├── data.db
 │   │   ├── database_access.py
 │   │   ├── database_connection.py
+│   ├── menu/
+│   │   ├── admin_menu.py
+│   │   ├── main_menu.py
+│   │   ├── player_menu.py
+│   │   ├── super_admin_menu.py
 │   ├── models/
 │   │   ├── database_saver.py
 │   │   ├── quiz.py
@@ -89,7 +93,6 @@ QuizApplication/
 │   │   ├── custom_error.py
 │   │   ├── initialize_app.py
 │   │   ├── json_to_db_loader.py
-│   │   ├── menu.py
 │   │   ├── password_hasher.py
 │   │   ├── pretty_print.py
 │   │   ├── validations.py
@@ -104,11 +107,10 @@ QuizApplication/
 │   ├── test_controllers/
 │   │   ├── test_handlers/
 │   │   │   ├── test_auth_handler.py
-│   │   │   ├── test_menu_handler.py
 │   │   │   ├── test_quiz_handler.py
 │   │   │   ├── test_user_handler.py
 │   │   ├── test_helpers/
-│   │   │   ├── test_quiz_helper.py
+│   │   │   ├── test_create_quiz_helper.py
 │   │   │   ├── test_start_quiz_helper.py
 │   │   ├── test_auth_controller.py
 │   │   ├── test_quiz_controller.py
@@ -116,6 +118,11 @@ QuizApplication/
 │   ├── test_database/
 │   │   ├── test_database_access.py
 │   │   ├── test_database_connection.py
+│   ├── test_menu/
+│   │   ├── test_admin_menu.py
+│   │   ├── test_main_menu.py
+│   │   ├── test_player_menu.py
+│   │   ├── test_super_admin_menu.py
 │   ├── test_models/
 │   │   ├── test_database_saver.py
 │   │   ├── test_quiz.py
@@ -125,7 +132,6 @@ QuizApplication/
 │   │   ├── test_custom_error.py
 │   │   ├── test_initialize_app.py
 │   │   ├── test_json_to_db_loader.py
-│   │   ├── test_menu.py
 │   │   ├── test_pretty_print.py
 │   │   ├── test_password_hasher.py
 │   │   ├── test_validations.py
