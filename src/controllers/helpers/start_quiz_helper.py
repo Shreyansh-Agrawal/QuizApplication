@@ -46,32 +46,21 @@ class StartQuizHelper:
             regex_pattern=RegexPattern.NUMERIC_PATTERN,
             error_msg=DisplayMessage.INVALID_CHOICE
         )
-
         player_choice = int(player_choice)
         if player_choice > len(categories) or player_choice-1 < 0:
             raise DataNotFoundError(DisplayMessage.CATEGORY_NOT_FOUND_MSG)
 
         category = categories[player_choice-1][0]
-
-        for data in categories:
-            if data[0] == category:
-                break
-        else:
-            raise DataNotFoundError(DisplayMessage.CATEGORY_NOT_FOUND_MSG)
-
         return category
 
     def display_question(self, question_no: int, question: str, question_type: str, options_data: List[Tuple]) -> None:
         '''Display question and its options to player'''
 
         print(f'\n{question_no}) {question}')
-
         if question_type.lower() == 'mcq':
             options = [option[0] for option in options_data]
-
             for count, option in enumerate(options, 1):
                 print(f'    {count}. {option}')
-
         elif question_type.lower() == 't/f':
             print(DisplayMessage.TF_OPTION_MSG)
 
@@ -85,7 +74,6 @@ class StartQuizHelper:
                     regex_pattern=RegexPattern.NUMERIC_PATTERN,
                     error_msg=DisplayMessage.INVALID_CHOICE
                 )
-
                 player_choice = int(player_choice)
                 if player_choice not in range(1, 5):
                     print(DisplayMessage.MCQ_WRONG_OPTION_MSG)
@@ -99,7 +87,6 @@ class StartQuizHelper:
                     regex_pattern=RegexPattern.NUMERIC_PATTERN,
                     error_msg=DisplayMessage.INVALID_CHOICE
                 )
-
                 player_choice = int(player_choice)
                 match player_choice:
                     case 1:
