@@ -7,9 +7,9 @@
 
 import logging
 
-from config.display_menu import DisplayMessage
+from config.message_prompts import DisplayMessage, LogMessage
 from utils.initialize_app import Initializer
-from utils.menu import start
+from menu.main_menu import MainMenu
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)-d] %(message)s',
@@ -21,15 +21,20 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-if __name__ == '__main__':
-    logger.info('app.py running')
+def start_quiz_app():
+    '''Function to start the Application.'''
 
+    logger.info(LogMessage.SYSTEM_START)
     try:
         Initializer.initialize_app()
-        start()
-    except Exception as e:
+        MainMenu.auth_menu()
+    except Exception as e: # pylint: disable=broad-exception-caught
         logger.exception(e)
         print(e)
 
-    logger.info('Stopping Application')
+    logger.info(LogMessage.SYSTEM_STOP)
     print(DisplayMessage.EXIT_MSG)
+
+
+if __name__ == '__main__':
+    start_quiz_app() # pragma: no cover

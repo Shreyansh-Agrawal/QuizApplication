@@ -1,5 +1,6 @@
 '''Contains regex patterns for validating various inputs'''
 
+
 class RegexPattern:
     '''Contains regex patterns as class variables'''
 

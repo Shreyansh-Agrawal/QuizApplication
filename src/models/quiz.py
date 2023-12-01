@@ -1,21 +1,13 @@
 '''Contains classes for Quiz, Category, Question and Option'''
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import Dict
 
 from config.queries import Queries
 from database.database_access import DatabaseAccess as DAO
+from models.database_saver import DatabaseSaver
 from utils import validations
 from utils.custom_error import DataNotFoundError
-
-
-class DatabaseSaver(ABC):
-    '''Abstract interface for saving to the database'''
-
-    @abstractmethod
-    def save_to_database(self) -> None:
-        '''Abstract method to save to the database'''
-        pass
 
 
 class QuizEntity(ABC):

@@ -7,7 +7,7 @@ import maskpass
 import shortuuid
 
 from config.regex_patterns import RegexPattern
-from config.display_menu import DisplayMessage, Headers
+from config.message_prompts import DisplayMessage, Headers
 from utils.custom_error import InvalidInputError
 
 
@@ -21,7 +21,6 @@ def error_handling(func):
         except InvalidInputError as e:
             print(DisplayMessage.TRY_AGAIN_MSG.format(error=e))
             return False
-
         return res
 
     return wrapper
@@ -58,7 +57,7 @@ def validate_id(entity: str) -> str:
 
 
 def validate_password(prompt: str) -> str:
-    ''' Checks password input: min length = 6'''
+    '''Checks password input: min length = 6'''
 
     result = False
     password = ''
@@ -75,7 +74,7 @@ def validate_password(prompt: str) -> str:
     return password
 
 
-def regex_validator(prompt, regex_pattern, error_msg) -> str:
+def regex_validator(prompt: str, regex_pattern: str, error_msg: str) -> str:
     '''Validates input using regex'''
 
     result = False

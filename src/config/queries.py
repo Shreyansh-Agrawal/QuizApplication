@@ -1,5 +1,6 @@
 '''Queries for database operations'''
 
+
 class InitializationQueries:
     '''Contains queries for creation of db tables'''
 

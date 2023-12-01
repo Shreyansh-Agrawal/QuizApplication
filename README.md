@@ -54,23 +54,23 @@ pipenv run python .\src\app.py
 ### Project Structure
 
 ```bash
-QuizApp/
+QuizApplication/
 ├── documents/
 │   ├── documentation.pdf
 ├── src/
 │   ├── config/
-│   │   ├── display_menu.py
+│   │   ├── file_paths.py
+│   │   ├── message_prompts.py
 │   │   ├── queries.py
 │   │   ├── questions.json
 │   │   ├── regex_patterns.py
 │   ├── controllers/
 │   │   ├── handlers/
 │   │   │   ├── auth_handler.py
-│   │   │   ├── menu_handler.py
 │   │   │   ├── quiz_handler.py
 │   │   │   ├── user_handler.py
 │   │   ├── helpers/
-│   │   │   ├── quiz_helper.py
+│   │   │   ├── create_quiz_helper.py
 │   │   │   ├── start_quiz_helper.py
 │   │   ├── auth_controller.py
 │   │   ├── quiz_controller.py
@@ -79,22 +79,70 @@ QuizApp/
 │   │   ├── data.db
 │   │   ├── database_access.py
 │   │   ├── database_connection.py
+│   ├── menu/
+│   │   ├── admin_menu.py
+│   │   ├── main_menu.py
+│   │   ├── player_menu.py
+│   │   ├── super_admin_menu.py
 │   ├── models/
+│   │   ├── database_saver.py
 │   │   ├── quiz.py
+│   │   ├── user_manager.py
 │   │   ├── user.py
 │   ├── utils/
 │   │   ├── custom_error.py
 │   │   ├── initialize_app.py
 │   │   ├── json_to_db_loader.py
-│   │   ├── menu.py
+│   │   ├── password_hasher.py
 │   │   ├── pretty_print.py
 │   │   ├── validations.py
 │   ├── app.py
+├── tests/
+│   ├── test_config/
+│   │   ├── test_file_paths.py
+│   │   ├── test_message_prompts.py
+│   │   ├── test_queries.py
+│   │   ├── test_questions.json
+│   │   ├── test_regex_patterns.py
+│   ├── test_controllers/
+│   │   ├── test_handlers/
+│   │   │   ├── test_auth_handler.py
+│   │   │   ├── test_quiz_handler.py
+│   │   │   ├── test_user_handler.py
+│   │   ├── test_helpers/
+│   │   │   ├── test_create_quiz_helper.py
+│   │   │   ├── test_start_quiz_helper.py
+│   │   ├── test_auth_controller.py
+│   │   ├── test_quiz_controller.py
+│   │   ├── test_user_controller.py
+│   ├── test_database/
+│   │   ├── test_database_access.py
+│   │   ├── test_database_connection.py
+│   ├── test_menu/
+│   │   ├── test_admin_menu.py
+│   │   ├── test_main_menu.py
+│   │   ├── test_player_menu.py
+│   │   ├── test_super_admin_menu.py
+│   ├── test_models/
+│   │   ├── test_database_saver.py
+│   │   ├── test_quiz.py
+│   │   ├── test_user_manager.py
+│   │   ├── test_user.py
+│   ├── test_utils/
+│   │   ├── test_custom_error.py
+│   │   ├── test_initialize_app.py
+│   │   ├── test_json_to_db_loader.py
+│   │   ├── test_pretty_print.py
+│   │   ├── test_password_hasher.py
+│   │   ├── test_validations.py
+│   ├── conftest.py
+│   ├── test_app.py
 ├── .env
 ├── .gitignore
 ├── logs.log
 ├── Pipfile
 ├── Pipfile.lock
+├── pytest.ini
 ├── README.md
 ```
 
@@ -103,6 +151,10 @@ QuizApp/
 - **user.py**: Contains classes for users, including `User`, `SuperAdmin`, `Admin`, and `Player`.
 
 - **quiz.py**: Contains classes for quiz entities, such as `QuizEntity`, `Category`, `Option`, and `Question`.
+
+- **database_saver.py**: Contains interface for `DatabaseSaver`.
+
+- **user_manager.py**: Contains classes responsible for saving users to the database, such as `UserManager`.
 
 ## Controllers
 
@@ -128,7 +180,7 @@ The application employs an SQLite database with the following tables:
 ### Super Admin
 
 - **Create Admin Account**: Super Admins can create new admin accounts.
-- **View Admins**: Super Admins can view a list of admins, either all or by specific admin ID.
+- **View Admins**: Super Admins can view a list of admins.
 - **Delete Admin Details**: Super Admins can delete admin accounts.
 
 ### Admin
@@ -138,7 +190,7 @@ The application employs an SQLite database with the following tables:
 
 ### Player
 
-- **Take a Quiz**: Players can participate in quizzes by selecting a category.
+- **Take a Quiz**: Players can participate in quizzes by selecting a category or can play a random quiz.
 - **View Leaderboard**: Players can see the quiz leaderboard.
 - **View Your Scores**: Players can view their own past quiz scores.
 

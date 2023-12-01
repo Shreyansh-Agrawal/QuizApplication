@@ -1,23 +1,29 @@
 '''Functions to load data to database from json file'''
 
 import json
+import logging
 import sqlite3
 
+from config.file_paths import FilePaths
+from config.message_prompts import LogMessage
 from config.queries import Queries
 from database.database_access import DatabaseAccess as DAO
 from utils import validations
 
+logger = logging.getLogger(__name__)
 
-def load_questions_from_json(created_by_admin_username: str) -> None:
-    '''Function to load data to db from json'''
 
+def load_quiz_data_from_json(created_by_admin_username: str) -> None:
+    '''Function to load quiz data to db from json'''
+
+    logger.debug(LogMessage.LOAD_QUIZ_DATA_FROM_JSON)
     admin_data = DAO.read_from_database(
                     Queries.GET_USER_ID_BY_USERNAME,
                     (created_by_admin_username, )
                 )
     created_by_admin_id = admin_data[0][0]
 
-    with open('src\\config\\questions.json', 'r', encoding="utf-8") as file:
+    with open(FilePaths.QUESTIONS_JSON_PATH, 'r', encoding="utf-8") as file:
         data = json.load(file)
 
     for question in data['questions']:
@@ -37,6 +43,7 @@ def load_questions_from_json(created_by_admin_username: str) -> None:
                 (category_id, admin_id, admin_username, category))
 
         except sqlite3.IntegrityError:
+            # Not logging the error: Reason - Definite error due to json data structure
             pass
 
         try:
@@ -58,4 +65,5 @@ def load_questions_from_json(created_by_admin_username: str) -> None:
                         (other_option_id, question_id, other_option, 0))
 
         except sqlite3.IntegrityError:
+            # Not logging the error: Reason - Definite error due to json data structure
             pass
