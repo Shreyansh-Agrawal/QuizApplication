@@ -34,7 +34,7 @@ class TestDatabaseConnection:
 
         with pytest.raises(sqlite3.Error):
             with DatabaseConnection('test.db'):
-                raise sqlite3.Error("Some error")
+                raise sqlite3.Error('Some error')
 
         # After exiting the context manager with an exception
         mock_connection.commit.assert_not_called()

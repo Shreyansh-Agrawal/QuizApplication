@@ -12,8 +12,8 @@ class TestQuizEntity:
     def test_quiz_entity_instance_creation(self):
         '''Test method to test QuizEntity class instance creation'''
 
-        text = "Test Question"
-        quiz_entity = "question"
+        text = 'Test Question'
+        quiz_entity = 'question'
 
         quiz_entity_obj = QuizEntity(text, quiz_entity)
 

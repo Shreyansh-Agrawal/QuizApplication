@@ -3,7 +3,7 @@
 import logging
 from typing import Dict, List, Tuple
 
-from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
+from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from database.database_access import DatabaseAccess as DAO
@@ -30,14 +30,14 @@ class CreateQuizHelper:
         print(DisplayMessage.CREATE_QUES_MSG)
 
         user_choice = validations.regex_validator(
-            prompt='Choose a Category: ',
+            prompt=Prompts.SELECT_CATEGORY_PROMPT,
             regex_pattern=RegexPattern.NUMERIC_PATTERN,
             error_msg=DisplayMessage.INVALID_CHOICE
         )
         user_choice = int(user_choice)
         categories = self.get_all_categories()
         if user_choice > len(categories) or user_choice-1 < 0:
-            raise DataNotFoundError('No such Category! Please choose from above!!')
+            raise DataNotFoundError(ErrorMessage.INVALID_CATEGORY_SELECTION_ERROR)
 
         category_name = categories[user_choice-1][0]
         category_id = DAO.read_from_database(Queries.GET_CATEGORY_ID_BY_NAME, (category_name, ))
@@ -49,7 +49,7 @@ class CreateQuizHelper:
         question_data['admin_id'] = admin_id
         question_data['admin_username'] = username
         question_data['question_text'] = validations.regex_validator(
-            prompt='Enter Question Text: ',
+            prompt=Prompts.QUES_TEXT_PROMPT,
             regex_pattern=RegexPattern.QUES_TEXT_PATTERN,
             error_msg=DisplayMessage.INVALID_TEXT.format(Headers.QUES)
         ).title()
@@ -88,7 +88,7 @@ class CreateQuizHelper:
                 option_data = {}
                 option_data['question_id'] = question.entity_id
                 option_data['option_text'] = validations.regex_validator(
-                    prompt='Enter Answer: ',
+                    prompt=Prompts.ANS_PROMPT,
                     regex_pattern=RegexPattern.OPTION_TEXT_PATTERN,
                     error_msg=DisplayMessage.INVALID_TEXT.format(Headers.OPTION)
                 ).title()
@@ -99,7 +99,7 @@ class CreateQuizHelper:
                 for _ in range(3):
                     option_data['question_id'] = question.entity_id
                     option_data['option_text'] = validations.regex_validator(
-                        prompt='Enter Other Option: ',
+                        prompt=Prompts.OPTION_PROMPT,
                         regex_pattern=RegexPattern.OPTION_TEXT_PATTERN,
                         error_msg=DisplayMessage.INVALID_TEXT.format(Headers.OPTION)
                     ).title()
@@ -110,7 +110,7 @@ class CreateQuizHelper:
                 option_data = {}
                 option_data['question_id'] = question.entity_id
                 option_data['option_text'] = validations.regex_validator(
-                    prompt='Enter Answer: ',
+                    prompt=Prompts.ANS_PROMPT,
                     regex_pattern=RegexPattern.OPTION_TEXT_PATTERN,
                     error_msg=DisplayMessage.INVALID_TEXT.format(Headers.OPTION)
                 ).title()

@@ -83,7 +83,7 @@ class TestCreateQuizHelper:
         assert DisplayMessage.INVALID_QUES_TYPE_MSG in captured.out
         assert result == self.ques_type_data[0][1]
 
-    @pytest.mark.parametrize("question_type, user_inputs, expected_options_length", create_option_data)
+    @pytest.mark.parametrize('question_type, user_inputs, expected_options_length', create_option_data)
     def test_create_option(self, mocker, question_type, user_inputs, expected_options_length):
         '''Test method to test create_option'''
 

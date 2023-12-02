@@ -4,7 +4,7 @@ import logging
 import sqlite3
 from typing import Dict, List, Tuple
 
-from config.message_prompts import DisplayMessage, Headers, LogMessage
+from config.message_prompts import DisplayMessage, Headers, LogMessage, ErrorMessage
 from config.queries import Queries
 from database.database_access import DatabaseAccess as DAO
 from models.user import Admin
@@ -35,7 +35,7 @@ class UserController:
         try:
             admin.save_to_database()
         except sqlite3.IntegrityError as e:
-            raise LoginError('User already exists! Try with different credentials...') from e
+            raise LoginError(ErrorMessage.USER_EXISTS_ERROR) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.ADMIN)
         print(DisplayMessage.CREATE_ADMIN_SUCCESS_MSG)

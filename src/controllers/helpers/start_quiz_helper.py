@@ -4,7 +4,7 @@ import logging
 from datetime import datetime, timezone
 from typing import List, Tuple
 
-from config.message_prompts import DisplayMessage, Headers, LogMessage
+from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from controllers.helpers.create_quiz_helper import CreateQuizHelper
@@ -36,13 +36,13 @@ class StartQuizHelper:
 
         data = CreateQuizHelper().get_all_categories()
         if not data:
-            raise DataNotFoundError('No Category Added!')
+            raise DataNotFoundError(ErrorMessage.NO_CATEGORY_ERROR)
 
         categories = [(tup[0], ) for tup in data]
         pretty_print(data=categories, headers=(Headers.CATEGORY, ))
 
         player_choice = validations.regex_validator(
-            prompt='Choose a Category: ',
+            prompt=Prompts.SELECT_CATEGORY_PROMPT,
             regex_pattern=RegexPattern.NUMERIC_PATTERN,
             error_msg=DisplayMessage.INVALID_CHOICE
         )
@@ -53,7 +53,9 @@ class StartQuizHelper:
         category = categories[player_choice-1][0]
         return category
 
-    def display_question(self, question_no: int, question: str, question_type: str, options_data: List[Tuple]) -> None:
+    def display_question(
+        self, question_no: int, question: str, question_type: str, options_data: List[Tuple]
+    ) -> None:
         '''Display question and its options to player'''
 
         print(f'\n{question_no}) {question}')
@@ -70,7 +72,7 @@ class StartQuizHelper:
         if question_type.lower() == 'mcq':
             while True:
                 player_choice = validations.regex_validator(
-                    prompt='Choose an option: ',
+                    prompt=Prompts.SELECT_OPTION_PROMPT,
                     regex_pattern=RegexPattern.NUMERIC_PATTERN,
                     error_msg=DisplayMessage.INVALID_CHOICE
                 )
@@ -83,7 +85,7 @@ class StartQuizHelper:
         elif question_type.lower() == 't/f':
             while True:
                 player_choice = validations.regex_validator(
-                    prompt='Choose an option: ',
+                    prompt=Prompts.SELECT_OPTION_PROMPT,
                     regex_pattern=RegexPattern.NUMERIC_PATTERN,
                     error_msg=DisplayMessage.INVALID_CHOICE
                 )
@@ -97,7 +99,7 @@ class StartQuizHelper:
                         print(DisplayMessage.TF_WRONG_OPTION_MSG)
         else:
             player_answer = validations.regex_validator(
-                prompt='-> Enter your answer: ',
+                prompt=Prompts.ANS_INPUT_PROMPT,
                 regex_pattern=RegexPattern.OPTION_TEXT_PATTERN,
                 error_msg=DisplayMessage.INVALID_TEXT.format(Headers.OPTION)
             )

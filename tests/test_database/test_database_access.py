@@ -8,7 +8,7 @@ from src.database.database_access import DatabaseAccess
 class TestDatabaseAccess:
     '''Test class containing test methods to test DatabaseAccess class methods'''
 
-    query = "SELECT * FROM your_table"
+    query = 'SELECT * FROM your_table'
     data = ('example', 'data')
     mock_fetchall_result = [('result1',), ('result2',)]
 

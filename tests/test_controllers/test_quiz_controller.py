@@ -16,7 +16,7 @@ class TestQuizController:
     category_name = 'test_category'
     old_category_name = 'test_old_category'
     username = 'test_username'
-    question_data = [('Q030', 'What is the result of 6 squared?', 'ONE WORD', '36'), ('Q108', 'Which strait separates Europe from Asia?', 'MCQ', 'Bosporus Strait'), ('Q110', "Which river is often called the 'Cradle of Civilization'?", 'MCQ', 'Tigris and Euphrates'), ('Q043', "What is the value of the mathematical constant 'π' (pi) to two decimal places?", 'ONE WORD', '3.14'), ('Q029', 'What is the next prime number after 7?', 'ONE WORD', '11'), ('Q104', "Which mountain range is considered the 'Roof of the World'?", 'MCQ', 'Himalayas'), ('Q115', 'Which African country is located at the southernmost tip of the continent?', 'MCQ', 'South Africa'), ('Q011', 'The process of converting sugar into alcohol is known as what?', 'ONE WORD', 'Fermentation'), ('Q009', 'How many bones are there in the adult human body?', 'ONE WORD', '206'), ('Q015', 'Is water a conductor of electricity? (True/False)', 'T/F', 'True')]
+    question_data = [('Q030', 'What is the result of 6 squared?', 'ONE WORD', '36'), ('Q108', 'Which strait separates Europe from Asia?', 'MCQ', 'Bosporus Strait'), ('Q110', 'Which river is often called the "Cradle of Civilization"?', 'MCQ', 'Tigris and Euphrates'), ('Q043', 'What is the value of the mathematical constant "π" (pi) to two decimal places?', 'ONE WORD', '3.14'), ('Q029', 'What is the next prime number after 7?', 'ONE WORD', '11'), ('Q104', 'Which mountain range is considered the "Roof of the World"?', 'MCQ', 'Himalayas'), ('Q115', 'Which African country is located at the southernmost tip of the continent?', 'MCQ', 'South Africa'), ('Q011', 'The process of converting sugar into alcohol is known as what?', 'ONE WORD', 'Fermentation'), ('Q009', 'How many bones are there in the adult human body?', 'ONE WORD', '206'), ('Q015', 'Is water a conductor of electricity? (True/False)', 'T/F', 'True')]
     option_data = [[('36',)], [('Bosporus Strait',), ('Strait of Gibraltar',), ('Malacca Strait',), ('Hormuz Strait',)], [('Nile',), ('Amazon',), ('Tigris and Euphrates',), ('Yangtze',)], [('3.14',)], [('11',)], [('Rocky Mountains',), ('Andes',), ('Alps',), ('Himalayas',)], [('Egypt',), ('South Africa',), ('Nigeria',), ('Morocco',)], [('Fermentation',)], [('206',)], [('True',)]]
     player_response_data = ['35', 4, 1, '3.14', '11', 4, 2, 'fermentation', '206', 'true']
     score = 70
@@ -128,7 +128,7 @@ class TestQuizController:
         captured = capsys.readouterr()
 
         assert LogMessage.UPDATE_ENTITY, Headers.CATEGORY in caplog.text
-        assert f"Category {self.old_category_name} updated to {self.category_name}" in caplog.text
+        assert f'Category {self.old_category_name} updated to {self.category_name}' in caplog.text
         assert DisplayMessage.UPDATE_CATEGORY_SUCCESS_MSG.format(
             name=self.old_category_name, new_name=self.category_name
         ) in captured.out

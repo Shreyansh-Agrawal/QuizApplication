@@ -23,7 +23,7 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
                 )
     created_by_admin_id = admin_data[0][0]
 
-    with open(FilePaths.QUESTIONS_JSON_PATH, 'r', encoding="utf-8") as file:
+    with open(FilePaths.QUESTIONS_JSON_PATH, 'r', encoding='utf-8') as file:
         data = json.load(file)
 
     for question in data['questions']:

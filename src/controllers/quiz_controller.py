@@ -5,7 +5,7 @@ import sqlite3
 import time
 from typing import Dict, List, Tuple
 
-from config.message_prompts import DisplayMessage, Headers, LogMessage
+from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import Queries
 from controllers.helpers.create_quiz_helper import CreateQuizHelper
 from controllers.helpers.start_quiz_helper import StartQuizHelper
@@ -48,7 +48,7 @@ class QuizController:
         try:
             category.save_to_database()
         except sqlite3.IntegrityError as e:
-            raise DuplicateEntryError('Category already exists!') from e
+            raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.CATEGORY)) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.CATEGORY)
         print(DisplayMessage.CREATE_CATEGORY_SUCCESS_MSG)
@@ -63,7 +63,7 @@ class QuizController:
         try:
             question.save_to_database()
         except sqlite3.IntegrityError as e:
-            raise DuplicateEntryError('Question already exists!') from e
+            raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.QUES)) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.QUES)
         print(DisplayMessage.CREATE_QUES_SUCCESS_MSG)
@@ -75,10 +75,14 @@ class QuizController:
         try:
             DAO.write_to_database(Queries.UPDATE_CATEGORY_BY_NAME, (new_category_name, old_category_name))
         except sqlite3.IntegrityError as e:
-            raise DuplicateEntryError('Category already exists!') from e
+            raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.CATEGORY)) from e
 
         logger.debug(LogMessage.UPDATE_CATEGORY_SUCCESS, old_category_name, new_category_name)
-        print(DisplayMessage.UPDATE_CATEGORY_SUCCESS_MSG.format(name=old_category_name, new_name=new_category_name))
+        print(
+            DisplayMessage.UPDATE_CATEGORY_SUCCESS_MSG.format(
+                name=old_category_name, new_name=new_category_name
+            )
+        )
 
     def delete_category_by_name(self, category_name: str) -> None:
         '''Delete a category by category name'''
@@ -99,7 +103,7 @@ class QuizController:
         else:
             data = start_quiz_helper.get_random_questions_by_category(category)
         if len(data) < 10:
-            raise DataNotFoundError('Not enough questions!')
+            raise DataNotFoundError(ErrorMessage.INSUFFICIENT_QUESTIONS_ERROR)
 
         print(DisplayMessage.QUIZ_START_MSG)
         end_time = time.time() + 5*60

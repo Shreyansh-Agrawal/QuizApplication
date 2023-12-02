@@ -89,49 +89,49 @@ def mock_env_variables(monkeypatch, user_data):
 def headers_attributes():
     '''Test Fixture to collect and returns attributes from the Headers class.'''
 
-    return [attr for attr in dir(Headers) if not attr.startswith("__")]
+    return [attr for attr in dir(Headers) if not attr.startswith('__')]
 
 
 @pytest.fixture
 def prompts_attributes():
     '''Test Fixture to collect and returns attributes from the Prompts class.'''
 
-    return [attr for attr in dir(Prompts) if not attr.startswith("__")]
+    return [attr for attr in dir(Prompts) if not attr.startswith('__')]
 
 
 @pytest.fixture
 def display_message_attributes():
     '''Test Fixture to collect and returns attributes from the DisplayMessage class.'''
 
-    return [attr for attr in dir(DisplayMessage) if not attr.startswith("__")]
+    return [attr for attr in dir(DisplayMessage) if not attr.startswith('__')]
 
 
 @pytest.fixture
 def initialization_queries_attributes():
     '''Test Fixture to collect and returns attributes from the InitializationQueries class.'''
 
-    return [attr for attr in dir(InitializationQueries) if not attr.startswith("__")]
+    return [attr for attr in dir(InitializationQueries) if not attr.startswith('__')]
 
 
 @pytest.fixture
 def queries_attributes():
     '''Test Fixture to collect and returns attributes from the Queries class.'''
 
-    return [attr for attr in dir(Queries) if not attr.startswith("__")]
+    return [attr for attr in dir(Queries) if not attr.startswith('__')]
 
 
 @pytest.fixture
 def log_message_attributes():
     '''Test Fixture to collect and returns attributes from the LogMessage class.'''
 
-    return [attr for attr in dir(LogMessage) if not attr.startswith("__")]
+    return [attr for attr in dir(LogMessage) if not attr.startswith('__')]
 
 
 @pytest.fixture
 def file_paths_attributes():
     '''Test Fixture to collect and returns attributes from the FilePaths class.'''
 
-    return [attr for attr in dir(FilePaths) if not attr.startswith("__")]
+    return [attr for attr in dir(FilePaths) if not attr.startswith('__')]
 
 
 @pytest.fixture

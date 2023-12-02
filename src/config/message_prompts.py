@@ -1,6 +1,9 @@
 '''Contains all the messages and prompts displayed to user'''
 
 
+from tkinter.messagebox import QUESTION
+
+
 class DisplayMessage:
     '''Contains all the print messages as class variables'''
 
@@ -65,6 +68,8 @@ class DisplayMessage:
     INVALID_TEXT = 'Invalid {}'
     INVALID_CHOICE = 'Select a number from above options!'
     INVALID_PASSWORD = 'Invalid password! Length cannot be less than 6!'
+    CONFIRMATION_MSG='Type "YES" if you wish to continue\nPress any other key to go back: '
+    SELECT_QUIZ_MSG='\n-----SELECT QUIZ MODE-----'
 
 
 class Prompts:
@@ -167,6 +172,26 @@ Enter -
 
 Select Mode: '''
 
+    USERNAME_PROMPT='Enter your username: '
+    CREATE_USERNAME_PROMPT='Create your username: '
+    PASSWORD_PROMPT='Enter your password: '
+    CREATE_PASSWORD_PROMPT='Create your password: '
+    CONFIRM_PASSWORD_PROMPT='Confirm Password: '
+    NEW_PASSWORD_PROMPT='Enter New Password: '
+    NAME_PROMPT='Enter your name: '
+    EMAIL_PROMPT='Enter your email: '
+    SELECT_CATEGORY_PROMPT='Choose a Category: '
+    NEW_CATEGORY_NAME_PROMPT='Enter New Category Name: '
+    UPDATED_CATEGORY_NAME_PROMPT='Enter updated category name: '
+    ADMIN_NAME_PROMPT='Enter admin name: '
+    ADMIN_EMAIL_PROMPT='Enter admin email: '
+    ADMIN_USERNAME_PROMPT='Create admin username: '
+    USER_EMAIL_PROMPT='\nEnter {role} Email: '
+    QUES_TEXT_PROMPT='Enter Question Text: '
+    ANS_PROMPT='Enter Answer: '
+    OPTION_PROMPT='Enter Other Option: '
+    SELECT_OPTION_PROMPT='Choose an option: '
+    ANS_INPUT_PROMPT='-> Enter your answer: '
     ATTEMPT_LIMIT = 3
 
 
@@ -235,3 +260,15 @@ class LogMessage:
     QUES_DATA_NOT_FOUND='No Questions added'
     RUNNING_ADMIN_MENU='Running Admin: Manage %s Menu'
     LOAD_QUIZ_DATA_FROM_JSON='Loading Quiz Data from JSON'
+
+
+class ErrorMessage:
+    '''Contains all the error messages as class variables'''
+
+    USER_EXISTS_ERROR='User already exists! Try different credentials...'
+    ENTITY_EXISTS_ERROR='{entity} already exists!'
+    INSUFFICIENT_QUESTIONS_ERROR='Not enough questions!'
+    INVALID_CATEGORY_SELECTION_ERROR='No such Category! Please choose from above!!'
+    NO_CATEGORY_ERROR='No Category Added!'
+    NO_ROLE_ERROR='No {role} Currently!'
+    NO_OPTIONS_ERROR='No Options added for this Question!'

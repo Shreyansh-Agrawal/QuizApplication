@@ -31,11 +31,11 @@ class AuthHandler:
         while True:
             # validating credentials even during login to prevent any Injections
             username = validations.regex_validator(
-                prompt='Enter your username: ',
+                prompt=Prompts.USERNAME_PROMPT,
                 regex_pattern=RegexPattern.USERNAME_PATTERN,
                 error_msg=DisplayMessage.INVALID_TEXT.format(Headers.USERNAME)
             )
-            password = validations.validate_password(prompt='Enter your password: ')
+            password = validations.validate_password(prompt=Prompts.PASSWORD_PROMPT)
             data = self.auth_controller.login(username, password)
             if data:
                 break
@@ -59,25 +59,25 @@ class AuthHandler:
 
         player_data = {}
         player_data['name'] = validations.regex_validator(
-            prompt='Enter your name: ',
+            prompt=Prompts.NAME_PROMPT,
             regex_pattern=RegexPattern.NAME_PATTERN,
             error_msg=DisplayMessage.INVALID_TEXT.format(Headers.NAME)
         ).title()
         player_data['email'] = validations.regex_validator(
-            prompt='Enter your email: ',
+            prompt=Prompts.EMAIL_PROMPT,
             regex_pattern=RegexPattern.EMAIL_PATTERN,
             error_msg=DisplayMessage.INVALID_TEXT.format(Headers.EMAIL)
         )
         player_data['username'] = validations.regex_validator(
-            prompt='Create your username: ',
+            prompt=Prompts.CREATE_USERNAME_PROMPT,
             regex_pattern=RegexPattern.USERNAME_PATTERN,
             error_msg=DisplayMessage.INVALID_TEXT.format(Headers.USERNAME)
         )
-        password = validations.validate_password(prompt='Create your password: ')
+        password = validations.validate_password(prompt=Prompts.CREATE_PASSWORD_PROMPT)
         confirm_password = ''
 
         while True:
-            confirm_password =  validations.validate_password(prompt='Confirm Password: ')
+            confirm_password =  validations.validate_password(prompt=Prompts.CONFIRM_PASSWORD_PROMPT)
             if password != confirm_password:
                 print(DisplayMessage.CONFIRM_PSWD_FAIL_MSG)
             else:
@@ -102,10 +102,10 @@ class AuthHandler:
             print(DisplayMessage.CHANGE_PSWD_MSG)
             logger.debug(LogMessage.CHANGE_DEFAULT_ADMIN_PSW)
 
-            new_password = validations.validate_password(prompt='Enter New Password: ')
+            new_password = validations.validate_password(prompt=Prompts.NEW_PASSWORD_PROMPT)
             confirm_password = ''
             while True:
-                confirm_password =  validations.validate_password(prompt='Confirm Password: ')
+                confirm_password =  validations.validate_password(prompt=Prompts.CONFIRM_PASSWORD_PROMPT)
                 if new_password != confirm_password:
                     print(DisplayMessage.CONFIRM_PSWD_FAIL_MSG)
                 else:

@@ -16,7 +16,7 @@ class TestMainMenu:
         ('invalid_role', None),
     ]
 
-    @pytest.mark.parametrize("role, expected_func_call", assign_menu_data)
+    @pytest.mark.parametrize('role, expected_func_call', assign_menu_data)
     def test_assign_menu(self, mocker, role, expected_func_call, caplog, capsys):
         '''Test method to test assign_menu'''
 

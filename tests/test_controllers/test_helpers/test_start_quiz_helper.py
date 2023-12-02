@@ -46,10 +46,10 @@ class TestStartQuizHelper:
         )
     ]
     player_response_data = [
-            ("MCQ", ["5", "3"], 3),  # Out of range option, then correct option
-            ("T/F", ["3", "2"], "false"),  # Out of range option, then false option
-            ("T/F", ["3", "1"], "true"),  # Out of range option, then true option
-            ("ONE WORD", ["Text"], "Text"),  # Text input for one-word answer
+            ('MCQ', ['5', '3'], 3),  # Out of range option, then correct option
+            ('T/F', ['3', '2'], 'false'),  # Out of range option, then false option
+            ('T/F', ['3', '1'], 'true'),  # Out of range option, then true option
+            ('ONE WORD', ['Text'], 'Text'),  # Text input for one-word answer
     ]
     start_quiz_helper = StartQuizHelper()
 
@@ -127,7 +127,7 @@ class TestStartQuizHelper:
         captured = capsys.readouterr()
         assert captured.out in expected_output
 
-    @pytest.mark.parametrize("question_type, user_input, expected_output", player_response_data)
+    @pytest.mark.parametrize('question_type, user_input, expected_output', player_response_data)
     def test_get_player_response(self, mocker, question_type, user_input, expected_output):
         '''Test method to test get_player_response'''
 

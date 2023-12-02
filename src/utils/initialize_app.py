@@ -7,7 +7,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from config.message_prompts import DisplayMessage, Headers, LogMessage
+from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import InitializationQueries
 from database.database_access import DatabaseAccess as DAO
 from models.user import SuperAdmin
@@ -40,7 +40,9 @@ class Initializer:
         try:
             super_admin.save_to_database()
         except sqlite3.IntegrityError as e:
-            raise DuplicateEntryError('Super Admin Already exists!') from e
+            raise DuplicateEntryError(
+                ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.SUPER_ADMIN)
+            ) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.SUPER_ADMIN)
         print(DisplayMessage.CREATE_SUPER_ADMIN_SUCCESS_MSG)

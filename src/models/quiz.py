@@ -2,6 +2,7 @@
 
 from abc import ABC
 from typing import Dict
+from config.message_prompts import ErrorMessage
 
 from config.queries import Queries
 from database.database_access import DatabaseAccess as DAO
@@ -89,7 +90,7 @@ class Question(QuizEntity, DatabaseSaver):
         )
 
         if not self.options:
-            raise DataNotFoundError("No Options added for this Question!")
+            raise DataNotFoundError(ErrorMessage.NO_OPTIONS_ERROR)
 
         DAO.write_to_database(Queries.INSERT_QUESTION, question_data)
 

@@ -3,7 +3,7 @@
 import logging
 from typing import Tuple
 
-from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
+from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from controllers.helpers.create_quiz_helper import CreateQuizHelper
@@ -32,7 +32,7 @@ class QuizHandler:
         data = self.create_quiz_helper.get_all_categories()
 
         if not data:
-            raise DataNotFoundError('No Category Added!')
+            raise DataNotFoundError(ErrorMessage.NO_CATEGORY_ERROR)
 
         print(DisplayMessage.CATEGORIES_MSG)
 
@@ -67,14 +67,14 @@ class QuizHandler:
             categories = self.create_quiz_helper.get_all_categories()
 
             user_choice = validations.regex_validator(
-                prompt='Choose a Category: ',
+                prompt=Prompts.SELECT_CATEGORY_PROMPT,
                 regex_pattern=RegexPattern.NUMERIC_PATTERN,
                 error_msg=DisplayMessage.INVALID_CHOICE
             )
             user_choice = int(user_choice)
 
             if user_choice > len(categories) or user_choice-1 < 0:
-                raise DataNotFoundError('No such Category! Please choose from above!!')
+                raise DataNotFoundError(ErrorMessage.INVALID_CATEGORY_SELECTION_ERROR)
         except DataNotFoundError as e:
             logger.warning(e)
             print(e)
@@ -111,7 +111,7 @@ class QuizHandler:
         logger.debug(LogMessage.START_QUIZ, username)
 
         while True:
-            print('\n-----SELECT QUIZ MODE-----')
+            print(DisplayMessage.SELECT_QUIZ_MSG)
             quiz_mode = input(Prompts.SELECT_MODE_PROMPTS)
 
             match quiz_mode:
@@ -151,7 +151,7 @@ class QuizHandler:
         category_data['admin_id'] = admin_id
         category_data['admin_username'] = created_by
         category_data['category_name'] = validations.regex_validator(
-            prompt='Enter New Category Name: ',
+            prompt=Prompts.NEW_CATEGORY_NAME_PROMPT,
             regex_pattern=RegexPattern.NAME_PATTERN,
             error_msg=DisplayMessage.INVALID_TEXT.format(Headers.NAME)
         ).title()
@@ -185,13 +185,13 @@ class QuizHandler:
             print(DisplayMessage.UPDATE_CATEGORY_MSG)
 
             user_choice = validations.regex_validator(
-                prompt='Choose a Category: ',
+                prompt=Prompts.SELECT_CATEGORY_PROMPT,
                 regex_pattern=RegexPattern.NUMERIC_PATTERN,
                 error_msg=DisplayMessage.INVALID_CHOICE
             )
             user_choice = int(user_choice)
             if user_choice > len(categories) or user_choice-1 < 0:
-                raise DataNotFoundError('No such Category! Please choose from above!!')
+                raise DataNotFoundError(ErrorMessage.INVALID_CATEGORY_SELECTION_ERROR)
         except DataNotFoundError as e:
             logger.warning(e)
             print(e)
@@ -199,7 +199,7 @@ class QuizHandler:
 
         old_category_name = categories[user_choice-1][0]
         new_category_name = validations.regex_validator(
-            prompt='Enter updated category name: ',
+            prompt=Prompts.UPDATED_CATEGORY_NAME_PROMPT,
             regex_pattern=RegexPattern.NAME_PATTERN,
             error_msg=DisplayMessage.INVALID_TEXT.format(Headers.NAME)
         ).title()
@@ -221,13 +221,13 @@ class QuizHandler:
             print(DisplayMessage.DELETE_CATEGORY_MSG)
 
             user_choice = validations.regex_validator(
-                prompt='Choose a Category: ',
+                prompt=Prompts.SELECT_CATEGORY_PROMPT,
                 regex_pattern=RegexPattern.NUMERIC_PATTERN,
                 error_msg=DisplayMessage.INVALID_CHOICE
             )
             user_choice = int(user_choice)
             if user_choice > len(categories) or user_choice-1 < 0:
-                raise DataNotFoundError('No such Category! Please choose from above!!')
+                raise DataNotFoundError(ErrorMessage.INVALID_CATEGORY_SELECTION_ERROR)
         except DataNotFoundError as e:
             logger.warning(e)
             print(e)
@@ -236,7 +236,7 @@ class QuizHandler:
         category_name = categories[user_choice-1][0]
         while True:
             print(DisplayMessage.DELETE_CATEGORY_WARNING_MSG.format(name=category_name))
-            confirmation = input('Type "YES" if you wish to continue\nPress any other key to go back: ')
+            confirmation = input(DisplayMessage.CONFIRMATION_MSG)
             if confirmation.lower() == 'yes':
                 break
             return
