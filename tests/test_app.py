@@ -1,14 +1,14 @@
 '''Test file for app.py'''
 
 from config.message_prompts import DisplayMessage, LogMessage
-from src.app import start_quiz_app
+from app import start_quiz_app
 
 
 def test_application_entry_point_logging(mocker, capsys, caplog):
     '''Test function to test app.py'''
 
-    mocker.patch('src.app.Initializer.initialize_app')
-    mocker.patch('src.app.MainMenu.auth_menu')
+    mocker.patch('app.Initializer.initialize_app')
+    mocker.patch('app.MainMenu.auth_menu')
 
     start_quiz_app()
     captured = capsys.readouterr()
@@ -20,8 +20,8 @@ def test_application_entry_point_logging(mocker, capsys, caplog):
 def test_application_entry_point_error(mocker, capsys, caplog):
     '''Test function to test app.py for error'''
 
-    mocker.patch('src.app.Initializer.initialize_app')
-    mocker.patch('src.app.MainMenu.auth_menu', side_effect=Exception('test_exception'))
+    mocker.patch('app.Initializer.initialize_app')
+    mocker.patch('app.MainMenu.auth_menu', side_effect=Exception('test_exception'))
 
     start_quiz_app()
     captured = capsys.readouterr()

@@ -3,9 +3,9 @@
 import pytest
 import shortuuid
 
-from src.config.message_prompts import DisplayMessage, Headers
-from src.config.regex_patterns import RegexPattern
-from src.utils import validations
+from config.message_prompts import DisplayMessage, Headers
+from config.regex_patterns import RegexPattern
+from utils import validations
 
 valid_validator_input_data = [
     (RegexPattern.NAME_PATTERN, 'John Doe', DisplayMessage.INVALID_TEXT.format(Headers.NAME)),

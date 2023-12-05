@@ -4,8 +4,8 @@ import sqlite3
 
 import pytest
 
-from src.database.database_access import DatabaseAccess
-from src.database.database_connection import DatabaseConnection
+from database.database_access import DatabaseAccess
+from database.database_connection import DatabaseConnection
 
 
 class TestDatabaseAccess:
@@ -20,7 +20,7 @@ class TestDatabaseAccess:
         '''Test Fixture to mock db connection'''
 
         mock_connection = mocker.MagicMock(spec=DatabaseConnection)
-        mocker.patch('src.database.database_access.DatabaseConnection', return_value=mock_connection)
+        mocker.patch('database.database_access.DatabaseConnection', return_value=mock_connection)
         mock_cursor = mocker.MagicMock()
         mock_connection.__enter__.return_value.cursor.return_value = mock_cursor
 

@@ -1,6 +1,6 @@
 '''Test file for custom_error.py'''
 
-from src.utils.custom_error import (
+from utils.custom_error import (
     DataNotFoundError,
     DuplicateEntryError,
     InvalidInputError,

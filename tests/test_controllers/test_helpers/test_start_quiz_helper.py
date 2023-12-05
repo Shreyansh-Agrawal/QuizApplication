@@ -4,8 +4,8 @@ from datetime import datetime, timezone
 
 import pytest
 
-from src.config.message_prompts import LogMessage
-from src.controllers.helpers.start_quiz_helper import StartQuizHelper
+from config.message_prompts import LogMessage
+from controllers.helpers.start_quiz_helper import StartQuizHelper
 from utils.custom_error import DataNotFoundError
 
 
@@ -57,25 +57,25 @@ class TestStartQuizHelper:
     def mock_pretty_print(self, mocker):
         '''Test fixture to mock pretty print'''
 
-        return mocker.patch('src.controllers.helpers.start_quiz_helper.pretty_print')
+        return mocker.patch('controllers.helpers.start_quiz_helper.pretty_print')
 
     @pytest.fixture(autouse=True)
     def mock_read_from_database(self, mocker):
         '''Test fixture to mock read_from_database method'''
 
-        mocker.patch('src.controllers.helpers.start_quiz_helper.DAO.read_from_database', return_value=self.mock_data)
+        mocker.patch('controllers.helpers.start_quiz_helper.DAO.read_from_database', return_value=self.mock_data)
 
     @pytest.fixture(autouse=True)
     def mock_write_to_database(self, mocker):
         '''Test fixture to mock write_to_database method'''
 
-        mocker.patch('src.controllers.helpers.start_quiz_helper.DAO.write_to_database')
+        mocker.patch('controllers.helpers.start_quiz_helper.DAO.write_to_database')
 
     @pytest.fixture
     def mock_create_quiz_helper_class(self, mocker):
         '''Test fixture to mock CreateQuizHelper class'''
 
-        return mocker.patch('src.controllers.helpers.start_quiz_helper.CreateQuizHelper')
+        return mocker.patch('controllers.helpers.start_quiz_helper.CreateQuizHelper')
 
     def test_get_random_questions(self):
         '''Test method to test get_random_questions'''
@@ -94,7 +94,7 @@ class TestStartQuizHelper:
 
         create_quiz_helper = mock_create_quiz_helper_class()
         create_quiz_helper.get_all_categories.return_value = self.mock_data
-        mocker.patch('src.controllers.helpers.start_quiz_helper.validations.regex_validator', return_value = '1')
+        mocker.patch('controllers.helpers.start_quiz_helper.validations.regex_validator', return_value = '1')
 
         result = self.start_quiz_helper.select_category()
 
@@ -114,7 +114,7 @@ class TestStartQuizHelper:
 
         create_quiz_helper = mock_create_quiz_helper_class()
         create_quiz_helper.get_all_categories.return_value = self.mock_data
-        mocker.patch('src.controllers.helpers.start_quiz_helper.validations.regex_validator', return_value = '-1')
+        mocker.patch('controllers.helpers.start_quiz_helper.validations.regex_validator', return_value = '-1')
 
         with pytest.raises(DataNotFoundError):
             self.start_quiz_helper.select_category()
@@ -131,15 +131,15 @@ class TestStartQuizHelper:
     def test_get_player_response(self, mocker, question_type, user_input, expected_output):
         '''Test method to test get_player_response'''
 
-        mocker.patch('src.controllers.helpers.start_quiz_helper.validations.regex_validator', side_effect = user_input)
+        mocker.patch('controllers.helpers.start_quiz_helper.validations.regex_validator', side_effect = user_input)
         result = self.start_quiz_helper.get_player_response(question_type)
         assert result == expected_output
 
     def test_save_quiz_score(self, mocker, caplog):
         '''Test method to test save_quiz_score'''
 
-        mocker.patch('src.controllers.helpers.start_quiz_helper.validations.validate_id')
-        mock_datetime = mocker.patch('src.controllers.helpers.start_quiz_helper.datetime')
+        mocker.patch('controllers.helpers.start_quiz_helper.validations.validate_id')
+        mock_datetime = mocker.patch('controllers.helpers.start_quiz_helper.datetime')
         mock_time = datetime(2023, 12, 1, 10, 30, 0, tzinfo=timezone.utc)
         mock_datetime.now.return_value = mock_time
 

@@ -1,7 +1,7 @@
 '''Test file for player_menu.py'''
 
-from src.config.message_prompts import DisplayMessage, Headers, LogMessage
-from src.menu.player_menu import PlayerMenu
+from config.message_prompts import DisplayMessage, Headers, LogMessage
+from menu.player_menu import PlayerMenu
 
 
 class TestPlayerMenu:
@@ -13,8 +13,8 @@ class TestPlayerMenu:
         username = 'test_player'
 
         mocker.patch('builtins.input', side_effect=['1', '2', '3', '4', 'q'])
-        mock_quiz_handler = mocker.patch('src.menu.player_menu.QuizHandler')
-        mock_user_handler = mocker.patch('src.menu.player_menu.UserHandler')
+        mock_quiz_handler = mocker.patch('menu.player_menu.QuizHandler')
+        mock_user_handler = mocker.patch('menu.player_menu.UserHandler')
 
         PlayerMenu.player_menu(username)
         captured = capsys.readouterr()

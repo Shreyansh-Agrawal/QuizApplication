@@ -2,8 +2,8 @@
 
 import pytest
 
-from src.config.message_prompts import DisplayMessage, Headers, LogMessage
-from src.controllers.handlers.user_handler import UserHandler
+from config.message_prompts import DisplayMessage, Headers, LogMessage
+from controllers.handlers.user_handler import UserHandler
 from utils.custom_error import LoginError
 
 
@@ -24,13 +24,13 @@ class TestUserHandler:
     def mock_pretty_print(self, mocker):
         '''Test fixture to mock pretty print'''
 
-        return mocker.patch('src.controllers.handlers.user_handler.pretty_print')
+        return mocker.patch('controllers.handlers.user_handler.pretty_print')
 
     @pytest.fixture
     def mock_user_controller_class(self, mocker):
         '''Test fixture to mock UserController class'''
 
-        return mocker.patch('src.controllers.handlers.user_handler.UserController')
+        return mocker.patch('controllers.handlers.user_handler.UserController')
 
     def test_display_users_by_role(self, capsys, caplog, mock_user_controller_class):
         '''Test method to test display_users_by_role'''
@@ -85,7 +85,7 @@ class TestUserHandler:
     def test_handle_create_admin(self, mocker, capsys, caplog, mock_user_controller_class):
         '''Test method to test handle_create_admin with login error'''
 
-        mocker.patch('src.controllers.handlers.user_handler.validations.regex_validator', side_effect=[self.name, self.email, self.username])
+        mocker.patch('controllers.handlers.user_handler.validations.regex_validator', side_effect=[self.name, self.email, self.username])
         user_controller = mock_user_controller_class()
         user_controller.create_admin.side_effect = LoginError(self.error_msg)
         self.user_handler.user_controller = user_controller
@@ -105,7 +105,7 @@ class TestUserHandler:
         user_controller = mock_user_controller_class()
         user_controller.get_all_users_by_role.return_value = self.mock_data
         self.user_handler.user_controller = user_controller
-        mocker.patch('src.controllers.handlers.user_handler.validations.regex_validator', side_effect=[self.email])
+        mocker.patch('controllers.handlers.user_handler.validations.regex_validator', side_effect=[self.email])
 
         self.user_handler.handle_delete_user_by_email(self.role)
         captured = capsys.readouterr()
@@ -120,7 +120,7 @@ class TestUserHandler:
         user_controller = mock_user_controller_class()
         user_controller.get_all_users_by_role.return_value = self.mock_invalid_data
         self.user_handler.user_controller = user_controller
-        mocker.patch('src.controllers.handlers.user_handler.validations.regex_validator', side_effect=[self.email])
+        mocker.patch('controllers.handlers.user_handler.validations.regex_validator', side_effect=[self.email])
 
         self.user_handler.handle_delete_user_by_email(self.role)
         captured = capsys.readouterr()

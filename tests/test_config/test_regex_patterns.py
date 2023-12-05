@@ -2,7 +2,7 @@
 
 import re
 
-from src.config.regex_patterns import RegexPattern
+from config.regex_patterns import RegexPattern
 
 
 def test_name_pattern():

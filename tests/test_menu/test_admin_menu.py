@@ -1,7 +1,7 @@
 '''Test file for admin_menu.py'''
 
-from src.config.message_prompts import DisplayMessage, Headers, LogMessage
-from src.menu.admin_menu import AdminMenu
+from config.message_prompts import DisplayMessage, Headers, LogMessage
+from menu.admin_menu import AdminMenu
 from utils.custom_error import DataNotFoundError
 
 
@@ -13,7 +13,7 @@ class TestAdminMenu:
 
         username = 'test_admin'
         mocker.patch('builtins.input', side_effect=['1', '2', '3', 'q'])
-        mock_auth_handler = mocker.patch('src.menu.admin_menu.AuthHandler')
+        mock_auth_handler = mocker.patch('menu.admin_menu.AuthHandler')
         mock_manage_players = mocker.patch.object(AdminMenu, 'manage_players_menu')
         mock_manage_quizzes = mocker.patch.object(AdminMenu, 'manage_quizzes_menu')
 
@@ -49,7 +49,7 @@ class TestAdminMenu:
 
         role = 'player'
         mocker.patch('builtins.input', side_effect=['1', '2', '3', 'q'])
-        mock_user_handler = mocker.patch('src.menu.admin_menu.UserHandler')
+        mock_user_handler = mocker.patch('menu.admin_menu.UserHandler')
 
         AdminMenu.manage_players_menu()
 
@@ -62,7 +62,7 @@ class TestAdminMenu:
 
         username = 'test_admin'
         mocker.patch('builtins.input', side_effect=['1', '2', '3', '4', '5', 'q'])
-        mock_quiz_handler = mocker.patch('src.menu.admin_menu.QuizHandler')
+        mock_quiz_handler = mocker.patch('menu.admin_menu.QuizHandler')
         mock_quiz_handler().display_categories.side_effect = DataNotFoundError('test error')
 
         AdminMenu.manage_categories_menu(username)
@@ -83,8 +83,8 @@ class TestAdminMenu:
 
         username = 'test_admin'
         mocker.patch('builtins.input', side_effect=['1', '2', '3', '4', '5', 'q'])
-        mock_quiz_handler = mocker.patch('src.menu.admin_menu.QuizHandler')
-        mock_load_quiz_data = mocker.patch('src.menu.admin_menu.json_to_db_loader.load_quiz_data_from_json')
+        mock_quiz_handler = mocker.patch('menu.admin_menu.QuizHandler')
+        mock_load_quiz_data = mocker.patch('menu.admin_menu.json_to_db_loader.load_quiz_data_from_json')
 
         AdminMenu.manage_questions_menu(username)
         captured = capsys.readouterr()

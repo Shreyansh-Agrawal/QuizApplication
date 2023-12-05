@@ -4,7 +4,7 @@ import sqlite3
 
 import pytest
 
-from src.database.database_connection import DatabaseConnection
+from database.database_connection import DatabaseConnection
 
 
 class TestDatabaseConnection:

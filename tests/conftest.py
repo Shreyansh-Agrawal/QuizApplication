@@ -2,9 +2,9 @@
 
 import pytest
 
-from src.config.file_paths import FilePaths
-from src.config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts, ErrorMessage
-from src.config.queries import InitializationQueries, Queries
+from config.file_paths import FilePaths
+from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts, ErrorMessage
+from config.queries import InitializationQueries, Queries
 
 
 @pytest.fixture
