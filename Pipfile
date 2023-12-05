@@ -10,6 +10,7 @@ maskpass = "*"
 tabulate = "*"
 python-dotenv = "*"
 pytest-mock = "*"
+pytest-cov = "*"
 
 [dev-packages]
 

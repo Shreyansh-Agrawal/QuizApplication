@@ -1,9 +1,6 @@
 '''Contains all the messages and prompts displayed to user'''
 
 
-from tkinter.messagebox import QUESTION
-
-
 class DisplayMessage:
     '''Contains all the print messages as class variables'''
 

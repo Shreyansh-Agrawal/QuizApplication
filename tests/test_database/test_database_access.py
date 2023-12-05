@@ -2,7 +2,10 @@
 
 import sqlite3
 
+import pytest
+
 from src.database.database_access import DatabaseAccess
+from src.database.database_connection import DatabaseConnection
 
 
 class TestDatabaseAccess:
@@ -11,6 +14,17 @@ class TestDatabaseAccess:
     query = 'SELECT * FROM your_table'
     data = ('example', 'data')
     mock_fetchall_result = [('result1',), ('result2',)]
+
+    @pytest.fixture
+    def mock_db_connection(self, mocker):
+        '''Test Fixture to mock db connection'''
+
+        mock_connection = mocker.MagicMock(spec=DatabaseConnection)
+        mocker.patch('src.database.database_access.DatabaseConnection', return_value=mock_connection)
+        mock_cursor = mocker.MagicMock()
+        mock_connection.__enter__.return_value.cursor.return_value = mock_cursor
+
+        return mock_cursor
 
     def test_read_from_database_success(self, mock_db_connection):
         '''Test method to test read_from_database success'''

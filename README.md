@@ -1,6 +1,6 @@
-# QuizApp
+# QuizApplication
 
-This is a Python-based console application for a Quiz. The application is designed to manage users, categories, questions, and quizzes. It provides functionality for Super Admins, Admins, and Players. You can use `pipenv` to manage your project dependencies.
+This is a Python-based console application for Quiz management. The application is designed to manage users, categories, questions, and quizzes. It provides functionality for Super Admins, Admins, and Players. You can use `pipenv` to manage your project dependencies.
 
 ## Getting Started
 
@@ -48,14 +48,23 @@ python -m pipenv install
 To run the application, use the following command:
 
 ```bash
-pipenv run python .\src\app.py 
+pipenv run python .\src\app.py
+```
+
+### Run the Tests
+
+To run the Tests, use the following command:
+
+```bash
+pipenv shell
+pytest
 ```
 
 ### Project Structure
 
 ```bash
 QuizApplication/
-├── documents/
+├── docs/
 │   ├── documentation.pdf
 ├── src/
 │   ├── config/

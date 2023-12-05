@@ -1,8 +1,17 @@
 '''
-    A console-based Python quiz application that enables users to create, 
-    manage, and take quizzes efficiently while ensuring data security and user satisfaction
+A console-based Python Quiz Application that enables users to create, 
+manage, and take quizzes efficiently while ensuring data security and user satisfaction.
 
-    Entry point of the application
+This script serves as the entry point for a console-based quiz application. 
+It initializes the logging configuration, starts the application, and handles exceptions logging errors.
+
+Functions:
+- start_quiz_app: Function to start the Application. 
+It initializes the application and begins the main menu for user interaction.
+
+Usage:
+Ensure all necessary configurations are set up before running this script. 
+Execute this script to start the quiz application.
 '''
 
 import logging
@@ -22,8 +31,16 @@ logger = logging.getLogger(__name__)
 
 
 def start_quiz_app():
-    '''Function to start the Application.'''
+    '''
+    Function to start the Application.
 
+    This function serves as the entry point to the quiz application. 
+    It initiates the application by calling Initializer.initialize_app() to set up essential components and 
+    MainMenu.auth_menu() to display the main menu for user interaction.
+
+    Returns:
+        None
+    '''
     logger.info(LogMessage.SYSTEM_START)
     try:
         Initializer.initialize_app()

@@ -64,7 +64,9 @@ def test_display_message_attributes(display_message_attributes):
         'TRY_AGAIN_MSG',
         'INVALID_TEXT',
         'INVALID_CHOICE',
-        'INVALID_PASSWORD'
+        'INVALID_PASSWORD',
+        'CONFIRMATION_MSG',
+        'SELECT_QUIZ_MSG'
     ]
 
     for message in required_messages:
@@ -85,6 +87,26 @@ def test_prompts_attributes(prompts_attributes):
         'PLAYER_PROMPTS',
         'QUESTION_TYPE_PROMPTS',
         'SELECT_MODE_PROMPTS',
+        'USERNAME_PROMPT',
+        'CREATE_USERNAME_PROMPT',
+        'PASSWORD_PROMPT',
+        'CREATE_PASSWORD_PROMPT',
+        'CONFIRM_PASSWORD_PROMPT',
+        'NEW_PASSWORD_PROMPT',
+        'NAME_PROMPT',
+        'EMAIL_PROMPT',
+        'SELECT_CATEGORY_PROMPT',
+        'NEW_CATEGORY_NAME_PROMPT',
+        'UPDATED_CATEGORY_NAME_PROMPT',
+        'ADMIN_NAME_PROMPT',
+        'ADMIN_EMAIL_PROMPT',
+        'ADMIN_USERNAME_PROMPT',
+        'USER_EMAIL_PROMPT',
+        'QUES_TEXT_PROMPT',
+        'ANS_PROMPT',
+        'OPTION_PROMPT',
+        'SELECT_OPTION_PROMPT',
+        'ANS_INPUT_PROMPT',
         'ATTEMPT_LIMIT'
     ]
 
@@ -166,3 +188,20 @@ def test_log_message_attributes(log_message_attributes):
 
     for log_message in required_log_messages:
         assert log_message in log_message_attributes
+
+
+def test_error_message_attributes(error_message_attributes):
+    '''Test if ErrorMessage class has all required error messages defined'''
+
+    required_error_messages = [
+        'USER_EXISTS_ERROR',
+        'ENTITY_EXISTS_ERROR',
+        'INSUFFICIENT_QUESTIONS_ERROR',
+        'INVALID_CATEGORY_SELECTION_ERROR',
+        'NO_CATEGORY_ERROR',
+        'NO_ROLE_ERROR',
+        'NO_OPTIONS_ERROR'
+    ]
+
+    for error_message in required_error_messages:
+        assert error_message in error_message_attributes

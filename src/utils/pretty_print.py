@@ -12,8 +12,16 @@ logger = logging.getLogger(__name__)
 
 
 def pretty_print(data: List[Tuple], headers: Tuple) -> None:
-    '''Method to pretty print using tabulate'''
+    '''
+    Formats and displays data in a tabulated format using the tabulate library.
 
+    Args:
+        data (List[Tuple]): The data to be displayed as a table.
+        headers (Tuple): Headers for the table.
+
+    Returns:
+        None
+    '''
     row_id = list(range(1, len(data) + 1))
     headers = ('SNo.', *headers)
 

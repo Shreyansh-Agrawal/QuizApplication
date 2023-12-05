@@ -21,11 +21,30 @@ logger = logging.getLogger(__name__)
 
 
 class Initializer:
-    '''Class containing methods to create super admin'''
+    '''
+    Contains methods to create a super admin and initialize the application.
+    
+    Methods:
+        create_super_admin(): Creates a super admin account for the application.
+        initialize_app(): Initializes the application by setting up necessary tables and the super admin.
+    '''
 
     @staticmethod
     def create_super_admin() -> None:
-        '''method to create a super admin '''
+        '''
+        Creates a super admin account in the application.
+
+        This method gathers necessary information to create a super admin:
+        - Retrieves super admin details like name, email, username, and hashed password from environment variables.
+        - Attempts to create a SuperAdmin instance and save it to the database.
+        If a super admin with the same details already exists, it raises a DuplicateEntryError.
+
+        Raises:
+            DuplicateEntryError: If an attempt is made to create a super admin that already exists.
+
+        Returns:
+            None
+        '''
 
         logger.debug(LogMessage.CREATE_ENTITY, Headers.SUPER_ADMIN)
 
@@ -49,7 +68,17 @@ class Initializer:
 
     @staticmethod
     def initialize_app() -> None:
-        '''method to initialize application'''
+        '''
+        Initializes the application by creating necessary tables and the super admin.
+
+        This method initiates the application by setting up essential components:
+        - It initializes the database by creating required tables using InitializeDatabase.initialize_database().
+        - Attempts to create a super admin using Initializer.create_super_admin() method.
+        If a super admin already exists, it logs a debug message indicating its presence.
+
+        Returns:
+            None
+        '''
 
         InitializeDatabase.initialize_database()
 
@@ -63,12 +92,29 @@ class Initializer:
 
 
 class InitializeDatabase:
-    '''Class to create tables for database'''
+    '''
+    Contains methods to create tables for the database.
+
+    Methods:
+        initialize_database(): Creates tables in the database for the application.
+    '''
 
     @staticmethod
     def initialize_database() -> None:
-        '''method to create tables in database'''
+        '''
+        Creates necessary tables in the database for the application.
 
+        Executes SQL queries to create essential tables:
+        - Users
+        - Credentials
+        - Scores
+        - Categories
+        - Questions
+        - Options
+
+        Returns: 
+            None
+        '''
         DAO.write_to_database(InitializationQueries.CREATE_USERS_TABLE)
         DAO.write_to_database(InitializationQueries.CREATE_CREDENTIALS_TABLE)
         DAO.write_to_database(InitializationQueries.CREATE_SCORES_TABLE)

@@ -1,13 +1,10 @@
 '''Contains all the pytest fixtures'''
 
-import sqlite3
-
 import pytest
 
 from src.config.file_paths import FilePaths
-from src.config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
+from src.config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts, ErrorMessage
 from src.config.queries import InitializationQueries, Queries
-from src.database.database_connection import DatabaseConnection
 
 
 @pytest.fixture
@@ -135,16 +132,10 @@ def file_paths_attributes():
 
 
 @pytest.fixture
-def mock_db_connection(mocker):
-    '''Test Fixture to mock db connection'''
+def error_message_attributes():
+    '''Test Fixture to collect and returns attributes from the ErrorMessage class.'''
 
-    mock_connection = mocker.MagicMock(spec=DatabaseConnection)
-    mocker.patch('src.database.database_access.DatabaseConnection', return_value=mock_connection)
-
-    mock_cursor = mocker.MagicMock()
-    mock_connection.__enter__.return_value.cursor.return_value = mock_cursor
-
-    return mock_cursor
+    return [attr for attr in dir(ErrorMessage) if not attr.startswith('__')]
 
 
 @pytest.fixture
