@@ -1,8 +1,8 @@
 '''Test file for auth_handler.py'''
 
 import pytest
-from src.config.message_prompts import DisplayMessage, LogMessage
-from src.controllers.handlers.auth_handler import AuthHandler
+from config.message_prompts import DisplayMessage, LogMessage
+from controllers.handlers.auth_handler import AuthHandler
 from utils.custom_error import LoginError
 
 
@@ -22,13 +22,13 @@ class TestAuthHandler:
     def mock_auth_controller_class(self, mocker):
         '''Test fixture to mock AuthController class'''
 
-        return mocker.patch('src.controllers.handlers.auth_handler.AuthController')
+        return mocker.patch('controllers.handlers.auth_handler.AuthController')
 
     def test_handle_login_success(self, mocker, capsys, caplog, mock_auth_controller_class):
         '''Test method to test handle login for successful login'''
 
-        mocker.patch('src.controllers.handlers.auth_handler.validations.regex_validator', return_value = self.username)
-        mocker.patch('src.controllers.handlers.auth_handler.validations.validate_password', return_value = self.password)
+        mocker.patch('controllers.handlers.auth_handler.validations.regex_validator', return_value = self.username)
+        mocker.patch('controllers.handlers.auth_handler.validations.validate_password', return_value = self.password)
         auth_controller = mock_auth_controller_class()
         auth_controller.login.return_value = self.mock_data
         self.auth_handler.auth_controller = auth_controller
@@ -43,8 +43,8 @@ class TestAuthHandler:
     def test_handle_login_failure(self, mocker, caplog, capsys, mock_auth_controller_class):
         '''Test method to test handle login for unsuccessful login'''
 
-        mocker.patch('src.controllers.handlers.auth_handler.validations.regex_validator', return_value = self.username)
-        mocker.patch('src.controllers.handlers.auth_handler.validations.validate_password', return_value = self.password)
+        mocker.patch('controllers.handlers.auth_handler.validations.regex_validator', return_value = self.username)
+        mocker.patch('controllers.handlers.auth_handler.validations.validate_password', return_value = self.password)
         auth_controller = mock_auth_controller_class()
         auth_controller.login.return_value = None
         self.auth_handler.auth_controller = auth_controller
@@ -59,8 +59,8 @@ class TestAuthHandler:
     def test_handle_signup_success(self, mocker, caplog, capsys, mock_auth_controller_class):
         '''Test method to test handle signup for successful signup'''
 
-        mocker.patch('src.controllers.handlers.auth_handler.validations.regex_validator', side_effect = [self.name, self.email, self.username])
-        mocker.patch('src.controllers.handlers.auth_handler.validations.validate_password', return_value = self.password)
+        mocker.patch('controllers.handlers.auth_handler.validations.regex_validator', side_effect = [self.name, self.email, self.username])
+        mocker.patch('controllers.handlers.auth_handler.validations.validate_password', return_value = self.password)
         auth_controller = mock_auth_controller_class()
         auth_controller.signup.return_value = self.username
         self.auth_handler.auth_controller = auth_controller
@@ -77,8 +77,8 @@ class TestAuthHandler:
     def test_handle_signup_failure(self, mocker, caplog, capsys, mock_auth_controller_class):
         '''Test method to test handle signup for unsuccessful signup'''
 
-        mocker.patch('src.controllers.handlers.auth_handler.validations.regex_validator', side_effect = [self.name, self.email, self.username])
-        mocker.patch('src.controllers.handlers.auth_handler.validations.validate_password', side_effect = [self.password, self.wrong_password, self.password])
+        mocker.patch('controllers.handlers.auth_handler.validations.regex_validator', side_effect = [self.name, self.email, self.username])
+        mocker.patch('controllers.handlers.auth_handler.validations.validate_password', side_effect = [self.password, self.wrong_password, self.password])
         auth_controller = mock_auth_controller_class()
         auth_controller.signup.side_effect = LoginError(self.error_msg)
         self.auth_handler.auth_controller = auth_controller
@@ -93,9 +93,9 @@ class TestAuthHandler:
     def test_handle_first_login(self, mocker, caplog, capsys):
         '''Test method to test handle first login'''
 
-        mocker.patch('src.controllers.handlers.auth_handler.validations.validate_password', side_effect = [self.password, self.wrong_password, self.password])
-        mocker.patch('src.controllers.handlers.auth_handler.hash_password', return_value = 'hashed_password')
-        mock_write_to_database = mocker.patch('src.controllers.handlers.auth_handler.DAO.write_to_database')
+        mocker.patch('controllers.handlers.auth_handler.validations.validate_password', side_effect = [self.password, self.wrong_password, self.password])
+        mocker.patch('controllers.handlers.auth_handler.hash_password', return_value = 'hashed_password')
+        mock_write_to_database = mocker.patch('controllers.handlers.auth_handler.DAO.write_to_database')
 
         self.auth_handler.handle_first_login(self.username, 0)
         captured = capsys.readouterr()

@@ -13,11 +13,20 @@ class UserManager:
     '''
 
     def __init__(self, user) -> None:
+        '''
+        Initializes a UserManager instance.
+
+        Args:
+            user: The user object to be managed.
+        '''
         self.user = user
 
     def save_to_database(self) -> None:
-        '''Saves the user and their credentials to the database. '''
+        '''
+        Saves the user and their credentials to the database.
 
+        Writes user data and credentials to the database using appropriate queries.
+        '''
         user_data = (
             self.user.user_id,
             self.user.name,

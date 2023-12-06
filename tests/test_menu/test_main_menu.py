@@ -2,8 +2,8 @@
 
 import pytest
 
-from src.config.message_prompts import DisplayMessage, LogMessage
-from src.menu.main_menu import MainMenu
+from config.message_prompts import DisplayMessage, LogMessage
+from menu.main_menu import MainMenu
 
 
 class TestMainMenu:
@@ -16,15 +16,15 @@ class TestMainMenu:
         ('invalid_role', None),
     ]
 
-    @pytest.mark.parametrize("role, expected_func_call", assign_menu_data)
+    @pytest.mark.parametrize('role, expected_func_call', assign_menu_data)
     def test_assign_menu(self, mocker, role, expected_func_call, caplog, capsys):
         '''Test method to test assign_menu'''
 
         data = ('test_user', role, 1)
         # pylint: disable=possibly-unused-variable
-        mock_super_admin_menu = mocker.patch('src.menu.main_menu.SuperAdminMenu.super_admin_menu')
-        mock_admin_menu = mocker.patch('src.menu.main_menu.AdminMenu.admin_menu')
-        mock_player_menu = mocker.patch('src.menu.main_menu.PlayerMenu.player_menu')
+        mock_super_admin_menu = mocker.patch('menu.main_menu.SuperAdminMenu.super_admin_menu')
+        mock_admin_menu = mocker.patch('menu.main_menu.AdminMenu.admin_menu')
+        mock_player_menu = mocker.patch('menu.main_menu.PlayerMenu.player_menu')
 
         MainMenu.assign_menu(data)
         captured = capsys.readouterr()
@@ -47,10 +47,10 @@ class TestMainMenu:
 
         mocker.patch('builtins.input', side_effect=['1', '2', '3', 'q'])
         mock_assign_menu = mocker.patch.object(MainMenu, 'assign_menu')
-        mock_auth_handler = mocker.patch('src.menu.main_menu.AuthHandler')
+        mock_auth_handler = mocker.patch('menu.main_menu.AuthHandler')
         mock_auth_handler().handle_login.return_value = data
         mock_auth_handler().handle_signup.return_value = data[0]
-        mock_player_menu = mocker.patch('src.menu.main_menu.PlayerMenu.player_menu')
+        mock_player_menu = mocker.patch('menu.main_menu.PlayerMenu.player_menu')
 
         MainMenu.auth_menu()
         captured = capsys.readouterr()
@@ -67,10 +67,10 @@ class TestMainMenu:
 
         mocker.patch('builtins.input', side_effect=['1', '2', '3', 'q'])
         mock_assign_menu = mocker.patch.object(MainMenu, 'assign_menu')
-        mock_auth_handler = mocker.patch('src.menu.main_menu.AuthHandler')
+        mock_auth_handler = mocker.patch('menu.main_menu.AuthHandler')
         mock_auth_handler().handle_login.return_value = None
         mock_auth_handler().handle_signup.return_value = None
-        mock_player_menu = mocker.patch('src.menu.main_menu.PlayerMenu.player_menu')
+        mock_player_menu = mocker.patch('menu.main_menu.PlayerMenu.player_menu')
 
         MainMenu.auth_menu()
         captured = capsys.readouterr()

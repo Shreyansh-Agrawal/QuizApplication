@@ -1,7 +1,7 @@
 '''Test file for super_admin_menu.py'''
 
-from src.config.message_prompts import DisplayMessage, Headers, LogMessage
-from src.menu.super_admin_menu import SuperAdminMenu
+from config.message_prompts import DisplayMessage, Headers, LogMessage
+from menu.super_admin_menu import SuperAdminMenu
 
 class TestSuperAdminMenu:
     '''Test class containing test method to test super admin menu'''
@@ -12,7 +12,7 @@ class TestSuperAdminMenu:
         username = 'test_super_admin'
 
         mocker.patch('builtins.input', side_effect=['1', '2', '3', '4', 'q'])
-        mock_user_handler = mocker.patch('src.menu.super_admin_menu.UserHandler')
+        mock_user_handler = mocker.patch('menu.super_admin_menu.UserHandler')
 
         SuperAdminMenu.super_admin_menu(username)
         captured = capsys.readouterr()

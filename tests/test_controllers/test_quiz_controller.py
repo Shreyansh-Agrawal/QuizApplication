@@ -5,7 +5,7 @@ import sqlite3
 import pytest
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage
-from src.controllers.quiz_controller import QuizController
+from controllers.quiz_controller import QuizController
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
 
 
@@ -16,8 +16,30 @@ class TestQuizController:
     category_name = 'test_category'
     old_category_name = 'test_old_category'
     username = 'test_username'
-    question_data = [('Q030', 'What is the result of 6 squared?', 'ONE WORD', '36'), ('Q108', 'Which strait separates Europe from Asia?', 'MCQ', 'Bosporus Strait'), ('Q110', "Which river is often called the 'Cradle of Civilization'?", 'MCQ', 'Tigris and Euphrates'), ('Q043', "What is the value of the mathematical constant 'π' (pi) to two decimal places?", 'ONE WORD', '3.14'), ('Q029', 'What is the next prime number after 7?', 'ONE WORD', '11'), ('Q104', "Which mountain range is considered the 'Roof of the World'?", 'MCQ', 'Himalayas'), ('Q115', 'Which African country is located at the southernmost tip of the continent?', 'MCQ', 'South Africa'), ('Q011', 'The process of converting sugar into alcohol is known as what?', 'ONE WORD', 'Fermentation'), ('Q009', 'How many bones are there in the adult human body?', 'ONE WORD', '206'), ('Q015', 'Is water a conductor of electricity? (True/False)', 'T/F', 'True')]
-    option_data = [[('36',)], [('Bosporus Strait',), ('Strait of Gibraltar',), ('Malacca Strait',), ('Hormuz Strait',)], [('Nile',), ('Amazon',), ('Tigris and Euphrates',), ('Yangtze',)], [('3.14',)], [('11',)], [('Rocky Mountains',), ('Andes',), ('Alps',), ('Himalayas',)], [('Egypt',), ('South Africa',), ('Nigeria',), ('Morocco',)], [('Fermentation',)], [('206',)], [('True',)]]
+    question_data = [
+        ('Q030', 'What is the result of 6 squared?', 'ONE WORD', '36'),
+        ('Q108', 'Which strait separates Europe from Asia?', 'MCQ', 'Bosporus Strait'),
+        ('Q110', 'Which river is often called the "Cradle of Civilization"?', 'MCQ', 'Tigris and Euphrates'),
+        ('Q043', 'What is the value of the mathematical constant "π" (pi) to two decimal places?', 'ONE WORD', '3.14'),
+        ('Q029', 'What is the next prime number after 7?', 'ONE WORD', '11'),
+        ('Q104', 'Which mountain range is considered the "Roof of the World"?', 'MCQ', 'Himalayas'),
+        ('Q115', 'Which African country is located at the southernmost tip of the continent?', 'MCQ', 'South Africa'),
+        ('Q011', 'The process of converting sugar into alcohol is known as what?', 'ONE WORD', 'Fermentation'),
+        ('Q009', 'How many bones are there in the adult human body?', 'ONE WORD', '206'),
+        ('Q015', 'Is water a conductor of electricity? (True/False)', 'T/F', 'True')
+    ]
+    option_data = [
+        [('36',)],
+        [('Bosporus Strait',), ('Strait of Gibraltar',), ('Malacca Strait',), ('Hormuz Strait',)],
+        [('Nile',), ('Amazon',), ('Tigris and Euphrates',), ('Yangtze',)],
+        [('3.14',)],
+        [('11',)],
+        [('Rocky Mountains',), ('Andes',), ('Alps',), ('Himalayas',)],
+        [('Egypt',), ('South Africa',), ('Nigeria',), ('Morocco',)],
+        [('Fermentation',)],
+        [('206',)],
+        [('True',)]
+    ]
     player_response_data = ['35', 4, 1, '3.14', '11', 4, 2, 'fermentation', '206', 'true']
     score = 70
     quiz_controller = QuizController()
@@ -26,31 +48,31 @@ class TestQuizController:
     def mock_read_from_database(self, mocker):
         '''Test fixture to mock read_from_database method'''
 
-        return mocker.patch('src.controllers.quiz_controller.DAO.read_from_database', return_value=self.data)
+        return mocker.patch('controllers.quiz_controller.DAO.read_from_database', return_value=self.data)
 
     @pytest.fixture
     def mock_write_to_database(self, mocker):
         '''Test fixture to mock write_to_database method'''
 
-        return mocker.patch('src.controllers.quiz_controller.DAO.write_to_database')
+        return mocker.patch('controllers.quiz_controller.DAO.write_to_database')
 
     @pytest.fixture
     def mock_category_class(self, mocker):
         '''Test fixture to mock Category class'''
 
-        return mocker.patch('src.controllers.quiz_controller.Category')
+        return mocker.patch('controllers.quiz_controller.Category')
 
     @pytest.fixture
     def mock_create_quiz_helper_class(self, mocker):
         '''Test fixture to mock CreateQuizHelper class'''
 
-        return mocker.patch('src.controllers.quiz_controller.CreateQuizHelper')
+        return mocker.patch('controllers.quiz_controller.CreateQuizHelper')
 
     @pytest.fixture
     def mock_start_quiz_helper_class(self, mocker):
         '''Test fixture to mock StartQuizHelper class'''
 
-        return mocker.patch('src.controllers.quiz_controller.StartQuizHelper')
+        return mocker.patch('controllers.quiz_controller.StartQuizHelper')
 
     def test_get_all_questions(self, mock_read_from_database):
         '''Test method to test get_all_questions'''
@@ -128,7 +150,7 @@ class TestQuizController:
         captured = capsys.readouterr()
 
         assert LogMessage.UPDATE_ENTITY, Headers.CATEGORY in caplog.text
-        assert f"Category {self.old_category_name} updated to {self.category_name}" in caplog.text
+        assert f'Category {self.old_category_name} updated to {self.category_name}' in caplog.text
         assert DisplayMessage.UPDATE_CATEGORY_SUCCESS_MSG.format(
             name=self.old_category_name, new_name=self.category_name
         ) in captured.out
@@ -158,7 +180,7 @@ class TestQuizController:
 
         mock_start_quiz_helper = mock_start_quiz_helper_class()
         mock_start_quiz_helper.get_random_questions_by_category.return_value = self.question_data
-        mock_read_from_database = mocker.patch('src.controllers.quiz_controller.DAO.read_from_database')
+        mock_read_from_database = mocker.patch('controllers.quiz_controller.DAO.read_from_database')
         mock_read_from_database.side_effect = self.option_data
         mock_start_quiz_helper.get_player_response.side_effect = self.player_response_data
 

@@ -2,8 +2,8 @@
 
 import pytest
 
-from src.config.message_prompts import DisplayMessage, Headers, LogMessage
-from src.controllers.handlers.quiz_handler import QuizHandler
+from config.message_prompts import DisplayMessage, Headers, LogMessage
+from controllers.handlers.quiz_handler import QuizHandler
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
 
 
@@ -22,25 +22,25 @@ class TestQuizHandler:
     def mock_pretty_print(self, mocker):
         '''Test fixture to mock pretty print'''
 
-        return mocker.patch('src.controllers.handlers.quiz_handler.pretty_print')
+        return mocker.patch('controllers.handlers.quiz_handler.pretty_print')
 
     @pytest.fixture
     def mock_quiz_controller_class(self, mocker):
         '''Test fixture to mock QuizController class'''
 
-        return mocker.patch('src.controllers.handlers.quiz_handler.QuizController')
+        return mocker.patch('controllers.handlers.quiz_handler.QuizController')
 
     @pytest.fixture
     def mock_create_quiz_helper_class(self, mocker):
         '''Test fixture to mock CreateQuizHelper class'''
 
-        return mocker.patch('src.controllers.handlers.quiz_handler.CreateQuizHelper')
+        return mocker.patch('controllers.handlers.quiz_handler.CreateQuizHelper')
 
     @pytest.fixture
     def mock_start_quiz_helper_class(self, mocker):
         '''Test fixture to mock StartQuizHelper class'''
 
-        return mocker.patch('src.controllers.handlers.quiz_handler.StartQuizHelper')
+        return mocker.patch('controllers.handlers.quiz_handler.StartQuizHelper')
 
     def test_display_categories(self, mocker, caplog, capsys, mock_create_quiz_helper_class):
         '''Test method to test display_categories'''
@@ -48,7 +48,7 @@ class TestQuizHandler:
         create_quiz_helper = mock_create_quiz_helper_class()
         create_quiz_helper.get_all_categories.return_value = self.mock_data
         self.quiz_handler.create_quiz_helper = create_quiz_helper
-        mock_pretty_print = mocker.patch('src.controllers.handlers.quiz_handler.pretty_print')
+        mock_pretty_print = mocker.patch('controllers.handlers.quiz_handler.pretty_print')
 
         self.quiz_handler.display_categories(self.role, self.header)
         captured = capsys.readouterr()
@@ -63,7 +63,7 @@ class TestQuizHandler:
         create_quiz_helper = mock_create_quiz_helper_class()
         create_quiz_helper.get_all_categories.return_value = None
         self.quiz_handler.create_quiz_helper = create_quiz_helper
-        mock_pretty_print = mocker.patch('src.controllers.handlers.quiz_handler.pretty_print')
+        mock_pretty_print = mocker.patch('controllers.handlers.quiz_handler.pretty_print')
 
         with pytest.raises(DataNotFoundError):
             self.quiz_handler.display_categories(self.role, self.header)
@@ -76,7 +76,7 @@ class TestQuizHandler:
         quiz_controller = mock_quiz_controller_class()
         quiz_controller.get_all_questions.return_value = self.mock_data
         self.quiz_handler.quiz_controller = quiz_controller
-        mock_pretty_print = mocker.patch('src.controllers.handlers.quiz_handler.pretty_print')
+        mock_pretty_print = mocker.patch('controllers.handlers.quiz_handler.pretty_print')
 
         self.quiz_handler.display_all_questions()
         captured = capsys.readouterr()
@@ -91,7 +91,7 @@ class TestQuizHandler:
         quiz_controller = mock_quiz_controller_class
         quiz_controller.get_all_questions.return_value = None
         self.quiz_handler.quiz_controller = quiz_controller
-        mock_pretty_print = mocker.patch('src.controllers.handlers.quiz_handler.pretty_print')
+        mock_pretty_print = mocker.patch('controllers.handlers.quiz_handler.pretty_print')
 
         self.quiz_handler.display_all_questions()
         mock_pretty_print.assert_not_called()
@@ -108,8 +108,8 @@ class TestQuizHandler:
         quiz_controller.get_questions_by_category.return_value = self.mock_data
         self.quiz_handler.quiz_controller = quiz_controller
 
-        mocker.patch('src.controllers.handlers.quiz_handler.validations.regex_validator', return_value = '1')
-        mock_pretty_print = mocker.patch('src.controllers.handlers.quiz_handler.pretty_print')
+        mocker.patch('controllers.handlers.quiz_handler.validations.regex_validator', return_value = '1')
+        mock_pretty_print = mocker.patch('controllers.handlers.quiz_handler.pretty_print')
 
         self.quiz_handler.display_questions_by_category()
         captured = capsys.readouterr()
@@ -126,8 +126,8 @@ class TestQuizHandler:
         create_quiz_helper.get_all_categories.return_value = self.mock_data
         self.quiz_handler.create_quiz_helper = create_quiz_helper
 
-        mocker.patch('src.controllers.handlers.quiz_handler.validations.regex_validator', return_value = '0')
-        mock_pretty_print = mocker.patch('src.controllers.handlers.quiz_handler.pretty_print')
+        mocker.patch('controllers.handlers.quiz_handler.validations.regex_validator', return_value = '0')
+        mock_pretty_print = mocker.patch('controllers.handlers.quiz_handler.pretty_print')
 
         self.quiz_handler.display_questions_by_category()
         captured = capsys.readouterr()
@@ -147,8 +147,8 @@ class TestQuizHandler:
         quiz_controller = mock_quiz_controller_class()
         quiz_controller.get_questions_by_category.return_value = None
         self.quiz_handler.quiz_controller = quiz_controller
-        mocker.patch('src.controllers.handlers.quiz_handler.validations.regex_validator', return_value = '1')
-        mock_pretty_print = mocker.patch('src.controllers.handlers.quiz_handler.pretty_print')
+        mocker.patch('controllers.handlers.quiz_handler.validations.regex_validator', return_value = '1')
+        mock_pretty_print = mocker.patch('controllers.handlers.quiz_handler.pretty_print')
 
         self.quiz_handler.display_questions_by_category()
         captured = capsys.readouterr()
@@ -163,7 +163,7 @@ class TestQuizHandler:
         quiz_controller = mock_quiz_controller_class()
         quiz_controller.get_leaderboard.return_value = self.mock_data
         self.quiz_handler.quiz_controller = quiz_controller
-        mock_pretty_print = mocker.patch('src.controllers.handlers.quiz_handler.pretty_print')
+        mock_pretty_print = mocker.patch('controllers.handlers.quiz_handler.pretty_print')
 
         self.quiz_handler.display_leaderboard()
         captured = capsys.readouterr()
@@ -177,7 +177,7 @@ class TestQuizHandler:
         quiz_controller = mock_quiz_controller_class()
         quiz_controller.get_leaderboard.return_value = None
         self.quiz_handler.quiz_controller = quiz_controller
-        mock_pretty_print = mocker.patch('src.controllers.handlers.quiz_handler.pretty_print')
+        mock_pretty_print = mocker.patch('controllers.handlers.quiz_handler.pretty_print')
 
         self.quiz_handler.display_leaderboard()
         captured = capsys.readouterr()
@@ -234,8 +234,8 @@ class TestQuizHandler:
         '''Test method to test handle_create_category'''
 
         mocker.patch.object(QuizHandler, 'display_categories', side_effect=DataNotFoundError(self.error_msg))
-        mocker.patch('src.controllers.handlers.quiz_handler.DAO.read_from_database', return_value=self.mock_data)
-        mocker.patch('src.controllers.handlers.quiz_handler.validations.regex_validator', return_value=self.category_name)
+        mocker.patch('controllers.handlers.quiz_handler.DAO.read_from_database', return_value=self.mock_data)
+        mocker.patch('controllers.handlers.quiz_handler.validations.regex_validator', return_value=self.category_name)
         quiz_controller = mock_quiz_controller_class()
         self.quiz_handler.quiz_controller = quiz_controller
         self.quiz_handler.quiz_controller.create_category.side_effect = DuplicateEntryError(self.error_msg)
@@ -281,7 +281,7 @@ class TestQuizHandler:
         create_quiz_helper = mock_create_quiz_helper_class()
         create_quiz_helper.get_all_categories.return_value = self.mock_data
         self.quiz_handler.create_quiz_helper = create_quiz_helper
-        mocker.patch('src.controllers.handlers.quiz_handler.validations.regex_validator', side_effect=['1', self.category_name])
+        mocker.patch('controllers.handlers.quiz_handler.validations.regex_validator', side_effect=['1', self.category_name])
         quiz_controller = mock_quiz_controller_class()
         quiz_controller.update_category_by_name.side_effect = DuplicateEntryError(self.error_msg)
         self.quiz_handler.quiz_controller = quiz_controller
@@ -301,7 +301,7 @@ class TestQuizHandler:
         create_quiz_helper = mock_create_quiz_helper_class()
         create_quiz_helper.get_all_categories.return_value = self.mock_data
         self.quiz_handler.create_quiz_helper = create_quiz_helper
-        mocker.patch('src.controllers.handlers.quiz_handler.validations.regex_validator', side_effect=['-1', self.category_name])
+        mocker.patch('controllers.handlers.quiz_handler.validations.regex_validator', side_effect=['-1', self.category_name])
         quiz_controller = mock_quiz_controller_class()
         self.quiz_handler.quiz_controller = quiz_controller
 
@@ -319,7 +319,7 @@ class TestQuizHandler:
         create_quiz_helper = mock_create_quiz_helper_class()
         create_quiz_helper.get_all_categories.return_value = self.mock_data
         self.quiz_handler.create_quiz_helper = create_quiz_helper
-        mocker.patch('src.controllers.handlers.quiz_handler.validations.regex_validator', return_value = '1')
+        mocker.patch('controllers.handlers.quiz_handler.validations.regex_validator', return_value = '1')
         mocker.patch('builtins.input', return_value = 'yes')
         quiz_controller = mock_quiz_controller_class()
         self.quiz_handler.quiz_controller = quiz_controller
@@ -338,7 +338,7 @@ class TestQuizHandler:
         create_quiz_helper = mock_create_quiz_helper_class()
         create_quiz_helper.get_all_categories.return_value = self.mock_data
         self.quiz_handler.create_quiz_helper = create_quiz_helper
-        mocker.patch('src.controllers.handlers.quiz_handler.validations.regex_validator', return_value = '-1')
+        mocker.patch('controllers.handlers.quiz_handler.validations.regex_validator', return_value = '-1')
         mocker.patch('builtins.input', return_value = 'yes')
         quiz_controller = mock_quiz_controller_class()
         self.quiz_handler.quiz_controller = quiz_controller
@@ -357,7 +357,7 @@ class TestQuizHandler:
         create_quiz_helper = mock_create_quiz_helper_class()
         create_quiz_helper.get_all_categories.return_value = self.mock_data
         self.quiz_handler.create_quiz_helper = create_quiz_helper
-        mocker.patch('src.controllers.handlers.quiz_handler.validations.regex_validator', return_value = '1')
+        mocker.patch('controllers.handlers.quiz_handler.validations.regex_validator', return_value = '1')
         mocker.patch('builtins.input', return_value = 'no')
         quiz_controller = mock_quiz_controller_class()
         self.quiz_handler.quiz_controller = quiz_controller

@@ -10,9 +10,31 @@ from utils import validations
 
 
 class User(ABC):
-    '''Abstract Base Class for representing users.'''
+    '''
+    Abstract Base Class for representing users.
+
+    Attributes:
+        name (str): The user's name.
+        email (str): The user's email address.
+        username (str): The user's username.
+        password (str): The user's password.
+        user_id (str): The unique identifier for the user.
+        role (str): The user's role (super admin, admin, player).
+        is_password_changed (int): Flag indicating if the user has changed their password.
+        registration_date (str): The date and time of user registration in UTC format.
+    '''
 
     def __init__(self, user_data: Dict, role: str) -> None:
+        '''
+        Initializes a User instance.
+
+        Args:
+            user_data (Dict): A dictionary containing user details.
+            role (str): The role of the user.
+
+        Raises:
+            KeyError: If required user data is missing.
+        '''
         self.name = user_data.get('name')
         self.email = user_data.get('email')
         self.username = user_data.get('username')
@@ -24,9 +46,24 @@ class User(ABC):
 
 
 class SuperAdmin(User, DatabaseSaver):
-    '''Class representing a super admin user.'''
+    '''
+    Class representing a super admin user.
+
+    Inherits from:
+        User: Abstract Base Class for representing users.
+        DatabaseSaver: Interface for saving to the database.
+
+    Methods:
+        save_to_database(): Saves the super admin to the database.
+    '''
 
     def __init__(self, super_admin_data: Dict) -> None:
+        '''
+        Initializes a SuperAdmin instance.
+
+        Args:
+            super_admin_data (Dict): A dictionary containing super admin details.
+        '''
         super().__init__(user_data=super_admin_data, role='super admin')
 
     def save_to_database(self) -> None:
@@ -37,9 +74,24 @@ class SuperAdmin(User, DatabaseSaver):
 
 
 class Admin(User, DatabaseSaver):
-    '''Class representing an admin user.'''
+    '''
+    Class representing an admin user.
+
+    Inherits from:
+        User: Abstract Base Class for representing users.
+        DatabaseSaver: Interface for saving to the database.
+
+    Methods:
+        save_to_database(): Saves the admin to the database.
+    '''
 
     def __init__(self, admin_data: Dict) -> None:
+        '''
+        Initializes an Admin instance.
+
+        Args:
+            admin_data (Dict): A dictionary containing admin details.
+        '''
         super().__init__(user_data=admin_data, role='admin')
 
     def save_to_database(self) -> None:
@@ -50,9 +102,24 @@ class Admin(User, DatabaseSaver):
 
 
 class Player(User, DatabaseSaver):
-    '''Class representing a player user.'''
+    '''
+    Class representing a player user.
+
+    Inherits from:
+        User: Abstract Base Class for representing users.
+        DatabaseSaver: Interface for saving to the database.
+
+    Methods:
+        save_to_database(): Saves the player to the database.
+    '''
 
     def __init__(self, player_data: Dict) -> None:
+        '''
+        Initializes a Player instance.
+
+        Args:
+            player_data (Dict): A dictionary containing player details.
+        '''
         super().__init__(user_data=player_data, role='player')
 
     def save_to_database(self) -> None:

@@ -1,7 +1,7 @@
 '''Test file for password_hasher.py'''
 
 import hashlib
-from src.utils.password_hasher import hash_password
+from utils.password_hasher import hash_password
 
 
 def test_hash_password():

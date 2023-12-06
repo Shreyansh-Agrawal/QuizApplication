@@ -4,7 +4,7 @@ import logging
 import random
 import string
 
-from config.message_prompts import DisplayMessage, Headers, LogMessage
+from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage, Prompts
 from config.regex_patterns import RegexPattern
 from controllers.user_controller import UserController
 from utils import validations
@@ -59,17 +59,17 @@ class UserHandler:
 
         admin_data = {}
         admin_data['name'] = validations.regex_validator(
-            prompt='Enter admin name: ',
+            prompt=Prompts.ADMIN_NAME_PROMPT,
             regex_pattern=RegexPattern.NAME_PATTERN,
             error_msg=DisplayMessage.INVALID_TEXT.format(Headers.NAME)
         ).title()
         admin_data['email'] = validations.regex_validator(
-            prompt='Enter admin email: ',
+            prompt=Prompts.ADMIN_EMAIL_PROMPT,
             regex_pattern=RegexPattern.EMAIL_PATTERN,
             error_msg=DisplayMessage.INVALID_TEXT.format(Headers.EMAIL)
         )
         admin_data['username'] = validations.regex_validator(
-            prompt='Create admin username: ',
+            prompt=Prompts.CREATE_USERNAME_PROMPT,
             regex_pattern=RegexPattern.USERNAME_PATTERN,
             error_msg=DisplayMessage.INVALID_TEXT.format(Headers.USERNAME)
         )
@@ -89,14 +89,14 @@ class UserHandler:
         try:
             data = self.user_controller.get_all_users_by_role(role)
             if not data:
-                raise DataNotFoundError(f'No {role} Currently!')
+                raise DataNotFoundError(ErrorMessage.NO_ROLE_ERROR.format(role=role))
 
             logger.debug(LogMessage.DELETE_ENTITY, {role.title()})
             print(DisplayMessage.DELETE_USER_MSG.format(user=role.title()))
             pretty_print(data=data, headers=(Headers.USERNAME, Headers.NAME, Headers.EMAIL, Headers.REG_DATE))
 
             email = validations.regex_validator(
-                prompt=f'\nEnter {role.title()} Email: ',
+                prompt=Prompts.USER_EMAIL_PROMPT.format(role=role.title()),
                 regex_pattern=RegexPattern.EMAIL_PATTERN,
                 error_msg=DisplayMessage.INVALID_TEXT.format(Headers.EMAIL)
             )

@@ -2,8 +2,8 @@
 
 import pytest
 
-from src.config.message_prompts import DisplayMessage, Headers, LogMessage
-from src.controllers.helpers.create_quiz_helper import CreateQuizHelper
+from config.message_prompts import DisplayMessage, Headers, LogMessage
+from controllers.helpers.create_quiz_helper import CreateQuizHelper
 from utils.custom_error import DataNotFoundError
 
 
@@ -32,7 +32,7 @@ class TestCreateQuizHelper:
     def mock_read_from_database(self, mocker):
         '''Test fixture to mock read_from_database method'''
 
-        mocker.patch('src.controllers.helpers.create_quiz_helper.DAO.read_from_database', return_value=self.mock_data)
+        mocker.patch('controllers.helpers.create_quiz_helper.DAO.read_from_database', return_value=self.mock_data)
 
     def test_get_all_categories(self):
         '''Test method to test get_all_categories'''
@@ -43,7 +43,7 @@ class TestCreateQuizHelper:
     def test_get_question_data(self, mocker, capsys, caplog):
         '''Test method to test get_question_data'''
 
-        mocker.patch('src.controllers.helpers.create_quiz_helper.validations.regex_validator', side_effect=['1', 'test_question_text'])
+        mocker.patch('controllers.helpers.create_quiz_helper.validations.regex_validator', side_effect=['1', 'test_question_text'])
         mocker.patch.object(CreateQuizHelper, 'get_all_categories', return_value=self.mock_data)
 
         result = self.create_quiz_helper.get_question_data(self.username)
@@ -56,7 +56,7 @@ class TestCreateQuizHelper:
     def test_get_question_data_invalid_category(self, mocker):
         '''Test method to test get_question_data when invalid category selected'''
 
-        mocker.patch('src.controllers.helpers.create_quiz_helper.validations.regex_validator', side_effect=['-1', 'test_question_text'])
+        mocker.patch('controllers.helpers.create_quiz_helper.validations.regex_validator', side_effect=['-1', 'test_question_text'])
         mocker.patch.object(CreateQuizHelper, 'get_all_categories', return_value=self.mock_data)
 
         with pytest.raises(DataNotFoundError) as error_msg:
@@ -83,17 +83,17 @@ class TestCreateQuizHelper:
         assert DisplayMessage.INVALID_QUES_TYPE_MSG in captured.out
         assert result == self.ques_type_data[0][1]
 
-    @pytest.mark.parametrize("question_type, user_inputs, expected_options_length", create_option_data)
+    @pytest.mark.parametrize('question_type, user_inputs, expected_options_length', create_option_data)
     def test_create_option(self, mocker, question_type, user_inputs, expected_options_length):
         '''Test method to test create_option'''
 
         question_data = {'question_type': question_type}
         mock_question = mocker.MagicMock()
         mocker.patch.object(CreateQuizHelper, 'get_question_type', return_value=question_data)
-        mocker.patch('src.controllers.helpers.create_quiz_helper.Question', return_value=mock_question)
-        mocker.patch('src.controllers.helpers.create_quiz_helper.validations.regex_validator', side_effect=user_inputs)
+        mocker.patch('controllers.helpers.create_quiz_helper.Question', return_value=mock_question)
+        mocker.patch('controllers.helpers.create_quiz_helper.validations.regex_validator', side_effect=user_inputs)
         mock_add_option = mocker.patch.object(mock_question, 'add_option')
-        mocker.patch('src.controllers.helpers.create_quiz_helper.Option')
+        mocker.patch('controllers.helpers.create_quiz_helper.Option')
 
         result = self.create_quiz_helper.create_option(question_data)
         if question_type == 'Invalid':

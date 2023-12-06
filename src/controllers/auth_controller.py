@@ -4,7 +4,7 @@ import logging
 import sqlite3
 from typing import Dict, Tuple
 
-from config.message_prompts import DisplayMessage, LogMessage
+from config.message_prompts import DisplayMessage, LogMessage, ErrorMessage
 from config.queries import Queries
 from database.database_access import DatabaseAccess as DAO
 from models.user import Player
@@ -46,9 +46,7 @@ class AuthController:
         try:
             player.save_to_database()
         except sqlite3.IntegrityError as e:
-            raise LoginError(
-                'User already exists! Login or Sign Up with different credentials...'
-            ) from e
+            raise LoginError(ErrorMessage.USER_EXISTS_ERROR) from e
 
         logger.debug(LogMessage.SIGNUP_SUCCESS)
         print(DisplayMessage.SIGNUP_SUCCESS_MSG)

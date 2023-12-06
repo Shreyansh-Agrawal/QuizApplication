@@ -4,14 +4,14 @@ import json
 import sqlite3
 
 from config.message_prompts import LogMessage
-from src.utils import json_to_db_loader
+from utils import json_to_db_loader
 
 
 def test_load_quiz_data_from_json_success(mocker, sample_json_data, caplog):
     '''Test function to test load_quiz_data_from_json function for success'''
 
-    mock_read_from_database = mocker.patch('src.utils.json_to_db_loader.DAO.read_from_database')
-    mock_write_to_database = mocker.patch('src.utils.json_to_db_loader.DAO.write_to_database')
+    mock_read_from_database = mocker.patch('utils.json_to_db_loader.DAO.read_from_database')
+    mock_write_to_database = mocker.patch('utils.json_to_db_loader.DAO.write_to_database')
     # mock_write_to_database.side_effect = sqlite3.IntegrityError
     mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps(sample_json_data)))
 
@@ -25,8 +25,8 @@ def test_load_quiz_data_from_json_success(mocker, sample_json_data, caplog):
 def test_load_quiz_data_from_json_error(mocker, sample_json_data, caplog):
     '''Test function to test load_quiz_data_from_json function for error'''
 
-    mock_read_from_database = mocker.patch('src.utils.json_to_db_loader.DAO.read_from_database')
-    mock_write_to_database = mocker.patch('src.utils.json_to_db_loader.DAO.write_to_database')
+    mock_read_from_database = mocker.patch('utils.json_to_db_loader.DAO.read_from_database')
+    mock_write_to_database = mocker.patch('utils.json_to_db_loader.DAO.write_to_database')
     mock_write_to_database.side_effect = sqlite3.IntegrityError
     mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps(sample_json_data)))
 

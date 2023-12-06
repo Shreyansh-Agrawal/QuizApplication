@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.models.database_saver import DatabaseSaver
+from models.database_saver import DatabaseSaver
 
 
 class ConcreteDatabaseSaver(DatabaseSaver):

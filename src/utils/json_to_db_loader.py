@@ -14,8 +14,19 @@ logger = logging.getLogger(__name__)
 
 
 def load_quiz_data_from_json(created_by_admin_username: str) -> None:
-    '''Function to load quiz data to db from json'''
+    '''
+    Loads quiz data to the database from a JSON file.
 
+    Args:
+        created_by_admin_username (str): The username of the admin who created the quiz.
+
+    Reads JSON data from the specified file path and loads it into the database.
+    The JSON file should contain quiz-related information such as questions, categories,
+    and options.
+
+    Returns:
+        None
+    '''
     logger.debug(LogMessage.LOAD_QUIZ_DATA_FROM_JSON)
     admin_data = DAO.read_from_database(
                     Queries.GET_USER_ID_BY_USERNAME,
@@ -23,7 +34,7 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
                 )
     created_by_admin_id = admin_data[0][0]
 
-    with open(FilePaths.QUESTIONS_JSON_PATH, 'r', encoding="utf-8") as file:
+    with open(FilePaths.QUESTIONS_JSON_PATH, 'r', encoding='utf-8') as file:
         data = json.load(file)
 
     for question in data['questions']:

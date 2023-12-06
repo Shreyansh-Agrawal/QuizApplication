@@ -4,7 +4,7 @@ from datetime import datetime
 
 import pytest
 
-from src.models.user import Admin, Player, SuperAdmin, User
+from models.user import Admin, Player, SuperAdmin, User
 
 
 class TestUser:
@@ -59,7 +59,7 @@ class TestSuperAdmin:
     def test_super_admin_save_to_database(self, user_data, mocker):
         '''Test function to test SuperAdmin class save_to_database method'''
 
-        mock_super_admin_manager = mocker.patch('src.models.user.UserManager')
+        mock_super_admin_manager = mocker.patch('models.user.UserManager')
         super_admin = SuperAdmin(user_data)
         super_admin.save_to_database()
 
@@ -87,7 +87,7 @@ class TestAdmin:
     def test_admin_save_to_database(self, user_data, mocker):
         '''Test function to test Admin class save_to_database method'''
 
-        mock_admin_manager = mocker.patch('src.models.user.UserManager')
+        mock_admin_manager = mocker.patch('models.user.UserManager')
         admin = Admin(user_data)
         admin.save_to_database()
 
@@ -115,7 +115,7 @@ class TestPlayer:
     def test_player_save_to_database(self, user_data, mocker):
         '''Test function to test Player class save_to_database method'''
 
-        mock_player_manager = mocker.patch('src.models.user.UserManager')
+        mock_player_manager = mocker.patch('models.user.UserManager')
         player = Player(user_data)
         player.save_to_database()
 

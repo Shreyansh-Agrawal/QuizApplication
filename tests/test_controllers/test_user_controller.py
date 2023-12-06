@@ -4,7 +4,7 @@ import sqlite3
 import pytest
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage
-from src.controllers.user_controller import UserController
+from controllers.user_controller import UserController
 from utils.custom_error import LoginError
 
 
@@ -21,19 +21,19 @@ class TestUserController:
     def mock_read_from_database(self, mocker):
         '''Test fixture to mock read_from_database method'''
 
-        return mocker.patch('src.controllers.user_controller.DAO.read_from_database', return_value=self.data)
+        return mocker.patch('controllers.user_controller.DAO.read_from_database', return_value=self.data)
 
     @pytest.fixture
     def mock_write_to_database(self, mocker):
         '''Test fixture to mock write_to_database method'''
 
-        return mocker.patch('src.controllers.user_controller.DAO.write_to_database')
+        return mocker.patch('controllers.user_controller.DAO.write_to_database')
 
     @pytest.fixture
     def mock_admin_class(self, mocker):
         '''Test fixture to mock Admin class'''
 
-        return mocker.patch('src.controllers.user_controller.Admin')
+        return mocker.patch('controllers.user_controller.Admin')
 
     def test_get_player_scores_by_username(self, mock_read_from_database):
         '''Test method to test get_player_scores_by_username method'''
