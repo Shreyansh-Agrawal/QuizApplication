@@ -6,7 +6,6 @@ from typing import List, Tuple
 
 from config.file_paths import FilePaths
 from config.queries import InitializationQueries
-from database.database_connection import DatabaseConnection
 
 logger = logging.getLogger(__name__)
 
@@ -14,38 +13,43 @@ logger = logging.getLogger(__name__)
 class DatabaseAccess:
     '''A class for database methods.'''
 
-    database_path = FilePaths.DATABASE_PATH
+    def __init__(self) -> None:
+        try:
+            self.database_path = FilePaths.DATABASE_PATH
+            self.connection = sqlite3.connect(self.database_path)
+            self.cursor = self.connection.cursor()
+        except sqlite3.Error as e:
+            logger.exception(e)
+            print(f'Exception inside DatabaseAccess __init__: {e}')
+            raise sqlite3.Error from e
 
-    @classmethod
-    def read_from_database(cls, query: str, data: Tuple = None) -> List:
+    def read_from_database(self, query: str, data: Tuple = None) -> List:
         '''Reads data from database.'''
+        try:
+            if not data:
+                self.cursor.execute(query)
+            else:
+                self.cursor.execute(query, data)
+        except sqlite3.OperationalError as e:
+            logger.exception(e)
+            print(f'Exception in read_from_database: {e}')
+            return []
 
-        with DatabaseConnection(cls.database_path) as connection:
-            cursor = connection.cursor()
-            try:
-                if not data:
-                    cursor.execute(query)
-                else:
-                    cursor.execute(query, data)
-            except sqlite3.OperationalError as e:
-                logger.exception(e)
-                print(e)
-                return []
+        return self.cursor.fetchall()
 
-            return cursor.fetchall()
-
-    @classmethod
-    def write_to_database(cls, query: str, data: Tuple = None) -> None:
+    def write_to_database(self, query: str, data: Tuple = None) -> None:
         '''CREATE TABLE / Add / Update / Delete data from database.'''
+        try:
+            self.cursor.execute(InitializationQueries.ENABLE_FOREIGN_KEYS)
+            if not data:
+                self.cursor.execute(query)
+            else:
+                self.cursor.execute(query, data)
+        except sqlite3.OperationalError as e:
+            logger.exception(e)
+            print(f'Exception in write_to_database: {e}')
 
-        with DatabaseConnection(cls.database_path) as connection:
-            cursor = connection.cursor()
-            try:
-                cursor.execute(InitializationQueries.ENABLE_FOREIGN_KEYS)
-                if not data:
-                    cursor.execute(query)
-                else:
-                    cursor.execute(query, data)
-            except sqlite3.OperationalError as e:
-                logger.exception(e)
-                print(e)
+        self.connection.commit()
+
+
+dao = DatabaseAccess()

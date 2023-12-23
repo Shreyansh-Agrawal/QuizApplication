@@ -63,13 +63,13 @@ class TestStartQuizHelper:
     def mock_read_from_database(self, mocker):
         '''Test fixture to mock read_from_database method'''
 
-        mocker.patch('controllers.helpers.start_quiz_helper.DAO.read_from_database', return_value=self.mock_data)
+        mocker.patch('controllers.helpers.start_quiz_helper.dao.read_from_database', return_value=self.mock_data)
 
     @pytest.fixture(autouse=True)
     def mock_write_to_database(self, mocker):
         '''Test fixture to mock write_to_database method'''
 
-        mocker.patch('controllers.helpers.start_quiz_helper.DAO.write_to_database')
+        mocker.patch('controllers.helpers.start_quiz_helper.dao.write_to_database')
 
     @pytest.fixture
     def mock_create_quiz_helper_class(self, mocker):

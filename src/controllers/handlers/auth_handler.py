@@ -7,7 +7,7 @@ from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from controllers.auth_controller import AuthController
-from database.database_access import DatabaseAccess as DAO
+from database.database_access import dao
 from utils import validations
 from utils.custom_error import LoginError
 from utils.password_hasher import hash_password
@@ -113,7 +113,7 @@ class AuthHandler:
 
             hashed_password = hash_password(confirm_password)
             is_password_changed = 1
-            DAO.write_to_database(
+            dao.write_to_database(
                 Queries.UPDATE_ADMIN_PASSWORD_BY_USERNAME,
                 (hashed_password, is_password_changed, username)
             )

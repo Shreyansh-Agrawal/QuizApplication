@@ -54,7 +54,7 @@ def test_initialize_database(mocker):
     '''Test function to test initialize_database method'''
 
     mock_write_to_database = mocker.Mock()
-    mocker.patch('utils.initialize_app.DAO.write_to_database', mock_write_to_database)
+    mocker.patch('utils.initialize_app.dao.write_to_database', mock_write_to_database)
 
     InitializeDatabase.initialize_database()
     assert mock_write_to_database.call_count == 6

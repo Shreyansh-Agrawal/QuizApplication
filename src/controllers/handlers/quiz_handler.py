@@ -9,7 +9,7 @@ from config.regex_patterns import RegexPattern
 from controllers.helpers.create_quiz_helper import CreateQuizHelper
 from controllers.helpers.start_quiz_helper import StartQuizHelper
 from controllers.quiz_controller import QuizController
-from database.database_access import DatabaseAccess as DAO
+from database.database_access import dao
 from utils import validations
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
 from utils.pretty_print import pretty_print
@@ -143,7 +143,7 @@ class QuizHandler:
         except DataNotFoundError as e:
             logger.warning(e)
             print(e)
-        admin_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (created_by, ))
+        admin_data = dao.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (created_by, ))
         admin_id = admin_data[0][0]
         print(DisplayMessage.CREATE_CATEGORY_MSG)
 

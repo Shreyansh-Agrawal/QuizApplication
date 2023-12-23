@@ -95,7 +95,7 @@ class TestAuthHandler:
 
         mocker.patch('controllers.handlers.auth_handler.validations.validate_password', side_effect = [self.password, self.wrong_password, self.password])
         mocker.patch('controllers.handlers.auth_handler.hash_password', return_value = 'hashed_password')
-        mock_write_to_database = mocker.patch('controllers.handlers.auth_handler.DAO.write_to_database')
+        mock_write_to_database = mocker.patch('controllers.handlers.auth_handler.dao.write_to_database')
 
         self.auth_handler.handle_first_login(self.username, 0)
         captured = capsys.readouterr()

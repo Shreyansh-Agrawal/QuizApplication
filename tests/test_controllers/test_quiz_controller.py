@@ -48,13 +48,13 @@ class TestQuizController:
     def mock_read_from_database(self, mocker):
         '''Test fixture to mock read_from_database method'''
 
-        return mocker.patch('controllers.quiz_controller.DAO.read_from_database', return_value=self.data)
+        return mocker.patch('controllers.quiz_controller.dao.read_from_database', return_value=self.data)
 
     @pytest.fixture
     def mock_write_to_database(self, mocker):
         '''Test fixture to mock write_to_database method'''
 
-        return mocker.patch('controllers.quiz_controller.DAO.write_to_database')
+        return mocker.patch('controllers.quiz_controller.dao.write_to_database')
 
     @pytest.fixture
     def mock_category_class(self, mocker):
@@ -180,7 +180,7 @@ class TestQuizController:
 
         mock_start_quiz_helper = mock_start_quiz_helper_class()
         mock_start_quiz_helper.get_random_questions_by_category.return_value = self.question_data
-        mock_read_from_database = mocker.patch('controllers.quiz_controller.DAO.read_from_database')
+        mock_read_from_database = mocker.patch('controllers.quiz_controller.dao.read_from_database')
         mock_read_from_database.side_effect = self.option_data
         mock_start_quiz_helper.get_player_response.side_effect = self.player_response_data
 

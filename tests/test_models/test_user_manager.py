@@ -10,7 +10,7 @@ class TestUserManager:
         '''Test function to test save_to_database implementation in UserManager Class'''
 
         mock_write_to_database = mocker.Mock()
-        mocker.patch('models.user_manager.DAO.write_to_database', mock_write_to_database)
+        mocker.patch('models.user_manager.dao.write_to_database', mock_write_to_database)
         user_manager_obj = UserManager(mock_user)
         user_manager_obj.save_to_database()
 

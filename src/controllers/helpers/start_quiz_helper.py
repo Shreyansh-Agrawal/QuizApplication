@@ -8,7 +8,7 @@ from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMes
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from controllers.helpers.create_quiz_helper import CreateQuizHelper
-from database.database_access import DatabaseAccess as DAO
+from database.database_access import dao
 from utils import validations
 from utils.custom_error import DataNotFoundError
 from utils.pretty_print import pretty_print
@@ -22,13 +22,13 @@ class StartQuizHelper:
     def get_random_questions(self) -> List[Tuple]:
         '''Return random questions across all categories'''
 
-        data = DAO.read_from_database(Queries.GET_RANDOM_QUESTIONS)
+        data = dao.read_from_database(Queries.GET_RANDOM_QUESTIONS)
         return data
 
     def get_random_questions_by_category(self, category: str) -> List[Tuple]:
         '''Return random questions by category'''
 
-        data = DAO.read_from_database(Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY, (category, ))
+        data = dao.read_from_database(Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY, (category, ))
         return data
 
     def select_category(self) -> str:
@@ -109,12 +109,12 @@ class StartQuizHelper:
         '''Save Player's Quiz Score'''
 
         logger.debug(LogMessage.SAVE_QUIZ_SCORE, username)
-        player_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
+        player_data = dao.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
         user_id = player_data[0][0]
         score_id = validations.validate_id(entity='score')
 
         time = datetime.now(timezone.utc) # current utc time
         timestamp = time.strftime('%Y-%m-%d %H:%M:%S') # yyyy-mm-dd
 
-        DAO.write_to_database(Queries.INSERT_PLAYER_QUIZ_SCORE, (score_id, user_id, score, timestamp))
+        dao.write_to_database(Queries.INSERT_PLAYER_QUIZ_SCORE, (score_id, user_id, score, timestamp))
         logger.debug(LogMessage.SAVE_QUIZ_SCORE_SUCCESS, username)

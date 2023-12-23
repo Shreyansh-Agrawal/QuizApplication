@@ -32,7 +32,7 @@ class TestCreateQuizHelper:
     def mock_read_from_database(self, mocker):
         '''Test fixture to mock read_from_database method'''
 
-        mocker.patch('controllers.helpers.create_quiz_helper.DAO.read_from_database', return_value=self.mock_data)
+        mocker.patch('controllers.helpers.create_quiz_helper.dao.read_from_database', return_value=self.mock_data)
 
     def test_get_all_categories(self):
         '''Test method to test get_all_categories'''

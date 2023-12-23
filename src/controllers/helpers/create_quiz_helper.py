@@ -6,7 +6,7 @@ from typing import Dict, List, Tuple
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
-from database.database_access import DatabaseAccess as DAO
+from database.database_access import dao
 from models.quiz import Option, Question
 from utils import validations
 from utils.custom_error import DataNotFoundError
@@ -20,7 +20,7 @@ class CreateQuizHelper:
     def get_all_categories(self) -> List[Tuple]:
         '''Return all Quiz Categories'''
 
-        data = DAO.read_from_database(Queries.GET_ALL_CATEGORIES)
+        data = dao.read_from_database(Queries.GET_ALL_CATEGORIES)
         return data
 
     def get_question_data(self, username: str) -> Dict:
@@ -40,8 +40,8 @@ class CreateQuizHelper:
             raise DataNotFoundError(ErrorMessage.INVALID_CATEGORY_SELECTION_ERROR)
 
         category_name = categories[user_choice-1][0]
-        category_id = DAO.read_from_database(Queries.GET_CATEGORY_ID_BY_NAME, (category_name, ))
-        admin_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
+        category_id = dao.read_from_database(Queries.GET_CATEGORY_ID_BY_NAME, (category_name, ))
+        admin_data = dao.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
         admin_id = admin_data[0][0]
 
         question_data = {}

@@ -5,7 +5,7 @@ from typing import Dict
 from config.message_prompts import ErrorMessage
 
 from config.queries import Queries
-from database.database_access import DatabaseAccess as DAO
+from database.database_access import dao
 from models.database_saver import DatabaseSaver
 from utils import validations
 from utils.custom_error import DataNotFoundError
@@ -67,7 +67,7 @@ class Category(QuizEntity, DatabaseSaver):
             self.text
         )
 
-        DAO.write_to_database(Queries.INSERT_CATEGORY, category_data)
+        dao.write_to_database(Queries.INSERT_CATEGORY, category_data)
 
 
 class Option(QuizEntity, DatabaseSaver):
@@ -104,7 +104,7 @@ class Option(QuizEntity, DatabaseSaver):
             self.is_correct
         )
 
-        DAO.write_to_database(Queries.INSERT_OPTION, option_data)
+        dao.write_to_database(Queries.INSERT_OPTION, option_data)
 
 
 class Question(QuizEntity, DatabaseSaver):
@@ -155,7 +155,7 @@ class Question(QuizEntity, DatabaseSaver):
         if not self.options:
             raise DataNotFoundError(ErrorMessage.NO_OPTIONS_ERROR)
 
-        DAO.write_to_database(Queries.INSERT_QUESTION, question_data)
+        dao.write_to_database(Queries.INSERT_QUESTION, question_data)
 
         for option in self.options:
             option.save_to_database()
