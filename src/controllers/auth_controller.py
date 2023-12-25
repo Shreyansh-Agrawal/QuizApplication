@@ -6,7 +6,7 @@ from typing import Dict, Tuple
 
 from config.message_prompts import DisplayMessage, LogMessage, ErrorMessage
 from config.queries import Queries
-from database.database_access import dao
+from database.database_access import db
 from models.user import Player
 from utils.custom_error import LoginError
 from utils.password_hasher import hash_password
@@ -22,7 +22,7 @@ class AuthController:
 
         logger.debug(LogMessage.LOGIN_INITIATED)
         hashed_password = hash_password(password)
-        user_data = dao.read_from_database(Queries.GET_CREDENTIALS_BY_USERNAME, (username, ))
+        user_data = db.read_from_database(Queries.GET_CREDENTIALS_BY_USERNAME, (username, ))
 
         if not user_data:
             print(DisplayMessage.AUTH_INVALIDATE_MSG)

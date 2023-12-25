@@ -17,7 +17,7 @@ Execute this script to start the quiz application.
 import logging
 
 from config.message_prompts import DisplayMessage, LogMessage
-from database.database_access import dao
+from database.database_access import db
 from menu.main_menu import MainMenu
 from utils.initialize_app import Initializer
 
@@ -47,11 +47,11 @@ def start_quiz_app():
         Initializer.initialize_app()
         MainMenu.auth_menu()
     except Exception as e: # pylint: disable=broad-exception-caught
-        dao.connection.close()
+        db.connection.close()
         logger.exception(e)
         print(f'exception caught in app.py: {e}')
 
-    dao.connection.close()
+    db.connection.close()
     logger.info(LogMessage.SYSTEM_STOP)
     print(DisplayMessage.EXIT_MSG)
 

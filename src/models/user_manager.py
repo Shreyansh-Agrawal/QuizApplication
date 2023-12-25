@@ -1,7 +1,7 @@
 '''Contains UserManagerClass'''
 
 from config.queries import Queries
-from database.database_access import dao
+from database.database_access import db
 
 
 class UserManager:
@@ -42,5 +42,5 @@ class UserManager:
             self.user.is_password_changed
         )
 
-        dao.write_to_database(Queries.INSERT_USER_DATA, user_data)
-        dao.write_to_database(Queries.INSERT_CREDENTIALS, credentials)
+        db.write_to_database(Queries.INSERT_USER_DATA, user_data)
+        db.write_to_database(Queries.INSERT_CREDENTIALS, credentials)

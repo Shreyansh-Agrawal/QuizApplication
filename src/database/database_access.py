@@ -52,4 +52,4 @@ class DatabaseAccess:
         self.connection.commit()
 
 
-dao = DatabaseAccess()
+db = DatabaseAccess()

@@ -27,7 +27,7 @@ class TestAuthController:
         '''Test method to test login success'''
 
         mocker.patch('controllers.auth_controller.hash_password', return_value = 'hashed_password')
-        mocker.patch('controllers.auth_controller.dao.read_from_database', return_value = self.user_data)
+        mocker.patch('controllers.auth_controller.db.read_from_database', return_value = self.user_data)
 
         result = self.auth_controller.login(self.username, self.password)
         _ , role, is_password_changed = self.user_data[0]
@@ -42,7 +42,7 @@ class TestAuthController:
         '''Test method to test login failure'''
 
         mocker.patch('controllers.auth_controller.hash_password', return_value = 'hashed_password')
-        mocker.patch('controllers.auth_controller.dao.read_from_database', return_value = None)
+        mocker.patch('controllers.auth_controller.db.read_from_database', return_value = None)
 
         result = self.auth_controller.login(self.username, self.password)
         captured = capsys.readouterr()
@@ -55,7 +55,7 @@ class TestAuthController:
 
         user_data = [('another_hashed_password', 'role', '1')]
         mocker.patch('controllers.auth_controller.hash_password', return_value = 'hashed_password')
-        mocker.patch('controllers.auth_controller.dao.read_from_database', return_value = user_data)
+        mocker.patch('controllers.auth_controller.db.read_from_database', return_value = user_data)
 
         result = self.auth_controller.login(self.username, self.password)
         captured = capsys.readouterr()

@@ -87,7 +87,6 @@ QuizApplication/
 │   ├── database/
 │   │   ├── data.db
 │   │   ├── database_access.py
-│   │   ├── database_connection.py
 │   ├── menu/
 │   │   ├── admin_menu.py
 │   │   ├── main_menu.py
@@ -126,7 +125,6 @@ QuizApplication/
 │   │   ├── test_user_controller.py
 │   ├── test_database/
 │   │   ├── test_database_access.py
-│   │   ├── test_database_connection.py
 │   ├── test_menu/
 │   │   ├── test_admin_menu.py
 │   │   ├── test_main_menu.py

@@ -21,13 +21,13 @@ class TestUserController:
     def mock_read_from_database(self, mocker):
         '''Test fixture to mock read_from_database method'''
 
-        return mocker.patch('controllers.user_controller.dao.read_from_database', return_value=self.data)
+        return mocker.patch('controllers.user_controller.db.read_from_database', return_value=self.data)
 
     @pytest.fixture
     def mock_write_to_database(self, mocker):
         '''Test fixture to mock write_to_database method'''
 
-        return mocker.patch('controllers.user_controller.dao.write_to_database')
+        return mocker.patch('controllers.user_controller.db.write_to_database')
 
     @pytest.fixture
     def mock_admin_class(self, mocker):

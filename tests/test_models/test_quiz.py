@@ -37,7 +37,7 @@ class TestCategory:
     def test_category_save_to_database(self, category_data, mocker):
         '''Test method to test Category class save_to_database method'''
 
-        mock_write_to_database = mocker.patch('models.quiz.dao.write_to_database')
+        mock_write_to_database = mocker.patch('models.quiz.db.write_to_database')
         category = Category(category_data)
         category.save_to_database()
 
@@ -60,7 +60,7 @@ class TestOption:
     def test_option_save_to_database(self, option_data, mocker):
         '''Test method to test Option class save_to_database method'''
 
-        mock_write_to_database = mocker.patch('models.quiz.dao.write_to_database')
+        mock_write_to_database = mocker.patch('models.quiz.db.write_to_database')
         option = Option(option_data)
         option.save_to_database()
 
@@ -96,7 +96,7 @@ class TestQuestion:
     def test_question_save_to_database_with_options(self, question_data, mocker):
         '''Test method to test Question class save_to_database method'''
 
-        mock_write_to_database = mocker.patch('models.quiz.dao.write_to_database')
+        mock_write_to_database = mocker.patch('models.quiz.db.write_to_database')
         mock_option = mocker.Mock()
         question = Question(question_data)
         question.add_option(mock_option)
@@ -108,7 +108,7 @@ class TestQuestion:
     def test_question_save_to_database_without_option(self, question_data, mocker):
         '''Test method to test Question class save_to_database method without adding option'''
 
-        mock_write_to_database = mocker.patch('models.quiz.dao.write_to_database')
+        mock_write_to_database = mocker.patch('models.quiz.db.write_to_database')
         mock_option = mocker.Mock()
         question = Question(question_data)
 

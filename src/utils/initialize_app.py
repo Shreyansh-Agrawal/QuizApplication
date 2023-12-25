@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import InitializationQueries
-from database.database_access import dao
+from database.database_access import db
 from models.user import SuperAdmin
 from utils.custom_error import DuplicateEntryError
 from utils.password_hasher import hash_password
@@ -115,9 +115,9 @@ class InitializeDatabase:
         Returns: 
             None
         '''
-        dao.write_to_database(InitializationQueries.CREATE_USERS_TABLE)
-        dao.write_to_database(InitializationQueries.CREATE_CREDENTIALS_TABLE)
-        dao.write_to_database(InitializationQueries.CREATE_SCORES_TABLE)
-        dao.write_to_database(InitializationQueries.CREATE_CATEGORIES_TABLE)
-        dao.write_to_database(InitializationQueries.CREATE_QUESTIONS_TABLE)
-        dao.write_to_database(InitializationQueries.CREATE_OPTIONS_TABLE)
+        db.write_to_database(InitializationQueries.CREATE_USERS_TABLE)
+        db.write_to_database(InitializationQueries.CREATE_CREDENTIALS_TABLE)
+        db.write_to_database(InitializationQueries.CREATE_SCORES_TABLE)
+        db.write_to_database(InitializationQueries.CREATE_CATEGORIES_TABLE)
+        db.write_to_database(InitializationQueries.CREATE_QUESTIONS_TABLE)
+        db.write_to_database(InitializationQueries.CREATE_OPTIONS_TABLE)
