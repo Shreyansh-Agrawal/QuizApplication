@@ -1,7 +1,7 @@
 '''Test file for test_json_to_db_loader.py'''
 
 import json
-import sqlite3
+import mysql.connector
 
 from config.message_prompts import LogMessage
 from utils import json_to_db_loader
@@ -12,7 +12,7 @@ def test_load_quiz_data_from_json_success(mocker, sample_json_data, caplog):
 
     mock_read_from_database = mocker.patch('utils.json_to_db_loader.db.read_from_database')
     mock_write_to_database = mocker.patch('utils.json_to_db_loader.db.write_to_database')
-    # mock_write_to_database.side_effect = sqlite3.IntegrityError
+    # mock_write_to_database.side_effect = mysql.connector.IntegrityError
     mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps(sample_json_data)))
 
     mock_read_from_database.return_value = [('AEcrFq',)]
@@ -27,7 +27,7 @@ def test_load_quiz_data_from_json_error(mocker, sample_json_data, caplog):
 
     mock_read_from_database = mocker.patch('utils.json_to_db_loader.db.read_from_database')
     mock_write_to_database = mocker.patch('utils.json_to_db_loader.db.write_to_database')
-    mock_write_to_database.side_effect = sqlite3.IntegrityError
+    mock_write_to_database.side_effect = mysql.connector.IntegrityError
     mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps(sample_json_data)))
 
     mock_read_from_database.return_value = [('AEcrFq',)]

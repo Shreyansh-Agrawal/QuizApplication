@@ -11,13 +11,17 @@ SUPER_ADMIN_NAME=YourSuperAdminName
 SUPER_ADMIN_EMAIL=YourSuperAdminEmail
 SUPER_ADMIN_USERNAME=YourSuperAdminUsername
 SUPER_ADMIN_PASSWORD=YourSuperAdminPassword
+MYSQL_USER=YourMySQLusername
+MYSQL_PASSWORD=YourMySQLpassword
+MYSQL_HOST=YourMySQLhost
+MYSQL_DB=YourMySQLdb
 ```
 
 ### Prerequisites
 
 - Python
 - Pipenv
-- SQLite database
+- MySQL database
 
 ### Installation
 
@@ -173,7 +177,7 @@ QuizApplication/
 
 ## Database
 
-The application employs an SQLite database with the following tables:
+The application employs an MySQL database with the following tables:
 
 - **Users**: Stores user information.
 - **Credentials**: Stores user credentials for authentication.

@@ -11,6 +11,7 @@ tabulate = "*"
 python-dotenv = "*"
 pytest-mock = "*"
 pytest-cov = "*"
+mysql-connector-python = "*"
 
 [dev-packages]
 

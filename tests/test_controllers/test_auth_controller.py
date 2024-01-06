@@ -1,6 +1,6 @@
 '''Test file for auth_controller.py'''
 
-import sqlite3
+import mysql.connector
 
 import pytest
 
@@ -83,7 +83,7 @@ class TestAuthController:
 
         mocker.patch('controllers.auth_controller.hash_password', return_value = 'hashed_password')
         mock_player = mocker.patch('controllers.auth_controller.Player')
-        mock_player().save_to_database.side_effect = sqlite3.IntegrityError
+        mock_player().save_to_database.side_effect = mysql.connector.IntegrityError
 
         with pytest.raises(LoginError):
             self.auth_controller.signup(self.player_data)

@@ -1,7 +1,7 @@
 '''Controllers for Operations related to Authentication'''
 
 import logging
-import sqlite3
+import mysql.connector
 from typing import Dict, Tuple
 
 from config.message_prompts import DisplayMessage, LogMessage, ErrorMessage
@@ -45,7 +45,7 @@ class AuthController:
 
         try:
             player.save_to_database()
-        except sqlite3.IntegrityError as e:
+        except mysql.connector.IntegrityError as e:
             raise LoginError(ErrorMessage.USER_EXISTS_ERROR) from e
 
         logger.debug(LogMessage.SIGNUP_SUCCESS)

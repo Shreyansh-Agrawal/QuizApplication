@@ -2,7 +2,7 @@
 
 import logging
 import os
-import sqlite3
+import mysql.connector
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -58,7 +58,7 @@ class Initializer:
 
         try:
             super_admin.save_to_database()
-        except sqlite3.IntegrityError as e:
+        except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(
                 ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.SUPER_ADMIN)
             ) from e

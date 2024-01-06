@@ -2,7 +2,7 @@
 
 import json
 import logging
-import sqlite3
+import mysql.connector
 
 from config.file_paths import FilePaths
 from config.message_prompts import LogMessage
@@ -53,7 +53,7 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
                 Queries.INSERT_CATEGORY,
                 (category_id, admin_id, admin_username, category))
 
-        except sqlite3.IntegrityError:
+        except mysql.connector.IntegrityError:
             # Not logging the error: Reason - Definite error due to json data structure
             pass
 
@@ -75,6 +75,6 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
                         Queries.INSERT_OPTION,
                         (other_option_id, question_id, other_option, 0))
 
-        except sqlite3.IntegrityError:
+        except mysql.connector.IntegrityError:
             # Not logging the error: Reason - Definite error due to json data structure
             pass

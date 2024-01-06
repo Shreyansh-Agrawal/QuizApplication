@@ -1,7 +1,7 @@
 '''Controllers for Operations related to Quiz'''
 
 import logging
-import sqlite3
+import mysql.connector
 import time
 from typing import Dict, List, Tuple
 
@@ -47,7 +47,7 @@ class QuizController:
 
         try:
             category.save_to_database()
-        except sqlite3.IntegrityError as e:
+        except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.CATEGORY)) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.CATEGORY)
@@ -62,7 +62,7 @@ class QuizController:
 
         try:
             question.save_to_database()
-        except sqlite3.IntegrityError as e:
+        except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.QUES)) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.QUES)
@@ -74,7 +74,7 @@ class QuizController:
         logger.debug(LogMessage.UPDATE_ENTITY, Headers.CATEGORY)
         try:
             db.write_to_database(Queries.UPDATE_CATEGORY_BY_NAME, (new_category_name, old_category_name))
-        except sqlite3.IntegrityError as e:
+        except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.CATEGORY)) from e
 
         logger.debug(LogMessage.UPDATE_CATEGORY_SUCCESS, old_category_name, new_category_name)
