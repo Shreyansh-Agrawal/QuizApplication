@@ -1,10 +1,11 @@
 '''Controllers for Operations related to Authentication'''
 
 import logging
-import mysql.connector
 from typing import Dict, Tuple
 
-from config.message_prompts import DisplayMessage, LogMessage, ErrorMessage
+import mysql.connector
+
+from config.message_prompts import DisplayMessage, ErrorMessage, LogMessage
 from config.queries import Queries
 from database.database_access import db
 from models.user import Player

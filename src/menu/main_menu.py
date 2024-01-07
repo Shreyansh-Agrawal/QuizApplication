@@ -54,7 +54,6 @@ class MainMenu:
                     username = auth_handler.handle_signup()
                     if not username:
                         continue
-                    PlayerMenu.player_menu(username)
                 case 'q':
                     break
                 case _:

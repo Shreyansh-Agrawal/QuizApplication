@@ -1,8 +1,9 @@
 '''Controllers for Operations related to Users: SuperAdmin, Admin, Player'''
 
 import logging
-import mysql.connector
 from typing import Dict, List, Tuple
+
+import mysql.connector
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage, ErrorMessage
 from config.queries import Queries

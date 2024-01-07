@@ -1,9 +1,10 @@
 '''Controllers for Operations related to Quiz'''
 
 import logging
-import mysql.connector
 import time
 from typing import Dict, List, Tuple
+
+import mysql.connector
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import Queries

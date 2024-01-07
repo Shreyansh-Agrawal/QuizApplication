@@ -2,13 +2,13 @@
 
 import logging
 import os
-import mysql.connector
 from pathlib import Path
 
+import mysql.connector
 from dotenv import load_dotenv
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
-from config.queries import InitializationQueries
+from config.queries import InitializationQueries, Queries
 from database.database_access import db
 from models.user import SuperAdmin
 from utils.custom_error import DuplicateEntryError
@@ -57,6 +57,9 @@ class Initializer:
         super_admin = SuperAdmin(super_admin_data)
 
         try:
+            user = db.read_from_database(Queries.GET_USER_BY_ROLE, ('super admin', ))
+            if user:
+                return
             super_admin.save_to_database()
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(
