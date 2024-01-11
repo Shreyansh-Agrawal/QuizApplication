@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import InitializationQueries, Queries
-from database.database_access import db
-from models.user import SuperAdmin
+from models.database.database_access import db
+from models.users.super_admin import SuperAdmin
 from utils.custom_error import DuplicateEntryError
 from utils.password_hasher import hash_password
 

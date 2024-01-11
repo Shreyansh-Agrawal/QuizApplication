@@ -7,8 +7,8 @@ from typing import List, Tuple
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
-from controllers.helpers.create_quiz_helper import CreateQuizHelper
-from database.database_access import db
+from controllers.category import Category
+from models.database.database_access import db
 from utils import validations
 from utils.custom_error import DataNotFoundError
 from utils.pretty_print import pretty_print
@@ -19,22 +19,10 @@ logger = logging.getLogger(__name__)
 class StartQuizHelper:
     '''StartQuizHelper containing methods for starting quiz for a player'''
 
-    def get_random_questions(self) -> List[Tuple]:
-        '''Return random questions across all categories'''
-
-        data = db.read_from_database(Queries.GET_RANDOM_QUESTIONS)
-        return data
-
-    def get_random_questions_by_category(self, category: str) -> List[Tuple]:
-        '''Return random questions by category'''
-
-        data = db.read_from_database(Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY, (category, ))
-        return data
-
     def select_category(self) -> str:
         '''Takes in player input for category'''
 
-        data = CreateQuizHelper().get_all_categories()
+        data = Category().get_all_categories()
         if not data:
             raise DataNotFoundError(ErrorMessage.NO_CATEGORY_ERROR)
 

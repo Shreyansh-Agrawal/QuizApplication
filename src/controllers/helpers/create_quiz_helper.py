@@ -1,13 +1,15 @@
 '''Helper functions for Managing Quiz'''
 
 import logging
-from typing import Dict, List, Tuple
+from typing import Dict
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
-from database.database_access import db
-from models.quiz import Option, Question
+from controllers.category import Category
+from models.database.database_access import db
+from models.quiz.question import Question
+from models.quiz.option import Option
 from utils import validations
 from utils.custom_error import DataNotFoundError
 
@@ -17,25 +19,19 @@ logger = logging.getLogger(__name__)
 class CreateQuizHelper:
     '''CreateQuizHelper class containing methods for managing quiz creation'''
 
-    def get_all_categories(self) -> List[Tuple]:
-        '''Return all Quiz Categories'''
-
-        data = db.read_from_database(Queries.GET_ALL_CATEGORIES)
-        return data
-
     def get_question_data(self, username: str) -> Dict:
         '''Takes input of question details'''
 
         logger.debug(LogMessage.CREATE_ENTITY, Headers.QUES)
         print(DisplayMessage.CREATE_QUES_MSG)
-
+        category_controller = Category()
         user_choice = validations.regex_validator(
             prompt=Prompts.SELECT_CATEGORY_PROMPT,
             regex_pattern=RegexPattern.NUMERIC_PATTERN,
             error_msg=DisplayMessage.INVALID_CHOICE
         )
         user_choice = int(user_choice)
-        categories = self.get_all_categories()
+        categories = category_controller.get_all_categories()
         if user_choice > len(categories) or user_choice-1 < 0:
             raise DataNotFoundError(ErrorMessage.INVALID_CATEGORY_SELECTION_ERROR)
 

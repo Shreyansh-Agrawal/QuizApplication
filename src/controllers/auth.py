@@ -7,16 +7,16 @@ import mysql.connector
 
 from config.message_prompts import DisplayMessage, ErrorMessage, LogMessage
 from config.queries import Queries
-from database.database_access import db
-from models.user import Player
+from models.database.database_access import db
+from models.users.player import Player
 from utils.custom_error import LoginError
 from utils.password_hasher import hash_password
 
 logger = logging.getLogger(__name__)
 
 
-class AuthController:
-    '''AuthController class containing login and signup methods'''
+class Authentication:
+    '''Authentication class containing login and signup methods'''
 
     def login(self, username: str, password: str) -> Tuple:
         '''Method for user login'''

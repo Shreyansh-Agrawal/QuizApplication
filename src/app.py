@@ -17,7 +17,7 @@ Execute this script to start the quiz application.
 import logging
 
 from config.message_prompts import DisplayMessage, LogMessage
-from database.database_access import db
+from models.database.database_access import db
 from menu.main_menu import MainMenu
 from utils.initialize_app import Initializer
 

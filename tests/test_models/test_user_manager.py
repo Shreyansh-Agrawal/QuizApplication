@@ -1,6 +1,6 @@
 '''Test file for user_manager.py'''
 
-from models.user_manager import UserManager
+from models.users.user_manager import UserManager
 
 
 class TestUserManager:

@@ -5,7 +5,7 @@ import mysql.connector
 import pytest
 
 from config.message_prompts import DisplayMessage, LogMessage
-from controllers.auth_controller import AuthController
+from controllers.auth import Authentication
 from utils.custom_error import LoginError
 
 
@@ -21,7 +21,7 @@ class TestAuthController:
     username = 'test_username'
     password = 'test_password'
     user_data = [('hashed_password', 'role', '1')]
-    auth_controller = AuthController()
+    auth_controller = Authentication()
 
     def test_login_success(self, mocker, capsys, caplog):
         '''Test method to test login success'''

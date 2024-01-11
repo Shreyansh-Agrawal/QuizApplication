@@ -2,7 +2,10 @@
 
 import pytest
 
-from models.quiz import Category, Option, Question, QuizEntity
+from models.quiz.quiz_entity import QuizEntity
+from models.quiz.category import Category
+from models.quiz.option import Option
+from models.quiz.question import Question
 from utils.custom_error import DataNotFoundError
 
 

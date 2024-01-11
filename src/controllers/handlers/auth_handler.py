@@ -6,8 +6,8 @@ from typing import List, Tuple
 from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
-from controllers.auth_controller import AuthController
-from database.database_access import db
+from controllers.auth import Authentication
+from models.database.database_access import db
 from utils import validations
 from utils.custom_error import LoginError
 from utils.password_hasher import hash_password
@@ -19,7 +19,7 @@ class AuthHandler:
     '''AuthHandler class containing methods for handling authentication'''
 
     def __init__(self) -> None:
-        self.auth_controller = AuthController()
+        self.auth_controller = Authentication()
 
     def handle_login(self) -> List[Tuple]:
         '''Handles Login'''

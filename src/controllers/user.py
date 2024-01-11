@@ -7,15 +7,15 @@ import mysql.connector
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage, ErrorMessage
 from config.queries import Queries
-from database.database_access import db
-from models.user import Admin
+from models.database.database_access import db
+from models.users.admin import Admin
 from utils.custom_error import LoginError
 
 logger = logging.getLogger(__name__)
 
 
-class UserController:
-    '''UserController class containing methods related to managing users'''
+class User:
+    '''User class for user management'''
 
     def get_player_scores_by_username(self, username: str) -> List[Tuple]:
         '''Return user's scores'''

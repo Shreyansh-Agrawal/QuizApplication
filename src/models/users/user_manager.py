@@ -1,10 +1,11 @@
 '''Contains UserManagerClass'''
 
 from config.queries import Queries
-from database.database_access import db
+from models.database.database_access import db
+from models.database.database_saver import DatabaseSaver
 
 
-class UserManager:
+class UserManager(DatabaseSaver):
     '''
     Manager class responsible for saving users to the database.
 
