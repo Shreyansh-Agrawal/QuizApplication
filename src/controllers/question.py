@@ -7,7 +7,7 @@ import mysql.connector
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import Queries
-from controllers.helpers.create_quiz_helper import CreateQuizHelper
+from helpers.create_quiz_helper import CreateQuizHelper
 from models.database.database_access import db
 from utils.custom_error import DuplicateEntryError
 

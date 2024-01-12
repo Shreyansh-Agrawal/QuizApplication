@@ -3,7 +3,7 @@
 import pytest
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage
-from controllers.helpers.create_quiz_helper import CreateQuizHelper
+from helpers.create_quiz_helper import CreateQuizHelper
 from utils.custom_error import DataNotFoundError
 
 

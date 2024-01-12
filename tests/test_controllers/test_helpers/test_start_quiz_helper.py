@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 import pytest
 
 from config.message_prompts import LogMessage
-from controllers.helpers.start_quiz_helper import StartQuizHelper
+from helpers.start_quiz_helper import StartQuizHelper
 from utils.custom_error import DataNotFoundError
 
 

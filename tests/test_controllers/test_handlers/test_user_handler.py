@@ -3,7 +3,7 @@
 import pytest
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage
-from controllers.handlers.user_handler import UserHandler
+from helpers.user_handler import UserHandler
 from utils.custom_error import LoginError
 
 
