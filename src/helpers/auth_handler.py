@@ -19,7 +19,7 @@ class AuthHandler:
     '''AuthHandler class containing methods for handling authentication'''
 
     def __init__(self) -> None:
-        self.auth_controller = Authentication()
+        self.auth_controller = Authentication(db)
 
     def handle_login(self) -> List[Tuple]:
         '''Handles Login'''
@@ -113,7 +113,7 @@ class AuthHandler:
 
             hashed_password = hash_password(confirm_password)
             is_password_changed = 1
-            db.write_to_database(
+            db.write(
                 Queries.UPDATE_ADMIN_PASSWORD_BY_USERNAME,
                 (hashed_password, is_password_changed, username)
             )

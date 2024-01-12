@@ -24,7 +24,7 @@ class CreateQuizHelper:
 
         logger.debug(LogMessage.CREATE_ENTITY, Headers.QUES)
         print(DisplayMessage.CREATE_QUES_MSG)
-        category_controller = Category()
+        category_controller = Category(db)
         user_choice = validations.regex_validator(
             prompt=Prompts.SELECT_CATEGORY_PROMPT,
             regex_pattern=RegexPattern.NUMERIC_PATTERN,
@@ -36,8 +36,8 @@ class CreateQuizHelper:
             raise DataNotFoundError(ErrorMessage.INVALID_CATEGORY_SELECTION_ERROR)
 
         category_name = categories[user_choice-1][0]
-        category_id = db.read_from_database(Queries.GET_CATEGORY_ID_BY_NAME, (category_name, ))
-        admin_data = db.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
+        category_id = db.read(Queries.GET_CATEGORY_ID_BY_NAME, (category_name, ))
+        admin_data = db.read(Queries.GET_USER_ID_BY_USERNAME, (username, ))
         admin_id = admin_data[0][0]
 
         question_data = {}

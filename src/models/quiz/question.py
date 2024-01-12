@@ -59,7 +59,7 @@ class Question(QuizEntity, DatabaseSaver):
         if not self.options:
             raise DataNotFoundError(ErrorMessage.NO_OPTIONS_ERROR)
 
-        db.write_to_database(Queries.INSERT_QUESTION, question_data)
+        db.write(Queries.INSERT_QUESTION, question_data)
 
         for option in self.options:
             option.save_to_database()

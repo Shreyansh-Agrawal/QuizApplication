@@ -29,10 +29,10 @@ class TestCreateQuizHelper:
     create_quiz_helper = CreateQuizHelper()
 
     @pytest.fixture(autouse=True)
-    def mock_read_from_database(self, mocker):
-        '''Test fixture to mock read_from_database method'''
+    def mock_read(self, mocker):
+        '''Test fixture to mock read method'''
 
-        mocker.patch('controllers.helpers.create_quiz_helper.db.read_from_database', return_value=self.mock_data)
+        mocker.patch('controllers.helpers.create_quiz_helper.db.read', return_value=self.mock_data)
 
     def test_get_all_categories(self):
         '''Test method to test get_all_categories'''

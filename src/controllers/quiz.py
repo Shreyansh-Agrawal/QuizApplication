@@ -18,17 +18,20 @@ logger = logging.getLogger(__name__)
 class Quiz:
     '''Quiz class for quiz management'''
 
+    def __init__(self, database) -> None:
+        self.db = database
+
     def get_leaderboard(self) -> List[Tuple]:
         '''Return top 10 scores for leaderboard'''
 
-        data = db.read_from_database(Queries.GET_LEADERBOARD)
+        data = self.db.read(Queries.GET_LEADERBOARD)
         return data
 
     def start_quiz(self, username: str, category: str = None) -> None:
         '''Start a New Quiz'''
 
         logger.debug(LogMessage.START_QUIZ, username)
-        question_controller = Question()
+        question_controller = Question(db)
         start_quiz_helper = StartQuizHelper()
         if not category:
             data = question_controller.get_random_questions()
@@ -45,7 +48,7 @@ class Quiz:
         # Display question, take player's response and calculate score one by one
         for question_no, question_data in enumerate(data, 1):
             question_id, question_text, question_type, correct_answer = question_data
-            options_data = db.read_from_database(Queries.GET_OPTIONS_FOR_MCQ, (question_id, ))
+            options_data = self.db.read(Queries.GET_OPTIONS_FOR_MCQ, (question_id, ))
 
             remaining_time = end_time - time.time()
             if remaining_time <= 0:

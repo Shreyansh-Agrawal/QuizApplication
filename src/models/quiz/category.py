@@ -42,4 +42,4 @@ class Category(QuizEntity, DatabaseSaver):
             self.text
         )
 
-        db.write_to_database(Queries.INSERT_CATEGORY, category_data)
+        db.write(Queries.INSERT_CATEGORY, category_data)

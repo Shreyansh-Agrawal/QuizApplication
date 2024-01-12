@@ -43,5 +43,5 @@ class UserManager(DatabaseSaver):
             self.user.is_password_changed
         )
 
-        db.write_to_database(Queries.INSERT_USER_DATA, user_data)
-        db.write_to_database(Queries.INSERT_CREDENTIALS, credentials)
+        db.write(Queries.INSERT_USER_DATA, user_data)
+        db.write(Queries.INSERT_CREDENTIALS, credentials)

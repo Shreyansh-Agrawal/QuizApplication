@@ -78,29 +78,37 @@ QuizApplication/
 │   │   ├── questions.json
 │   │   ├── regex_patterns.py
 │   ├── controllers/
-│   │   ├── handlers/
-│   │   │   ├── auth_handler.py
-│   │   │   ├── quiz_handler.py
-│   │   │   ├── user_handler.py
-│   │   ├── helpers/
-│   │   │   ├── create_quiz_helper.py
-│   │   │   ├── start_quiz_helper.py
-│   │   ├── auth_controller.py
-│   │   ├── quiz_controller.py
-│   │   ├── user_controller.py
-│   ├── database/
-│   │   ├── data.db
-│   │   ├── database_access.py
+│   │   ├── auth.py
+│   │   ├── category.py
+│   │   ├── question.py
+│   │   ├── quiz.py
+│   │   ├── user.py
+│   ├── helpers/
+│   │   ├── auth_handler.py
+│   │   ├── create_quiz_helper.py
+│   │   ├── quiz_handler.py
+│   │   ├── start_quiz_helper.py
+│   │   ├── user_handler.py
 │   ├── menu/
 │   │   ├── admin_menu.py
 │   │   ├── main_menu.py
 │   │   ├── player_menu.py
 │   │   ├── super_admin_menu.py
 │   ├── models/
-│   │   ├── database_saver.py
-│   │   ├── quiz.py
-│   │   ├── user_manager.py
-│   │   ├── user.py
+│   │   ├── database/
+│   │   │   ├── database_access.py
+│   │   │   ├── database_saver.py
+│   │   ├── quiz/
+│   │   │   ├── category.py
+│   │   │   ├── option.py
+│   │   │   ├── question.py
+│   │   │   ├── quiz_entity.py
+│   │   ├── users/
+│   │   │   ├── admin.py
+│   │   │   ├── player.py
+│   │   │   ├── super_admin.py
+│   │   │   ├── user_manager.py
+│   │   │   ├── user.py
 │   ├── utils/
 │   │   ├── custom_error.py
 │   │   ├── initialize_app.py

@@ -45,16 +45,16 @@ class TestQuizController:
     quiz_controller = QuizController()
 
     @pytest.fixture
-    def mock_read_from_database(self, mocker):
-        '''Test fixture to mock read_from_database method'''
+    def mock_read(self, mocker):
+        '''Test fixture to mock read method'''
 
-        return mocker.patch('controllers.quiz_controller.db.read_from_database', return_value=self.data)
+        return mocker.patch('controllers.quiz_controller.db.read', return_value=self.data)
 
     @pytest.fixture
-    def mock_write_to_database(self, mocker):
-        '''Test fixture to mock write_to_database method'''
+    def mock_write(self, mocker):
+        '''Test fixture to mock write method'''
 
-        return mocker.patch('controllers.quiz_controller.db.write_to_database')
+        return mocker.patch('controllers.quiz_controller.db.write')
 
     @pytest.fixture
     def mock_category_class(self, mocker):
@@ -74,26 +74,26 @@ class TestQuizController:
 
         return mocker.patch('controllers.quiz_controller.StartQuizHelper')
 
-    def test_get_all_questions(self, mock_read_from_database):
+    def test_get_all_questions(self, mock_read):
         '''Test method to test get_all_questions'''
 
-        expected = mock_read_from_database()
+        expected = mock_read()
         result = self.quiz_controller.get_all_questions()
         assert result == expected
 
-    def test_get_questions_by_category(self, mock_read_from_database, caplog):
+    def test_get_questions_by_category(self, mock_read, caplog):
         '''Test method to test get_questions_by_category'''
 
-        expected = mock_read_from_database()
+        expected = mock_read()
         result = self.quiz_controller.get_questions_by_category(self.category_name)
 
         assert LogMessage.GET_QUES_BY_CATEGORY in caplog.text
         assert result == expected
 
-    def test_get_leaderboard(self, mock_read_from_database):
+    def test_get_leaderboard(self, mock_read):
         '''Test method to test get_leaderboard'''
 
-        expected = mock_read_from_database()
+        expected = mock_read()
         result = self.quiz_controller.get_leaderboard()
         assert result == expected
 
@@ -142,7 +142,7 @@ class TestQuizController:
         with pytest.raises(DuplicateEntryError):
             self.quiz_controller.create_question(self.username)
 
-    @pytest.mark.usefixtures('mock_write_to_database')
+    @pytest.mark.usefixtures('mock_write')
     def test_update_category_by_name_success(self, caplog, capsys):
         '''Test method to test update_category_by_name success'''
 
@@ -156,15 +156,15 @@ class TestQuizController:
         ) in captured.out
 
 
-    def test_update_category_by_name_error(self, caplog, mock_write_to_database):
+    def test_update_category_by_name_error(self, caplog, mock_write):
         '''Test method to test update_category_by_name error'''
 
-        mock_write_to_database.side_effect = mysql.connector.IntegrityError
+        mock_write.side_effect = mysql.connector.IntegrityError
         with pytest.raises(DuplicateEntryError):
             self.quiz_controller.update_category_by_name(self.old_category_name, self.category_name)
         assert LogMessage.UPDATE_ENTITY, Headers.CATEGORY in caplog.text
 
-    @pytest.mark.usefixtures('mock_write_to_database')
+    @pytest.mark.usefixtures('mock_write')
     def test_delete_category_by_name_success(self, capsys, caplog):
         '''Test method to test delete_category_by_name success'''
 
@@ -180,8 +180,8 @@ class TestQuizController:
 
         mock_start_quiz_helper = mock_start_quiz_helper_class()
         mock_start_quiz_helper.get_random_questions_by_category.return_value = self.question_data
-        mock_read_from_database = mocker.patch('controllers.quiz_controller.db.read_from_database')
-        mock_read_from_database.side_effect = self.option_data
+        mock_read = mocker.patch('controllers.quiz_controller.db.read')
+        mock_read.side_effect = self.option_data
         mock_start_quiz_helper.get_player_response.side_effect = self.player_response_data
 
         self.quiz_controller.start_quiz(self.username, self.category_name)

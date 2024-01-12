@@ -22,7 +22,7 @@ class StartQuizHelper:
     def select_category(self) -> str:
         '''Takes in player input for category'''
 
-        data = Category().get_all_categories()
+        data = Category(db).get_all_categories()
         if not data:
             raise DataNotFoundError(ErrorMessage.NO_CATEGORY_ERROR)
 
@@ -97,12 +97,12 @@ class StartQuizHelper:
         '''Save Player's Quiz Score'''
 
         logger.debug(LogMessage.SAVE_QUIZ_SCORE, username)
-        player_data = db.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (username, ))
+        player_data = db.read(Queries.GET_USER_ID_BY_USERNAME, (username, ))
         user_id = player_data[0][0]
         score_id = validations.validate_id(entity='score')
 
         time = datetime.now(timezone.utc) # current utc time
         timestamp = time.strftime('%Y-%m-%d %H:%M:%S') # yyyy-mm-dd
 
-        db.write_to_database(Queries.INSERT_PLAYER_QUIZ_SCORE, (score_id, user_id, score, timestamp))
+        db.write(Queries.INSERT_PLAYER_QUIZ_SCORE, (score_id, user_id, score, timestamp))
         logger.debug(LogMessage.SAVE_QUIZ_SCORE_SUCCESS, username)

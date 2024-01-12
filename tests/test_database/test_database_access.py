@@ -27,51 +27,51 @@ class TestDatabaseAccess:
 
         return db_access
 
-    def test_read_from_database_success(self, mock_db_access):
-        '''Test method to test read_from_database success'''
+    def test_read_success(self, mock_db_access):
+        '''Test method to test read success'''
 
         db_access = mock_db_access
         db_access.cursor.fetchall.return_value = self.mock_fetchall_result
 
-        result = db_access.read_from_database(self.query, self.data)
+        result = db_access.read(self.query, self.data)
 
         db_access.cursor.execute.assert_called_once_with(self.query, self.data)
         db_access.cursor.fetchall.assert_called_once()
         assert result == self.mock_fetchall_result
 
-    def test_read_from_database_error(self, mock_db_access, caplog):
-        '''Test method to test read_from_database error'''
+    def test_read_error(self, mock_db_access, caplog):
+        '''Test method to test read error'''
 
         db_access = mock_db_access
         db_access.cursor.execute.side_effect = mysql.connector.OperationalError('Mock Error')
-        result = db_access.read_from_database(self.query)
+        result = db_access.read(self.query)
 
         db_access.cursor.fetchall.assert_not_called()
         assert 'Mock Error' in caplog.text
         assert not result
 
-    def test_write_to_database_success(self, mock_db_access):
-        '''Test method to test write_to_database success'''
+    def test_write_success(self, mock_db_access):
+        '''Test method to test write success'''
 
         db_access = mock_db_access
-        db_access.write_to_database(self.query, self.data)
+        db_access.write(self.query, self.data)
 
         assert db_access.cursor.execute.call_count == 2
 
-    def test_write_to_database_success_no_data(self, mock_db_access):
-        '''Test method to test write_to_database success with no data'''
+    def test_write_success_no_data(self, mock_db_access):
+        '''Test method to test write success with no data'''
 
         db_access = mock_db_access
-        db_access.write_to_database(self.query)
+        db_access.write(self.query)
 
         assert db_access.cursor.execute.call_count == 2
 
-    def test_write_to_database_error(self, mock_db_access, caplog):
-        '''Test method to test write_to_database error'''
+    def test_write_error(self, mock_db_access, caplog):
+        '''Test method to test write error'''
 
         db_access = mock_db_access
         db_access.cursor.execute.side_effect = mysql.connector.OperationalError('Mock Error')
-        db_access.write_to_database(self.query)
+        db_access.write(self.query)
 
         assert 'Mock Error' in caplog.text
 

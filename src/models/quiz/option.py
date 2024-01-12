@@ -42,4 +42,4 @@ class Option(QuizEntity, DatabaseSaver):
             self.is_correct
         )
 
-        db.write_to_database(Queries.INSERT_OPTION, option_data)
+        db.write(Queries.INSERT_OPTION, option_data)

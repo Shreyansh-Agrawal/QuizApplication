@@ -28,7 +28,7 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
         None
     '''
     logger.debug(LogMessage.LOAD_QUIZ_DATA_FROM_JSON)
-    admin_data = db.read_from_database(
+    admin_data = db.read(
                     Queries.GET_USER_ID_BY_USERNAME,
                     (created_by_admin_username, )
                 )
@@ -49,7 +49,7 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
         answer = question['options']['answer']['text']
 
         try:
-            db.write_to_database(
+            db.write(
                 Queries.INSERT_CATEGORY,
                 (category_id, admin_id, admin_username, category))
 
@@ -58,11 +58,11 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
             pass
 
         try:
-            db.write_to_database(
+            db.write(
                 Queries.INSERT_QUESTION,
                 (question_id, category_id, admin_id, admin_username, question_text, question_type))
 
-            db.write_to_database(
+            db.write(
                 Queries.INSERT_OPTION,
                 (answer_id, question_id, answer, 1))
 
@@ -71,7 +71,7 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
                     other_option_id = validations.validate_id(entity='option')
                     other_option = question['options']['other_options'][i]['text']
 
-                    db.write_to_database(
+                    db.write(
                         Queries.INSERT_OPTION,
                         (other_option_id, question_id, other_option, 0))
 

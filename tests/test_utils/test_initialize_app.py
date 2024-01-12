@@ -53,8 +53,8 @@ def test_initialize_app(mocker, capsys, caplog):
 def test_initialize_database(mocker):
     '''Test function to test initialize_database method'''
 
-    mock_write_to_database = mocker.Mock()
-    mocker.patch('utils.initialize_app.db.write_to_database', mock_write_to_database)
+    mock_write = mocker.Mock()
+    mocker.patch('utils.initialize_app.db.write', mock_write)
 
     InitializeDatabase.initialize_database()
-    assert mock_write_to_database.call_count == 6
+    assert mock_write.call_count == 6

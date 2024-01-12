@@ -46,6 +46,10 @@ class Initializer:
             None
         '''
 
+        user = db.read(Queries.GET_USER_BY_ROLE, ('super admin', ))
+        if user:
+            return
+
         logger.debug(LogMessage.CREATE_ENTITY, Headers.SUPER_ADMIN)
 
         super_admin_data = {}
@@ -57,9 +61,6 @@ class Initializer:
         super_admin = SuperAdmin(super_admin_data)
 
         try:
-            user = db.read_from_database(Queries.GET_USER_BY_ROLE, ('super admin', ))
-            if user:
-                return
             super_admin.save_to_database()
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(
@@ -118,9 +119,9 @@ class InitializeDatabase:
         Returns: 
             None
         '''
-        db.write_to_database(InitializationQueries.CREATE_USERS_TABLE)
-        db.write_to_database(InitializationQueries.CREATE_CREDENTIALS_TABLE)
-        db.write_to_database(InitializationQueries.CREATE_SCORES_TABLE)
-        db.write_to_database(InitializationQueries.CREATE_CATEGORIES_TABLE)
-        db.write_to_database(InitializationQueries.CREATE_QUESTIONS_TABLE)
-        db.write_to_database(InitializationQueries.CREATE_OPTIONS_TABLE)
+        db.write(InitializationQueries.CREATE_USERS_TABLE)
+        db.write(InitializationQueries.CREATE_CREDENTIALS_TABLE)
+        db.write(InitializationQueries.CREATE_SCORES_TABLE)
+        db.write(InitializationQueries.CREATE_CATEGORIES_TABLE)
+        db.write(InitializationQueries.CREATE_QUESTIONS_TABLE)
+        db.write(InitializationQueries.CREATE_OPTIONS_TABLE)

@@ -18,16 +18,16 @@ class TestUserController:
     user_controller = UserController()
 
     @pytest.fixture
-    def mock_read_from_database(self, mocker):
-        '''Test fixture to mock read_from_database method'''
+    def mock_read(self, mocker):
+        '''Test fixture to mock read method'''
 
-        return mocker.patch('controllers.user_controller.db.read_from_database', return_value=self.data)
+        return mocker.patch('controllers.user_controller.db.read', return_value=self.data)
 
     @pytest.fixture
-    def mock_write_to_database(self, mocker):
-        '''Test fixture to mock write_to_database method'''
+    def mock_write(self, mocker):
+        '''Test fixture to mock write method'''
 
-        return mocker.patch('controllers.user_controller.db.write_to_database')
+        return mocker.patch('controllers.user_controller.db.write')
 
     @pytest.fixture
     def mock_admin_class(self, mocker):
@@ -35,17 +35,17 @@ class TestUserController:
 
         return mocker.patch('controllers.user_controller.Admin')
 
-    def test_get_player_scores_by_username(self, mock_read_from_database):
+    def test_get_player_scores_by_username(self, mock_read):
         '''Test method to test get_player_scores_by_username method'''
 
-        expected = mock_read_from_database()
+        expected = mock_read()
         result = self.user_controller.get_player_scores_by_username(self.username)
         assert result == expected
 
-    def test_get_all_users_by_role(self, mock_read_from_database):
+    def test_get_all_users_by_role(self, mock_read):
         '''Test method to test get_all_users_by_role method'''
 
-        expected = mock_read_from_database()
+        expected = mock_read()
         result = self.user_controller.get_all_users_by_role(self.role)
         assert result == expected
 
@@ -69,7 +69,7 @@ class TestUserController:
         with pytest.raises(LoginError):
             self.user_controller.create_admin(self.data)
 
-    @pytest.mark.usefixtures('mock_write_to_database')
+    @pytest.mark.usefixtures('mock_write')
     def test_delete_user_by_email(self, caplog, capsys):
         '''Test method to test delete_user_by_email'''
 

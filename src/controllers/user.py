@@ -7,7 +7,6 @@ import mysql.connector
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage, ErrorMessage
 from config.queries import Queries
-from models.database.database_access import db
 from models.users.admin import Admin
 from utils.custom_error import LoginError
 
@@ -17,16 +16,19 @@ logger = logging.getLogger(__name__)
 class User:
     '''User class for user management'''
 
+    def __init__(self, database) -> None:
+        self.db = database
+
     def get_player_scores_by_username(self, username: str) -> List[Tuple]:
         '''Return user's scores'''
 
-        data = db.read_from_database(Queries.GET_PLAYER_SCORES_BY_USERNAME, (username, ))
+        data = self.db.read(Queries.GET_PLAYER_SCORES_BY_USERNAME, (username, ))
         return data
 
     def get_all_users_by_role(self, role: str) -> List[Tuple]:
         '''Return all users with their details'''
 
-        data = db.read_from_database(Queries.GET_USER_BY_ROLE, (role, ))
+        data = self.db.read(Queries.GET_USER_BY_ROLE, (role, ))
         return data
 
     def create_admin(self, admin_data: Dict) -> None:
@@ -44,6 +46,6 @@ class User:
     def delete_user_by_email(self, role: str, email: str) -> None:
         '''Delete a Player'''
 
-        db.write_to_database(Queries.DELETE_USER_BY_EMAIL, (email, ))
+        self.db.write(Queries.DELETE_USER_BY_EMAIL, (email, ))
         logger.debug(LogMessage.DELETE_SUCCESS, Headers.PLAYER)
         print(DisplayMessage.DELETE_USER_SUCCESS_MSG.format(user=role.title(), email=email))

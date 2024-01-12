@@ -23,9 +23,9 @@ class QuizHandler:
     '''QuizHandler class containing methods for managing quiz'''
 
     def __init__(self) -> None:
-        self.quiz_controller = Quiz()
-        self.category_controller = Category()
-        self.question_controller = Question()
+        self.quiz_controller = Quiz(db)
+        self.category_controller = Category(db)
+        self.question_controller = Question(db)
         self.create_quiz_helper = CreateQuizHelper()
         self.start_quiz_helper = StartQuizHelper()
 
@@ -147,7 +147,7 @@ class QuizHandler:
         except DataNotFoundError as e:
             logger.warning(e)
             print(e)
-        admin_data = db.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (created_by, ))
+        admin_data = db.read(Queries.GET_USER_ID_BY_USERNAME, (created_by, ))
         admin_id = admin_data[0][0]
         print(DisplayMessage.CREATE_CATEGORY_MSG)
 

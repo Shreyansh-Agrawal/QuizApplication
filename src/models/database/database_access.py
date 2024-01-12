@@ -40,7 +40,7 @@ class DatabaseAccess:
         self.connection = DatabaseAccess.connection
         self.cursor = DatabaseAccess.cursor
 
-    def read_from_database(self, query: str, data: Tuple = None) -> List:
+    def read(self, query: str, data: Tuple = None) -> List:
         '''Reads data from database.'''
         try:
             if not data:
@@ -49,12 +49,12 @@ class DatabaseAccess:
                 self.cursor.execute(query, data)
         except mysql.connector.OperationalError as e:
             logger.exception(e)
-            print(f'Exception in read_from_database: {e}')
+            print(f'Exception in DatabaseAccess read: {e}')
             return []
 
         return self.cursor.fetchall()
 
-    def write_to_database(self, query: str, data: Tuple = None) -> None:
+    def write(self, query: str, data: Tuple = None) -> None:
         '''CREATE TABLE / Add / Update / Delete data from database.'''
         try:
             if not data:
@@ -63,7 +63,7 @@ class DatabaseAccess:
                 self.cursor.execute(query, data)
         except mysql.connector.OperationalError as e:
             logger.exception(e)
-            print(f'Exception in write_to_database: {e}')
+            print(f'Exception in DatabaseAccess write: {e}')
 
         self.connection.commit()
 

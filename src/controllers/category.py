@@ -7,7 +7,6 @@ import mysql.connector
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import Queries
-from models.database.database_access import db
 from models.quiz.category import Category as CategoryModel
 from utils.custom_error import DuplicateEntryError
 
@@ -17,10 +16,13 @@ logger = logging.getLogger(__name__)
 class Category:
     '''Category class for category management'''
 
+    def __init__(self, database) -> None:
+        self.db = database
+
     def get_all_categories(self) -> List[Tuple]:
         '''Return all Quiz Categories'''
 
-        data = db.read_from_database(Queries.GET_ALL_CATEGORIES)
+        data = self.db.read(Queries.GET_ALL_CATEGORIES)
         return data
 
     def create_category(self, category_data: Dict) -> None:
@@ -42,7 +44,7 @@ class Category:
 
         logger.debug(LogMessage.UPDATE_ENTITY, Headers.CATEGORY)
         try:
-            db.write_to_database(Queries.UPDATE_CATEGORY_BY_NAME, (new_category_name, old_category_name))
+            self.db.write(Queries.UPDATE_CATEGORY_BY_NAME, (new_category_name, old_category_name))
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.CATEGORY)) from e
 
@@ -57,7 +59,7 @@ class Category:
         '''Delete a category by category name'''
 
         logger.warning(LogMessage.DELETE_CATEGORY, category_name)
-        db.write_to_database(Queries.DELETE_CATEGORY_BY_NAME, (category_name, ))
+        self.db.write(Queries.DELETE_CATEGORY_BY_NAME, (category_name, ))
 
         logger.debug(LogMessage.DELETE_CATEGORY_SUCCESS, category_name)
         print(DisplayMessage.DELETE_CATEGORY_SUCCESS_MSG.format(name=category_name))

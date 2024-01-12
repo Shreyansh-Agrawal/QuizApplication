@@ -7,7 +7,6 @@ import mysql.connector
 
 from config.message_prompts import DisplayMessage, ErrorMessage, LogMessage
 from config.queries import Queries
-from models.database.database_access import db
 from models.users.player import Player
 from utils.custom_error import LoginError
 from utils.password_hasher import hash_password
@@ -18,12 +17,15 @@ logger = logging.getLogger(__name__)
 class Authentication:
     '''Authentication class containing login and signup methods'''
 
+    def __init__(self, database) -> None:
+        self.db = database
+
     def login(self, username: str, password: str) -> Tuple:
         '''Method for user login'''
 
         logger.debug(LogMessage.LOGIN_INITIATED)
         hashed_password = hash_password(password)
-        user_data = db.read_from_database(Queries.GET_CREDENTIALS_BY_USERNAME, (username, ))
+        user_data = self.db.read(Queries.GET_CREDENTIALS_BY_USERNAME, (username, ))
 
         if not user_data:
             print(DisplayMessage.AUTH_INVALIDATE_MSG)
