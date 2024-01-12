@@ -3,7 +3,7 @@
 import logging
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
-from controllers.handlers.user_handler import UserHandler
+from helpers.user_handler import UserHandler
 
 logger = logging.getLogger(__name__)
 

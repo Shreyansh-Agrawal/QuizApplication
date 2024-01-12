@@ -6,7 +6,7 @@ from typing import List, Tuple
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import Queries
-from controllers.helpers.start_quiz_helper import StartQuizHelper
+from helpers.start_quiz_helper import StartQuizHelper
 from controllers.question import Question
 from models.database.database_access import db
 from utils.custom_error import DataNotFoundError

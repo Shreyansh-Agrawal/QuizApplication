@@ -4,7 +4,7 @@ import logging
 from typing import Tuple
 
 from config.message_prompts import DisplayMessage, LogMessage, Prompts
-from controllers.handlers.auth_handler import AuthHandler
+from helpers.auth_handler import AuthHandler
 from menu.admin_menu import AdminMenu
 from menu.player_menu import PlayerMenu
 from menu.super_admin_menu import SuperAdminMenu

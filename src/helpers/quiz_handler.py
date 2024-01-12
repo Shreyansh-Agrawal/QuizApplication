@@ -6,8 +6,8 @@ from typing import Tuple
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
-from controllers.helpers.create_quiz_helper import CreateQuizHelper
-from controllers.helpers.start_quiz_helper import StartQuizHelper
+from helpers.create_quiz_helper import CreateQuizHelper
+from helpers.start_quiz_helper import StartQuizHelper
 from controllers.quiz import Quiz
 from controllers.category import Category
 from controllers.question import Question

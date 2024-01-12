@@ -2,7 +2,7 @@
 
 import pytest
 from config.message_prompts import DisplayMessage, LogMessage
-from controllers.handlers.auth_handler import AuthHandler
+from helpers.auth_handler import AuthHandler
 from utils.custom_error import LoginError
 
 
