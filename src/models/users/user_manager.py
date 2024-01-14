@@ -1,10 +1,11 @@
 '''Contains UserManagerClass'''
 
 from config.queries import Queries
-from database.database_access import DatabaseAccess as DAO
+from models.database.database_access import db
+from models.database.database_saver import DatabaseSaver
 
 
-class UserManager:
+class UserManager(DatabaseSaver):
     '''
     Manager class responsible for saving users to the database.
 
@@ -42,5 +43,5 @@ class UserManager:
             self.user.is_password_changed
         )
 
-        DAO.write_to_database(Queries.INSERT_USER_DATA, user_data)
-        DAO.write_to_database(Queries.INSERT_CREDENTIALS, credentials)
+        db.write(Queries.INSERT_USER_DATA, user_data)
+        db.write(Queries.INSERT_CREDENTIALS, credentials)

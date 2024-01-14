@@ -6,7 +6,8 @@ import string
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage, Prompts
 from config.regex_patterns import RegexPattern
-from controllers.user_controller import UserController
+from controllers.user import User
+from models.database.database_access import db
 from utils import validations
 from utils.custom_error import DataNotFoundError, LoginError
 from utils.pretty_print import pretty_print
@@ -18,7 +19,7 @@ class UserHandler:
     '''UserHandler class containing methods for managing users - Admin and Player'''
 
     def __init__(self) -> None:
-        self.user_controller = UserController()
+        self.user_controller = User(db)
 
     def display_users_by_role(self, role: str) -> None:
         '''Display users on console by role'''

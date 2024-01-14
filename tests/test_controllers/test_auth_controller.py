@@ -1,11 +1,12 @@
 '''Test file for auth_controller.py'''
 
-import sqlite3
+import mysql.connector
 
 import pytest
+from pytest_mock import mocker
 
 from config.message_prompts import DisplayMessage, LogMessage
-from controllers.auth_controller import AuthController
+from controllers.auth import Authentication
 from utils.custom_error import LoginError
 
 
@@ -21,13 +22,14 @@ class TestAuthController:
     username = 'test_username'
     password = 'test_password'
     user_data = [('hashed_password', 'role', '1')]
-    auth_controller = AuthController()
+    moc_db = mocker.Mock()
+    auth_controller = Authentication(moc_db)
 
     def test_login_success(self, mocker, capsys, caplog):
         '''Test method to test login success'''
 
         mocker.patch('controllers.auth_controller.hash_password', return_value = 'hashed_password')
-        mocker.patch('controllers.auth_controller.DAO.read_from_database', return_value = self.user_data)
+        mocker.patch('controllers.auth_controller.db.read', return_value = self.user_data)
 
         result = self.auth_controller.login(self.username, self.password)
         _ , role, is_password_changed = self.user_data[0]
@@ -42,7 +44,7 @@ class TestAuthController:
         '''Test method to test login failure'''
 
         mocker.patch('controllers.auth_controller.hash_password', return_value = 'hashed_password')
-        mocker.patch('controllers.auth_controller.DAO.read_from_database', return_value = None)
+        mocker.patch('controllers.auth_controller.db.read', return_value = None)
 
         result = self.auth_controller.login(self.username, self.password)
         captured = capsys.readouterr()
@@ -55,7 +57,7 @@ class TestAuthController:
 
         user_data = [('another_hashed_password', 'role', '1')]
         mocker.patch('controllers.auth_controller.hash_password', return_value = 'hashed_password')
-        mocker.patch('controllers.auth_controller.DAO.read_from_database', return_value = user_data)
+        mocker.patch('controllers.auth_controller.db.read', return_value = user_data)
 
         result = self.auth_controller.login(self.username, self.password)
         captured = capsys.readouterr()
@@ -83,7 +85,7 @@ class TestAuthController:
 
         mocker.patch('controllers.auth_controller.hash_password', return_value = 'hashed_password')
         mock_player = mocker.patch('controllers.auth_controller.Player')
-        mock_player().save_to_database.side_effect = sqlite3.IntegrityError
+        mock_player().save_to_database.side_effect = mysql.connector.IntegrityError
 
         with pytest.raises(LoginError):
             self.auth_controller.signup(self.player_data)

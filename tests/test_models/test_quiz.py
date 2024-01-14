@@ -2,7 +2,10 @@
 
 import pytest
 
-from models.quiz import Category, Option, Question, QuizEntity
+from models.quiz.quiz_entity import QuizEntity
+from models.quiz.category import Category
+from models.quiz.option import Option
+from models.quiz.question import Question
 from utils.custom_error import DataNotFoundError
 
 
@@ -37,11 +40,11 @@ class TestCategory:
     def test_category_save_to_database(self, category_data, mocker):
         '''Test method to test Category class save_to_database method'''
 
-        mock_write_to_database = mocker.patch('models.quiz.DAO.write_to_database')
+        mock_write = mocker.patch('models.quiz.db.write')
         category = Category(category_data)
         category.save_to_database()
 
-        mock_write_to_database.assert_called_once()
+        mock_write.assert_called_once()
 
 
 class TestOption:
@@ -60,11 +63,11 @@ class TestOption:
     def test_option_save_to_database(self, option_data, mocker):
         '''Test method to test Option class save_to_database method'''
 
-        mock_write_to_database = mocker.patch('models.quiz.DAO.write_to_database')
+        mock_write = mocker.patch('models.quiz.db.write')
         option = Option(option_data)
         option.save_to_database()
 
-        mock_write_to_database.assert_called_once()
+        mock_write.assert_called_once()
 
 
 class TestQuestion:
@@ -96,24 +99,24 @@ class TestQuestion:
     def test_question_save_to_database_with_options(self, question_data, mocker):
         '''Test method to test Question class save_to_database method'''
 
-        mock_write_to_database = mocker.patch('models.quiz.DAO.write_to_database')
+        mock_write = mocker.patch('models.quiz.db.write')
         mock_option = mocker.Mock()
         question = Question(question_data)
         question.add_option(mock_option)
         question.save_to_database()
 
-        mock_write_to_database.assert_called_once()
+        mock_write.assert_called_once()
         mock_option.save_to_database.assert_called_once()
 
     def test_question_save_to_database_without_option(self, question_data, mocker):
         '''Test method to test Question class save_to_database method without adding option'''
 
-        mock_write_to_database = mocker.patch('models.quiz.DAO.write_to_database')
+        mock_write = mocker.patch('models.quiz.db.write')
         mock_option = mocker.Mock()
         question = Question(question_data)
 
         with pytest.raises(DataNotFoundError):
             question.save_to_database()
 
-        mock_write_to_database.assert_not_called()
+        mock_write.assert_not_called()
         mock_option.save_to_database.assert_not_called()

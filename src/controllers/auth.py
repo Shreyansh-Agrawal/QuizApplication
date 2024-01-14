@@ -1,28 +1,31 @@
 '''Controllers for Operations related to Authentication'''
 
 import logging
-import sqlite3
 from typing import Dict, Tuple
 
-from config.message_prompts import DisplayMessage, LogMessage, ErrorMessage
+import mysql.connector
+
+from config.message_prompts import DisplayMessage, ErrorMessage, LogMessage
 from config.queries import Queries
-from database.database_access import DatabaseAccess as DAO
-from models.user import Player
+from models.users.player import Player
 from utils.custom_error import LoginError
 from utils.password_hasher import hash_password
 
 logger = logging.getLogger(__name__)
 
 
-class AuthController:
-    '''AuthController class containing login and signup methods'''
+class Authentication:
+    '''Authentication class containing login and signup methods'''
+
+    def __init__(self, database) -> None:
+        self.db = database
 
     def login(self, username: str, password: str) -> Tuple:
         '''Method for user login'''
 
         logger.debug(LogMessage.LOGIN_INITIATED)
         hashed_password = hash_password(password)
-        user_data = DAO.read_from_database(Queries.GET_CREDENTIALS_BY_USERNAME, (username, ))
+        user_data = self.db.read(Queries.GET_CREDENTIALS_BY_USERNAME, (username, ))
 
         if not user_data:
             print(DisplayMessage.AUTH_INVALIDATE_MSG)
@@ -45,7 +48,7 @@ class AuthController:
 
         try:
             player.save_to_database()
-        except sqlite3.IntegrityError as e:
+        except mysql.connector.IntegrityError as e:
             raise LoginError(ErrorMessage.USER_EXISTS_ERROR) from e
 
         logger.debug(LogMessage.SIGNUP_SUCCESS)

@@ -6,10 +6,12 @@ from typing import Tuple
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
-from controllers.helpers.create_quiz_helper import CreateQuizHelper
-from controllers.helpers.start_quiz_helper import StartQuizHelper
-from controllers.quiz_controller import QuizController
-from database.database_access import DatabaseAccess as DAO
+from helpers.create_quiz_helper import CreateQuizHelper
+from helpers.start_quiz_helper import StartQuizHelper
+from controllers.quiz import Quiz
+from controllers.category import Category
+from controllers.question import Question
+from models.database.database_access import db
 from utils import validations
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
 from utils.pretty_print import pretty_print
@@ -21,7 +23,9 @@ class QuizHandler:
     '''QuizHandler class containing methods for managing quiz'''
 
     def __init__(self) -> None:
-        self.quiz_controller = QuizController()
+        self.quiz_controller = Quiz(db)
+        self.category_controller = Category(db)
+        self.question_controller = Question(db)
         self.create_quiz_helper = CreateQuizHelper()
         self.start_quiz_helper = StartQuizHelper()
 
@@ -29,7 +33,7 @@ class QuizHandler:
         '''Display Categories on Console'''
 
         logger.debug(LogMessage.DISPLAY_ALL_ENTITY, Headers.CATEGORY)
-        data = self.create_quiz_helper.get_all_categories()
+        data = self.category_controller.get_all_categories()
 
         if not data:
             raise DataNotFoundError(ErrorMessage.NO_CATEGORY_ERROR)
@@ -45,7 +49,7 @@ class QuizHandler:
         '''Display All Questions on Console'''
 
         logger.debug(LogMessage.DISPLAY_ALL_ENTITY, Headers.QUES)
-        data = self.quiz_controller.get_all_questions()
+        data = self.question_controller.get_all_questions()
 
         if not data:
             logger.debug(LogMessage.QUES_DATA_NOT_FOUND)
@@ -64,7 +68,7 @@ class QuizHandler:
         logger.debug(LogMessage.DISPLAY_QUES_BY_CATEGORY)
         try:
             self.display_categories(role='admin', header=(Headers.CATEGORY, Headers.CREATED_BY))
-            categories = self.create_quiz_helper.get_all_categories()
+            categories = self.category_controller.get_all_categories()
 
             user_choice = validations.regex_validator(
                 prompt=Prompts.SELECT_CATEGORY_PROMPT,
@@ -82,7 +86,7 @@ class QuizHandler:
 
         category_name = categories[user_choice-1][0]
         print(DisplayMessage.DISPLAY_QUES_IN_A_CATEGORY_MSG.format(name=category_name))
-        data = self.quiz_controller.get_questions_by_category(category_name)
+        data = self.question_controller.get_questions_by_category(category_name)
 
         if not data:
             print(DisplayMessage.QUES_NOT_FOUND_MSG)
@@ -143,7 +147,7 @@ class QuizHandler:
         except DataNotFoundError as e:
             logger.warning(e)
             print(e)
-        admin_data = DAO.read_from_database(Queries.GET_USER_ID_BY_USERNAME, (created_by, ))
+        admin_data = db.read(Queries.GET_USER_ID_BY_USERNAME, (created_by, ))
         admin_id = admin_data[0][0]
         print(DisplayMessage.CREATE_CATEGORY_MSG)
 
@@ -156,7 +160,7 @@ class QuizHandler:
             error_msg=DisplayMessage.INVALID_TEXT.format(Headers.NAME)
         ).title()
         try:
-            self.quiz_controller.create_category(category_data)
+            self.category_controller.create_category(category_data)
         except DuplicateEntryError as e:
             logger.warning(e)
             print(e)
@@ -166,7 +170,7 @@ class QuizHandler:
 
         try:
             self.display_categories(role='admin', header=(Headers.CATEGORY, Headers.CREATED_BY))
-            self.quiz_controller.create_question(created_by)
+            self.question_controller.create_question(created_by)
         except DataNotFoundError as e:
             logger.warning(e)
             print(e)
@@ -181,7 +185,7 @@ class QuizHandler:
 
         try:
             self.display_categories(role='admin', header=(Headers.CATEGORY, Headers.CREATED_BY))
-            categories = self.create_quiz_helper.get_all_categories()
+            categories = self.category_controller.get_all_categories()
             print(DisplayMessage.UPDATE_CATEGORY_MSG)
 
             user_choice = validations.regex_validator(
@@ -204,7 +208,7 @@ class QuizHandler:
             error_msg=DisplayMessage.INVALID_TEXT.format(Headers.NAME)
         ).title()
         try:
-            self.quiz_controller.update_category_by_name(old_category_name, new_category_name)
+            self.category_controller.update_category_by_name(old_category_name, new_category_name)
         except DuplicateEntryError as e:
             logger.warning(e)
             print(e)
@@ -215,7 +219,7 @@ class QuizHandler:
 
         try:
             self.display_categories(role='admin', header=(Headers.CATEGORY, Headers.CREATED_BY))
-            categories = self.create_quiz_helper.get_all_categories()
+            categories = self.category_controller.get_all_categories()
 
             logger.debug(LogMessage.DELETE_ENTITY, Headers.CATEGORY)
             print(DisplayMessage.DELETE_CATEGORY_MSG)
@@ -240,4 +244,4 @@ class QuizHandler:
             if confirmation.lower() == 'yes':
                 break
             return
-        self.quiz_controller.delete_category_by_name(category_name)
+        self.category_controller.delete_category_by_name(category_name)

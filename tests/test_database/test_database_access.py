@@ -1,75 +1,84 @@
 '''Test file for database_access.py'''
 
-import sqlite3
+import mysql.connector
 
 import pytest
 
-from database.database_access import DatabaseAccess
-from database.database_connection import DatabaseConnection
+from models.database.database_access import DatabaseAccess
 
 
 class TestDatabaseAccess:
     '''Test class containing test methods to test DatabaseAccess class methods'''
 
-    query = 'SELECT * FROM your_table'
+    query = 'SELECT * FROM test_table'
     data = ('example', 'data')
     mock_fetchall_result = [('result1',), ('result2',)]
 
     @pytest.fixture
-    def mock_db_connection(self, mocker):
+    def mock_db_access(self, mocker):
         '''Test Fixture to mock db connection'''
 
-        mock_connection = mocker.MagicMock(spec=DatabaseConnection)
-        mocker.patch('database.database_access.DatabaseConnection', return_value=mock_connection)
-        mock_cursor = mocker.MagicMock()
-        mock_connection.__enter__.return_value.cursor.return_value = mock_cursor
+        mock_cursor = mocker.Mock()
+        mock_connection = mocker.Mock()
+        mock_connection.cursor.return_value = mock_cursor
+        mocker.patch('database.database_access.FilePaths')
+        mocker.patch('mysql.connector.connect', return_value=mock_connection)
+        db_access = DatabaseAccess()
 
-        return mock_cursor
+        return db_access
 
-    def test_read_from_database_success(self, mock_db_connection):
-        '''Test method to test read_from_database success'''
+    def test_read_success(self, mock_db_access):
+        '''Test method to test read success'''
 
-        mock_cursor = mock_db_connection
-        mock_cursor.fetchall.return_value = self.mock_fetchall_result
+        db_access = mock_db_access
+        db_access.cursor.fetchall.return_value = self.mock_fetchall_result
 
-        result = DatabaseAccess.read_from_database(self.query, self.data)
+        result = db_access.read(self.query, self.data)
 
-        mock_cursor.execute.assert_called_once_with(self.query, self.data)
-        mock_cursor.fetchall.assert_called_once()
+        db_access.cursor.execute.assert_called_once_with(self.query, self.data)
+        db_access.cursor.fetchall.assert_called_once()
         assert result == self.mock_fetchall_result
 
-    def test_read_from_database_error(self, mock_db_connection, caplog):
-        '''Test method to test read_from_database error'''
+    def test_read_error(self, mock_db_access, caplog):
+        '''Test method to test read error'''
 
-        mock_cursor = mock_db_connection
-        mock_cursor.execute.side_effect = sqlite3.OperationalError('Mock Error')
-        result = DatabaseAccess.read_from_database(self.query)
+        db_access = mock_db_access
+        db_access.cursor.execute.side_effect = mysql.connector.OperationalError('Mock Error')
+        result = db_access.read(self.query)
 
-        mock_cursor.fetchall.assert_not_called()
+        db_access.cursor.fetchall.assert_not_called()
         assert 'Mock Error' in caplog.text
         assert not result
 
-    def test_write_to_database_success(self, mock_db_connection):
-        '''Test method to test write_to_database success'''
+    def test_write_success(self, mock_db_access):
+        '''Test method to test write success'''
 
-        mock_cursor = mock_db_connection
-        DatabaseAccess.write_to_database(self.query, self.data)
+        db_access = mock_db_access
+        db_access.write(self.query, self.data)
 
-        assert mock_cursor.execute.call_count == 2
+        assert db_access.cursor.execute.call_count == 2
 
-    def test_write_to_database_success_no_data(self, mock_db_connection):
-        '''Test method to test write_to_database success with no data'''
+    def test_write_success_no_data(self, mock_db_access):
+        '''Test method to test write success with no data'''
 
-        mock_cursor = mock_db_connection
-        DatabaseAccess.write_to_database(self.query)
+        db_access = mock_db_access
+        db_access.write(self.query)
 
-        assert mock_cursor.execute.call_count == 2
+        assert db_access.cursor.execute.call_count == 2
 
-    def test_write_to_database_error(self, mock_db_connection, caplog):
-        '''Test method to test write_to_database error'''
+    def test_write_error(self, mock_db_access, caplog):
+        '''Test method to test write error'''
 
-        mock_cursor = mock_db_connection
-        mock_cursor.execute.side_effect = sqlite3.OperationalError('Mock Error')
-        DatabaseAccess.write_to_database(self.query)
+        db_access = mock_db_access
+        db_access.cursor.execute.side_effect = mysql.connector.OperationalError('Mock Error')
+        db_access.write(self.query)
 
         assert 'Mock Error' in caplog.text
+
+    def test_init_exception_handling(self, mocker):
+        '''Test method to test __init__ exception handling'''
+
+        mock_connect = mocker.patch('mysql.connector.connect')
+        mock_connect.side_effect = mysql.connector.Error('Mocked error')
+        with pytest.raises(mysql.connector.Error):
+            DatabaseAccess()

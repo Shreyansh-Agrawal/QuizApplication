@@ -11,13 +11,17 @@ SUPER_ADMIN_NAME=YourSuperAdminName
 SUPER_ADMIN_EMAIL=YourSuperAdminEmail
 SUPER_ADMIN_USERNAME=YourSuperAdminUsername
 SUPER_ADMIN_PASSWORD=YourSuperAdminPassword
+MYSQL_USER=YourMySQLusername
+MYSQL_PASSWORD=YourMySQLpassword
+MYSQL_HOST=YourMySQLhost
+MYSQL_DB=YourMySQLdb
 ```
 
 ### Prerequisites
 
 - Python
 - Pipenv
-- SQLite database
+- MySQL database
 
 ### Installation
 
@@ -74,30 +78,37 @@ QuizApplication/
 │   │   ├── questions.json
 │   │   ├── regex_patterns.py
 │   ├── controllers/
-│   │   ├── handlers/
-│   │   │   ├── auth_handler.py
-│   │   │   ├── quiz_handler.py
-│   │   │   ├── user_handler.py
-│   │   ├── helpers/
-│   │   │   ├── create_quiz_helper.py
-│   │   │   ├── start_quiz_helper.py
-│   │   ├── auth_controller.py
-│   │   ├── quiz_controller.py
-│   │   ├── user_controller.py
-│   ├── database/
-│   │   ├── data.db
-│   │   ├── database_access.py
-│   │   ├── database_connection.py
+│   │   ├── auth.py
+│   │   ├── category.py
+│   │   ├── question.py
+│   │   ├── quiz.py
+│   │   ├── user.py
+│   ├── helpers/
+│   │   ├── auth_handler.py
+│   │   ├── create_quiz_helper.py
+│   │   ├── quiz_handler.py
+│   │   ├── start_quiz_helper.py
+│   │   ├── user_handler.py
 │   ├── menu/
 │   │   ├── admin_menu.py
 │   │   ├── main_menu.py
 │   │   ├── player_menu.py
 │   │   ├── super_admin_menu.py
 │   ├── models/
-│   │   ├── database_saver.py
-│   │   ├── quiz.py
-│   │   ├── user_manager.py
-│   │   ├── user.py
+│   │   ├── database/
+│   │   │   ├── database_access.py
+│   │   │   ├── database_saver.py
+│   │   ├── quiz/
+│   │   │   ├── category.py
+│   │   │   ├── option.py
+│   │   │   ├── question.py
+│   │   │   ├── quiz_entity.py
+│   │   ├── users/
+│   │   │   ├── admin.py
+│   │   │   ├── player.py
+│   │   │   ├── super_admin.py
+│   │   │   ├── user_manager.py
+│   │   │   ├── user.py
 │   ├── utils/
 │   │   ├── custom_error.py
 │   │   ├── initialize_app.py
@@ -126,7 +137,6 @@ QuizApplication/
 │   │   ├── test_user_controller.py
 │   ├── test_database/
 │   │   ├── test_database_access.py
-│   │   ├── test_database_connection.py
 │   ├── test_menu/
 │   │   ├── test_admin_menu.py
 │   │   ├── test_main_menu.py
@@ -175,7 +185,7 @@ QuizApplication/
 
 ## Database
 
-The application employs an SQLite database with the following tables:
+The application employs an MySQL database with the following tables:
 
 - **Users**: Stores user information.
 - **Credentials**: Stores user credentials for authentication.

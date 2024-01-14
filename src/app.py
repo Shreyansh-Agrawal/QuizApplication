@@ -17,8 +17,9 @@ Execute this script to start the quiz application.
 import logging
 
 from config.message_prompts import DisplayMessage, LogMessage
-from utils.initialize_app import Initializer
+from models.database.database_access import db
 from menu.main_menu import MainMenu
+from utils.initialize_app import Initializer
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)-d] %(message)s',
@@ -46,9 +47,11 @@ def start_quiz_app():
         Initializer.initialize_app()
         MainMenu.auth_menu()
     except Exception as e: # pylint: disable=broad-exception-caught
+        db.connection.close()
         logger.exception(e)
-        print(e)
+        print(f'exception caught in app.py: {e}')
 
+    db.connection.close()
     logger.info(LogMessage.SYSTEM_STOP)
     print(DisplayMessage.EXIT_MSG)
 

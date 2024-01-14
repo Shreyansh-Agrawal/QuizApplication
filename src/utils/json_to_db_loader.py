@@ -2,12 +2,12 @@
 
 import json
 import logging
-import sqlite3
+import mysql.connector
 
 from config.file_paths import FilePaths
 from config.message_prompts import LogMessage
 from config.queries import Queries
-from database.database_access import DatabaseAccess as DAO
+from models.database.database_access import db
 from utils import validations
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
         None
     '''
     logger.debug(LogMessage.LOAD_QUIZ_DATA_FROM_JSON)
-    admin_data = DAO.read_from_database(
+    admin_data = db.read(
                     Queries.GET_USER_ID_BY_USERNAME,
                     (created_by_admin_username, )
                 )
@@ -38,7 +38,7 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
         data = json.load(file)
 
     for question in data['questions']:
-        question_id = question['question_id']
+        question_id = validations.validate_id(entity='question')
         question_text = question['question_text']
         question_type = question['question_type'].upper()
         category_id = question['category_id']
@@ -49,20 +49,20 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
         answer = question['options']['answer']['text']
 
         try:
-            DAO.write_to_database(
+            db.write(
                 Queries.INSERT_CATEGORY,
                 (category_id, admin_id, admin_username, category))
 
-        except sqlite3.IntegrityError:
+        except mysql.connector.IntegrityError:
             # Not logging the error: Reason - Definite error due to json data structure
             pass
 
         try:
-            DAO.write_to_database(
+            db.write(
                 Queries.INSERT_QUESTION,
                 (question_id, category_id, admin_id, admin_username, question_text, question_type))
 
-            DAO.write_to_database(
+            db.write(
                 Queries.INSERT_OPTION,
                 (answer_id, question_id, answer, 1))
 
@@ -71,10 +71,10 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
                     other_option_id = validations.validate_id(entity='option')
                     other_option = question['options']['other_options'][i]['text']
 
-                    DAO.write_to_database(
+                    db.write(
                         Queries.INSERT_OPTION,
                         (other_option_id, question_id, other_option, 0))
 
-        except sqlite3.IntegrityError:
+        except mysql.connector.IntegrityError:
             # Not logging the error: Reason - Definite error due to json data structure
             pass

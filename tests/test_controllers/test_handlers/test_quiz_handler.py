@@ -3,7 +3,7 @@
 import pytest
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage
-from controllers.handlers.quiz_handler import QuizHandler
+from helpers.quiz_handler import QuizHandler
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
 
 
@@ -234,7 +234,7 @@ class TestQuizHandler:
         '''Test method to test handle_create_category'''
 
         mocker.patch.object(QuizHandler, 'display_categories', side_effect=DataNotFoundError(self.error_msg))
-        mocker.patch('controllers.handlers.quiz_handler.DAO.read_from_database', return_value=self.mock_data)
+        mocker.patch('controllers.handlers.quiz_handler.db.read', return_value=self.mock_data)
         mocker.patch('controllers.handlers.quiz_handler.validations.regex_validator', return_value=self.category_name)
         quiz_controller = mock_quiz_controller_class()
         self.quiz_handler.quiz_controller = quiz_controller

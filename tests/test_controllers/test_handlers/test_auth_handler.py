@@ -2,7 +2,7 @@
 
 import pytest
 from config.message_prompts import DisplayMessage, LogMessage
-from controllers.handlers.auth_handler import AuthHandler
+from helpers.auth_handler import AuthHandler
 from utils.custom_error import LoginError
 
 
@@ -20,9 +20,9 @@ class TestAuthHandler:
 
     @pytest.fixture
     def mock_auth_controller_class(self, mocker):
-        '''Test fixture to mock AuthController class'''
+        '''Test fixture to mock Authentication class'''
 
-        return mocker.patch('controllers.handlers.auth_handler.AuthController')
+        return mocker.patch('controllers.handlers.auth_handler.Authentication')
 
     def test_handle_login_success(self, mocker, capsys, caplog, mock_auth_controller_class):
         '''Test method to test handle login for successful login'''
@@ -95,7 +95,7 @@ class TestAuthHandler:
 
         mocker.patch('controllers.handlers.auth_handler.validations.validate_password', side_effect = [self.password, self.wrong_password, self.password])
         mocker.patch('controllers.handlers.auth_handler.hash_password', return_value = 'hashed_password')
-        mock_write_to_database = mocker.patch('controllers.handlers.auth_handler.DAO.write_to_database')
+        mock_write = mocker.patch('controllers.handlers.auth_handler.db.write')
 
         self.auth_handler.handle_first_login(self.username, 0)
         captured = capsys.readouterr()
@@ -104,4 +104,4 @@ class TestAuthHandler:
         assert DisplayMessage.CHANGE_PSWD_SUCCESS_MSG in captured.out
         assert LogMessage.CHANGE_DEFAULT_ADMIN_PSW in caplog.text
         assert LogMessage.CHANGE_DEFAULT_ADMIN_PSW_SUCCESS in caplog.text
-        mock_write_to_database.assert_called_once()
+        mock_write.assert_called_once()

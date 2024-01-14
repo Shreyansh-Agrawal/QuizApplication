@@ -1,6 +1,6 @@
 '''Test file for initialize_app.py'''
 
-import sqlite3
+import mysql.connector
 
 import pytest
 
@@ -29,7 +29,7 @@ def test_create_super_admin_failure(mocker):
     '''Test function to test create_super_admin method failure'''
 
     mock_super_admin = mocker.patch('utils.initialize_app.SuperAdmin')
-    mock_super_admin().save_to_database.side_effect = sqlite3.IntegrityError('Super Admin Already exists!')
+    mock_super_admin().save_to_database.side_effect = mysql.connector.IntegrityError('Super Admin Already exists!')
 
     with pytest.raises(DuplicateEntryError):
         Initializer.create_super_admin()
@@ -53,8 +53,8 @@ def test_initialize_app(mocker, capsys, caplog):
 def test_initialize_database(mocker):
     '''Test function to test initialize_database method'''
 
-    mock_write_to_database = mocker.Mock()
-    mocker.patch('utils.initialize_app.DAO.write_to_database', mock_write_to_database)
+    mock_write = mocker.Mock()
+    mocker.patch('utils.initialize_app.db.write', mock_write)
 
     InitializeDatabase.initialize_database()
-    assert mock_write_to_database.call_count == 6
+    assert mock_write.call_count == 6

@@ -4,7 +4,10 @@ from datetime import datetime
 
 import pytest
 
-from models.user import Admin, Player, SuperAdmin, User
+from models.users.user import User
+from models.users.super_admin import SuperAdmin
+from models.users.admin import Admin
+from models.users.player import Player
 
 
 class TestUser:

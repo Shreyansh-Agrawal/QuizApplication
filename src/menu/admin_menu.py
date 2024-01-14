@@ -3,9 +3,9 @@
 import logging
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
-from controllers.handlers.auth_handler import AuthHandler
-from controllers.handlers.quiz_handler import QuizHandler
-from controllers.handlers.user_handler import UserHandler
+from helpers.auth_handler import AuthHandler
+from helpers.quiz_handler import QuizHandler
+from helpers.user_handler import UserHandler
 from utils import json_to_db_loader
 from utils.custom_error import DataNotFoundError
 

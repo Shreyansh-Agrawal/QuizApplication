@@ -10,8 +10,7 @@ def test_initialization_queries(initialization_queries_attributes):
         'CREATE_OPTIONS_TABLE',
         'CREATE_QUESTIONS_TABLE',
         'CREATE_SCORES_TABLE',
-        'CREATE_USERS_TABLE',
-        'ENABLE_FOREIGN_KEYS'
+        'CREATE_USERS_TABLE'
     ]
 
     for query in required_queries:

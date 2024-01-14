@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 import pytest
 
 from config.message_prompts import LogMessage
-from controllers.helpers.start_quiz_helper import StartQuizHelper
+from helpers.start_quiz_helper import StartQuizHelper
 from utils.custom_error import DataNotFoundError
 
 
@@ -60,16 +60,16 @@ class TestStartQuizHelper:
         return mocker.patch('controllers.helpers.start_quiz_helper.pretty_print')
 
     @pytest.fixture(autouse=True)
-    def mock_read_from_database(self, mocker):
-        '''Test fixture to mock read_from_database method'''
+    def mock_read(self, mocker):
+        '''Test fixture to mock read method'''
 
-        mocker.patch('controllers.helpers.start_quiz_helper.DAO.read_from_database', return_value=self.mock_data)
+        mocker.patch('controllers.helpers.start_quiz_helper.db.read', return_value=self.mock_data)
 
     @pytest.fixture(autouse=True)
-    def mock_write_to_database(self, mocker):
-        '''Test fixture to mock write_to_database method'''
+    def mock_write(self, mocker):
+        '''Test fixture to mock write method'''
 
-        mocker.patch('controllers.helpers.start_quiz_helper.DAO.write_to_database')
+        mocker.patch('controllers.helpers.start_quiz_helper.db.write')
 
     @pytest.fixture
     def mock_create_quiz_helper_class(self, mocker):
