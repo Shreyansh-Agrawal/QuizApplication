@@ -4,6 +4,8 @@
 class InitializationQueries:
     '''Contains queries for creation of db tables'''
 
+    CREATE_DATABASE = 'CREATE DATABASE IF NOT EXISTS {}'
+    USE_DATABASE = 'USE {}'
     CREATE_CATEGORIES_TABLE = '''
         CREATE TABLE IF NOT EXISTS categories (
             category_id VARCHAR(10) PRIMARY KEY,
@@ -33,7 +35,7 @@ class InitializationQueries:
             category_id VARCHAR(10),
             admin_id VARCHAR(10),
             admin_username VARCHAR(25),
-            question_text VARCHAR(100),
+            question_text VARCHAR(100) UNIQUE,
             question_type VARCHAR(25),
             FOREIGN KEY (category_id) REFERENCES categories (category_id) ON DELETE CASCADE ON UPDATE CASCADE
         )'''

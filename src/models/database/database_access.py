@@ -8,10 +8,17 @@ from typing import List, Tuple
 import mysql.connector
 from dotenv import load_dotenv
 
+from config.queries import InitializationQueries
+
 dotenv_path = Path('.env')
 load_dotenv(dotenv_path=dotenv_path)
 
 logger = logging.getLogger(__name__)
+
+MYSQL_USER = os.getenv('MYSQL_USER')
+MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
+MYSQL_HOST = os.getenv('MYSQL_HOST')
+MYSQL_DB = os.getenv('MYSQL_DB')
 
 
 class DatabaseAccess:
@@ -24,12 +31,13 @@ class DatabaseAccess:
         if DatabaseAccess.connection is None:
             try:
                 DatabaseAccess.connection = mysql.connector.connect(
-                    user=os.getenv('MYSQL_USER'),
-                    password=os.getenv('MYSQL_PASSWORD'),
-                    host=os.getenv('MYSQL_HOST'),
-                    database=os.getenv('MYSQL_DB')
+                    user=MYSQL_USER,
+                    password=MYSQL_PASSWORD,
+                    host=MYSQL_HOST
                 )
                 DatabaseAccess.cursor = DatabaseAccess.connection.cursor()
+                DatabaseAccess.cursor.execute(InitializationQueries.CREATE_DATABASE.format(MYSQL_DB))
+                DatabaseAccess.cursor.execute(InitializationQueries.USE_DATABASE.format(MYSQL_DB))
             except mysql.connector.Error as e:
                 logger.exception(e)
                 print(f'Exception inside DatabaseAccess __init__: {e}')
@@ -66,6 +74,28 @@ class DatabaseAccess:
             print(f'Exception in DatabaseAccess write: {e}')
 
         self.connection.commit()
+
+    def create_tables(self) -> None:
+        '''
+        Creates necessary tables in the database for the application.
+
+        Executes SQL queries to create required tables:
+        - Users
+        - Credentials
+        - Scores
+        - Categories
+        - Questions
+        - Options
+
+        Returns: 
+            None
+        '''
+        self.cursor.execute(InitializationQueries.CREATE_USERS_TABLE)
+        self.cursor.execute(InitializationQueries.CREATE_CREDENTIALS_TABLE)
+        self.cursor.execute(InitializationQueries.CREATE_SCORES_TABLE)
+        self.cursor.execute(InitializationQueries.CREATE_CATEGORIES_TABLE)
+        self.cursor.execute(InitializationQueries.CREATE_QUESTIONS_TABLE)
+        self.cursor.execute(InitializationQueries.CREATE_OPTIONS_TABLE)
 
 
 db = DatabaseAccess()

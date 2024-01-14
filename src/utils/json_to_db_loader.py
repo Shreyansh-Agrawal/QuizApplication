@@ -38,7 +38,7 @@ def load_quiz_data_from_json(created_by_admin_username: str) -> None:
         data = json.load(file)
 
     for question in data['questions']:
-        question_id = question['question_id']
+        question_id = validations.validate_id(entity='question')
         question_text = question['question_text']
         question_type = question['question_type'].upper()
         category_id = question['category_id']

@@ -7,11 +7,10 @@ from pathlib import Path
 import mysql.connector
 from dotenv import load_dotenv
 
-from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
-from config.queries import InitializationQueries, Queries
+from config.message_prompts import DisplayMessage, Headers, LogMessage
+from config.queries import Queries
 from models.database.database_access import db
 from models.users.super_admin import SuperAdmin
-from utils.custom_error import DuplicateEntryError
 from utils.password_hasher import hash_password
 
 dotenv_path = Path('.env')
@@ -62,10 +61,8 @@ class Initializer:
 
         try:
             super_admin.save_to_database()
-        except mysql.connector.IntegrityError as e:
-            raise DuplicateEntryError(
-                ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.SUPER_ADMIN)
-            ) from e
+        except mysql.connector.IntegrityError:
+            logger.debug(LogMessage.SUPER_ADMIN_PRESENT)
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.SUPER_ADMIN)
         print(DisplayMessage.CREATE_SUPER_ADMIN_SUCCESS_MSG)
@@ -74,54 +71,11 @@ class Initializer:
     def initialize_app() -> None:
         '''
         Initializes the application by creating necessary tables and the super admin.
-
-        This method initiates the application by setting up essential components:
-        - It initializes the database by creating required tables using InitializeDatabase.initialize_database().
-        - Attempts to create a super admin using Initializer.create_super_admin() method.
-        If a super admin already exists, it logs a debug message indicating its presence.
-
         Returns:
             None
         '''
-
-        InitializeDatabase.initialize_database()
-
-        try:
-            Initializer.create_super_admin()
-        except DuplicateEntryError:
-            logger.debug(LogMessage.SUPER_ADMIN_PRESENT)
+        db.create_tables()
+        Initializer.create_super_admin()
 
         logger.debug(LogMessage.INITIALIZE_APP_SUCCESS)
         print(DisplayMessage.INITIALIZATION_SUCCESS_MSG)
-
-
-class InitializeDatabase:
-    '''
-    Contains methods to create tables for the database.
-
-    Methods:
-        initialize_database(): Creates tables in the database for the application.
-    '''
-
-    @staticmethod
-    def initialize_database() -> None:
-        '''
-        Creates necessary tables in the database for the application.
-
-        Executes SQL queries to create essential tables:
-        - Users
-        - Credentials
-        - Scores
-        - Categories
-        - Questions
-        - Options
-
-        Returns: 
-            None
-        '''
-        db.write(InitializationQueries.CREATE_USERS_TABLE)
-        db.write(InitializationQueries.CREATE_CREDENTIALS_TABLE)
-        db.write(InitializationQueries.CREATE_SCORES_TABLE)
-        db.write(InitializationQueries.CREATE_CATEGORIES_TABLE)
-        db.write(InitializationQueries.CREATE_QUESTIONS_TABLE)
-        db.write(InitializationQueries.CREATE_OPTIONS_TABLE)
