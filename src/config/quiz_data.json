@@ -1,0 +1,1343 @@
+{
+  "quiz_data": [
+    {
+      "category": "Science",
+      "question_data": [
+        {
+          "question_text": "What is the chemical symbol for water?",
+          "question_type": "one word",
+          "options": {
+            "answer": "H2O",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Which gas is responsible for the Earth's greenhouse effect?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Carbon dioxide",
+            "other_options": ["Oxygen", "Nitrogen", "Methane"]
+          }
+        },
+        {
+          "question_text": "Is the Earth flat? (True/False)",
+          "question_type": "t/f",
+          "options": {
+            "answer": "False",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the largest planet in our solar system?",
+          "question_type": "one word",
+          "options": {
+            "answer": "Jupiter",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Which gas do plants absorb from the atmosphere during photosynthesis?",
+          "question_type": "one word",
+          "options": {
+            "answer": "Carbon dioxide",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the chemical symbol for gold?",
+          "question_type": "one word",
+          "options": {
+            "answer": "Au",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Is a tomato a fruit? (True/False)",
+          "question_type": "t/f",
+          "options": {
+            "answer": "True",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the chemical symbol for oxygen?",
+          "question_type": "one word",
+          "options": {
+            "answer": "O",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "How many bones are there in the adult human body?",
+          "question_type": "one word",
+          "options": {
+            "answer": "206",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the chemical symbol for silver?",
+          "question_type": "one word",
+          "options": {
+            "answer": "Ag",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "The process of converting sugar into alcohol is known as what?",
+          "question_type": "one word",
+          "options": {
+            "answer": "Fermentation",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Is the Sun a star? (True/False)",
+          "question_type": "t/f",
+          "options": {
+            "answer": "True",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the chemical symbol for carbon?",
+          "question_type": "one word",
+          "options": {
+            "answer": "C",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the powerhouse of the cell?",
+          "question_type": "one word",
+          "options": {
+            "answer": "Mitochondria",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Is water a conductor of electricity? (True/False)",
+          "question_type": "t/f",
+          "options": {
+            "answer": "True",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the chemical symbol for sodium?",
+          "question_type": "one word",
+          "options": {
+            "answer": "Na",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the process by which plants make their own food using sunlight?",
+          "question_type": "one word",
+          "options": {
+            "answer": "Photosynthesis",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Is Pluto considered a planet? (True/False)",
+          "question_type": "t/f",
+          "options": {
+            "answer": "False",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the chemical symbol for nitrogen?",
+          "question_type": "one word",
+          "options": {
+            "answer": "N",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the chemical symbol for silver?",
+          "question_type": "one word",
+          "options": {
+            "answer": "Ag",
+            "other_options": []
+          }
+        }
+      ]
+    },
+    {
+      "category": "Mathematics",
+      "question_data": [
+        {
+          "question_text": "What is the square root of 16?",
+          "question_type": "one word",
+          "options": {
+            "answer": "4",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Is the sum of all angles in a triangle 180 degrees? (True/False)",
+          "question_type": "t/f",
+          "options": {
+            "answer": "True",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the value of pi (π) to two decimal places?",
+          "question_type": "one word",
+          "options": {
+            "answer": "3.14",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Solve for x: 2x + 5 = 11",
+          "question_type": "one word",
+          "options": {
+            "answer": "3",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the smallest prime number?",
+          "question_type": "one word",
+          "options": {
+            "answer": "2",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Is the statement '2 + 2 = 5' true? (True/False)",
+          "question_type": "t/f",
+          "options": {
+            "answer": "False",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the next prime number after 7?",
+          "question_type": "one word",
+          "options": {
+            "answer": "11",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the result of 6 squared?",
+          "question_type": "one word",
+          "options": {
+            "answer": "36",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the value of 5! (5 factorial)?",
+          "question_type": "one word",
+          "options": {
+            "answer": "120",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Is the statement '1 + 1 = 2' true? (True/False)",
+          "question_type": "t/f",
+          "options": {
+            "answer": "True",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the area of a square with a side length of 5 units?",
+          "question_type": "one word",
+          "options": {
+            "answer": "25",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the sum of the angles in a hexagon?",
+          "question_type": "one word",
+          "options": {
+            "answer": "720",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Is the statement '3 + 3 = 7' true? (True/False)",
+          "question_type": "t/f",
+          "options": {
+            "answer": "False",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the value of the mathematical constant 'e' (Euler's number) to two decimal places?",
+          "question_type": "one word",
+          "options": {
+            "answer": "2.71",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the sum of the first 10 positive integers?",
+          "question_type": "one word",
+          "options": {
+            "answer": "55",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Is the statement '4 squared is equal to 20' true? (True/False)",
+          "question_type": "t/f",
+          "options": {
+            "answer": "False",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the value of the square root of 25?",
+          "question_type": "one word",
+          "options": {
+            "answer": "5",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the result of 3 multiplied by 8?",
+          "question_type": "one word",
+          "options": {
+            "answer": "24",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the largest prime number less than 100?",
+          "question_type": "one word",
+          "options": {
+            "answer": "97",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "Is the statement '1 + 1 = 3' true? (True/False)",
+          "question_type": "t/f",
+          "options": {
+            "answer": "False",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the value of the mathematical constant 'π' (pi) to two decimal places?",
+          "question_type": "one word",
+          "options": {
+            "answer": "3.14",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the sum of the angles in a pentagon?",
+          "question_type": "one word",
+          "options": {
+            "answer": "540",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the result of 12 divided by 4?",
+          "question_type": "one word",
+          "options": {
+            "answer": "3",
+            "other_options": []
+          }
+        },
+        {
+          "question_text": "What is the value of the mathematical constant 'e' (Euler's number) to two decimal places?",
+          "question_type": "one word",
+          "options": {
+            "answer": "2.71",
+            "other_options": []
+          }
+        }
+      ]
+    },
+    {
+      "category": "Geography",
+      "question_data": [
+        {
+          "question_text": "Which continent is known as the 'Land Down Under'?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Australia",
+            "other_options": ["Africa", "North America", "Asia"]
+          }
+        },
+        {
+          "question_text": "Which river is the longest in the world?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Nile",
+            "other_options": ["Amazon", "Mississippi", "Yangtze"]
+          }
+        },
+        {
+          "question_text": "Which ocean is the largest on Earth?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Pacific Ocean",
+            "other_options": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean"]
+          }
+        },
+        {
+          "question_text": "Which mountain range is considered the 'Roof of the World'?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Himalayas",
+            "other_options": ["Andes", "Rocky Mountains", "Alps"]
+          }
+        },
+        {
+          "question_text": "Which desert is the largest hot desert in the world?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Sahara Desert",
+            "other_options": [
+              "Gobi Desert",
+              "Kalahari Desert",
+              "Atacama Desert"
+            ]
+          }
+        },
+        {
+          "question_text": "Which country is known as the 'Land of the Rising Sun'?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Japan",
+            "other_options": ["China", "South Korea", "Vietnam"]
+          }
+        },
+        {
+          "question_text": "Which country is known as the 'Land of a Thousand Lakes'?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Finland",
+            "other_options": ["Canada", "Sweden", "Norway"]
+          }
+        },
+        {
+          "question_text": "Which strait separates Europe from Asia?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Bosporus Strait",
+            "other_options": [
+              "Strait of Gibraltar",
+              "Hormuz Strait",
+              "Malacca Strait"
+            ]
+          }
+        },
+        {
+          "question_text": "Which country is the largest by land area?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Russia",
+            "other_options": ["Canada", "China", "United States"]
+          }
+        },
+        {
+          "question_text": "Which river is often called the 'Cradle of Civilization'?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Tigris and Euphrates",
+            "other_options": ["Amazon", "Nile", "Yangtze"]
+          }
+        },
+        {
+          "question_text": "Which continent is home to the Amazon Rainforest, known for its biodiversity?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "South America",
+            "other_options": ["Africa", "Asia", "Australia"]
+          }
+        },
+        {
+          "question_text": "Which ocean is located between Europe and Africa to the east and the Americas to the west?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Atlantic Ocean",
+            "other_options": ["Indian Ocean", "Pacific Ocean", "Arctic Ocean"]
+          }
+        },
+        {
+          "question_text": "Which African country is known as the 'Pearl of Africa'?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Uganda",
+            "other_options": ["Kenya", "Tanzania", "Rwanda"]
+          }
+        },
+        {
+          "question_text": "Which strait separates Russia from Alaska and connects the Arctic Ocean and the Bering Sea?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Bering Strait",
+            "other_options": [
+              "Hormuz Strait",
+              "Gibraltar Strait",
+              "Malacca Strait"
+            ]
+          }
+        },
+        {
+          "question_text": "Which African country is located at the southernmost tip of the continent?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "South Africa",
+            "other_options": ["Egypt", "Nigeria", "Morocco"]
+          }
+        }
+      ]
+    },
+    {
+      "category": "History",
+      "question_data": [
+        {
+          "question_text": "Who was the first President of the United States?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "George Washington",
+            "other_options": [
+              "John Adams",
+              "Thomas Jefferson",
+              "Abraham Lincoln"
+            ]
+          }
+        },
+        {
+          "question_text": "In which year did Christopher Columbus reach the Americas?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "1492",
+            "other_options": ["1500", "1607", "1776"]
+          }
+        },
+        {
+          "question_text": "Who wrote 'The Communist Manifesto' along with Karl Marx?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Friedrich Engels",
+            "other_options": ["Vladimir Lenin", "Leon Trotsky", "Mao Zedong"]
+          }
+        },
+        {
+          "question_text": "Which ancient civilization built the pyramids in Egypt?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Ancient Egyptians",
+            "other_options": ["Sumerians", "Greeks", "Romans"]
+          }
+        },
+        {
+          "question_text": "What event marked the beginning of World War I?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Assassination of Archduke Franz Ferdinand",
+            "other_options": [
+              "Treaty of Versailles",
+              "Invasion of Poland",
+              "Pearl Harbor"
+            ]
+          }
+        },
+        {
+          "question_text": "Who was the leader of the Soviet Union during the Cuban Missile Crisis?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Nikita Khrushchev",
+            "other_options": [
+              "Joseph Stalin",
+              "Vladimir Putin",
+              "Mikhail Gorbachev"
+            ]
+          }
+        },
+        {
+          "question_text": "Which queen ruled England for more than 63 years, known as the Victorian era?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Queen Victoria",
+            "other_options": ["Queen Elizabeth I", "Queen Anne", "Queen Mary"]
+          }
+        },
+        {
+          "question_text": "What was the main cause of the American Civil War?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Slavery",
+            "other_options": [
+              "Economic differences",
+              "States' rights",
+              "Manifest Destiny"
+            ]
+          }
+        },
+        {
+          "question_text": "Who was the first Emperor of China, known for the Terracotta Army?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Qin Shi Huang",
+            "other_options": ["Han Wudi", "Kublai Khan", "Sun Yat-sen"]
+          }
+        },
+        {
+          "question_text": "In which year did the Berlin Wall fall, leading to the reunification of Germany?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "1989",
+            "other_options": ["1991", "1975", "1961"]
+          }
+        },
+        {
+          "question_text": "Who was the first Emperor of the Maurya Dynasty in ancient India?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Chandragupta Maurya",
+            "other_options": ["Ashoka", "Bindusara", "Samudragupta"]
+          }
+        },
+        {
+          "question_text": "In which year did Vasco da Gama arrive in Calicut, opening a sea route to India?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "1498",
+            "other_options": ["1526", "1601", "1632"]
+          }
+        },
+        {
+          "question_text": "Who was the leader of the Indian independence movement known as the Quit India Movement?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Mahatma Gandhi",
+            "other_options": [
+              "Jawaharlal Nehru",
+              "Subhas Chandra Bose",
+              "Sardar Patel"
+            ]
+          }
+        },
+        {
+          "question_text": "Which Mughal emperor built the Taj Mahal in memory of his wife Mumtaz Mahal?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Shah Jahan",
+            "other_options": ["Akbar", "Aurangzeb", "Babur"]
+          }
+        },
+        {
+          "question_text": "Who was the first woman Prime Minister of India?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Indira Gandhi",
+            "other_options": ["Sarojini Naidu", "Mayawati", "Pratibha Patil"]
+          }
+        },
+        {
+          "question_text": "What was the name of the Indian National Congress leader who played a key role in the drafting of the Indian Constitution?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "B.R. Ambedkar",
+            "other_options": [
+              "Jawaharlal Nehru",
+              "Sardar Patel",
+              "Maulana Abul Kalam Azad"
+            ]
+          }
+        },
+        {
+          "question_text": "Who was the founder of the Gupta Empire, considered a golden age in Indian history?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Chandragupta I",
+            "other_options": ["Ashoka", "Harsha", "Samudragupta"]
+          }
+        },
+        {
+          "question_text": "In which year did India gain independence from British rule?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "1947",
+            "other_options": ["1950", "1936", "1962"]
+          }
+        },
+        {
+          "question_text": "Who was the leader of the non-violent civil disobedience movement against the salt tax imposed by the British, known as the Salt March?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Mahatma Gandhi",
+            "other_options": [
+              "Subhas Chandra Bose",
+              "Jawaharlal Nehru",
+              "Sardar Patel"
+            ]
+          }
+        },
+        {
+          "question_text": "Which Indian king is known for his support of Buddhism and the spread of the Mauryan Empire?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Ashoka",
+            "other_options": [
+              "Chandragupta Maurya",
+              "Bindusara",
+              "Samudragupta"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "category": "Python",
+      "question_data": [
+        {
+          "question_text": "Which of the following is the correct way to comment in Python?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "# This is a comment",
+            "other_options": [
+              "// This is a comment",
+              "<!-- This is a comment -->",
+              "/* This is a comment */"
+            ]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'range()' function in Python?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Generate a sequence of numbers",
+            "other_options": [
+              "Calculate the sum of elements",
+              "Find the maximum value",
+              "Create a random number"
+            ]
+          }
+        },
+        {
+          "question_text": "Which data type is used to represent a collection of elements with key-value pairs in Python?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Dictionary",
+            "other_options": ["List", "Tuple", "Set"]
+          }
+        },
+        {
+          "question_text": "In Python, how do you open a file in binary mode?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Open the file with 'rb' mode",
+            "other_options": [
+              "Open the file with 'r' mode",
+              "Open the file with 'wb' mode",
+              "Use 'file.read_binary()'"
+            ]
+          }
+        },
+        {
+          "question_text": "What does the 'self' keyword represent in a Python class method?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Instance of the class",
+            "other_options": ["Class itself", "Parent class", "Static method"]
+          }
+        },
+        {
+          "question_text": "Which module in Python provides functionality for working with regular expressions?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "re",
+            "other_options": ["regex", "regexp", "pattern"]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'pass' statement in Python?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "It is a null operation",
+            "other_options": [
+              "It raises an exception",
+              "It ends the program",
+              "It skips the current iteration"
+            ]
+          }
+        },
+        {
+          "question_text": "What is the output of the following code: 'print(len('Python'))'?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "6",
+            "other_options": ["5", "7", "SyntaxError"]
+          }
+        },
+        {
+          "question_text": "In Python, which 'if' statement is used for multiple mutually exclusive conditions?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "elif",
+            "other_options": ["else", "if-else", "switch"]
+          }
+        },
+        {
+          "question_text": "What is the correct way to import a module named 'example' in Python?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "import example",
+            "other_options": [
+              "from example import *",
+              "include example",
+              "import * from example"
+            ]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'if __name__ == '__main__':' statement in a Python script?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "It checks if the script is being run as the main program",
+            "other_options": [
+              "It defines a function",
+              "It imports external modules",
+              "It is used for exception handling"
+            ]
+          }
+        },
+        {
+          "question_text": "Which of the following is a valid way to create a Python virtual environment?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "python -m venv myenv",
+            "other_options": [
+              "virtualenv myenv",
+              "python create venv myenv",
+              "venv.create myenv"
+            ]
+          }
+        },
+        {
+          "question_text": "In Python, what is the purpose of the 'super()' function?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "It calls a method from the parent class",
+            "other_options": [
+              "It initializes a new object",
+              "It raises an exception",
+              "It prints the superclass"
+            ]
+          }
+        },
+        {
+          "question_text": "Which of the following statements is used to remove an item from a list in Python?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "list.remove(item)",
+            "other_options": [
+              "list.delete(item)",
+              "list.pop(item)",
+              "list.discard(item)"
+            ]
+          }
+        },
+        {
+          "question_text": "What does the 'sys.argv' list contain in a Python script?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Command-line arguments passed to the script",
+            "other_options": [
+              "Names of system files",
+              "Environment variables",
+              "Standard input/output streams"
+            ]
+          }
+        },
+        {
+          "question_text": "In Python, what is the purpose of the 'map()' function?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Apply a function to all items in an input list",
+            "other_options": [
+              "Create a new dictionary",
+              "Generate a sequence of numbers",
+              "Sort a list"
+            ]
+          }
+        },
+        {
+          "question_text": "Which module in Python provides support for working with dates and times?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "datetime",
+            "other_options": ["time", "date", "calendar"]
+          }
+        },
+        {
+          "question_text": "What is the correct way to open a file in Python and ensure it is closed properly, even if an exception occurs?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Using the 'with' statement",
+            "other_options": [
+              "Using 'file.close()'",
+              "Using 'try-except' block",
+              "Using 'finally' block"
+            ]
+          }
+        },
+        {
+          "question_text": "Which of the following is a valid method to concatenate two strings in Python?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "'string1' + 'string2'",
+            "other_options": [
+              "'string1'.concat('string2')",
+              "'string1'.join('string2')",
+              "'string1'.append('string2')"
+            ]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'pip' tool in Python?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Package management and installation",
+            "other_options": [
+              "Code profiling",
+              "Version control",
+              "Code documentation"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "category": "Java",
+      "question_data": [
+        {
+          "question_text": "Which of the following is a valid way to declare an array in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "int[] myArray;",
+            "other_options": [
+              "int myArray[];",
+              "int myArray();",
+              "int myArray{};"
+            ]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'break' statement in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Terminate the loop or switch statement",
+            "other_options": [
+              "Declare a variable",
+              "Print a message",
+              "Create a new object"
+            ]
+          }
+        },
+        {
+          "question_text": "In Java, which keyword is used to define a constant?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "final",
+            "other_options": ["const", "static", "immutable"]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'this' keyword in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Refer to the current instance of the class",
+            "other_options": [
+              "Declare a constructor",
+              "Access a static variable",
+              "Define a new class"
+            ]
+          }
+        },
+        {
+          "question_text": "Which class is the superclass for all classes in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Object",
+            "other_options": ["Main", "Superclass", "Base"]
+          }
+        },
+        {
+          "question_text": "What is the difference between '=='' and '.equals()' when comparing strings in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "'==' compares object references, '.equals()' compares content",
+            "other_options": [
+              "Both compare content",
+              "Both compare object references",
+              "'==' compares content"
+            ]
+          }
+        },
+        {
+          "question_text": "In Java, what is the purpose of the 'try', 'catch', and 'finally' blocks?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Handle exceptions",
+            "other_options": [
+              "Define a new class",
+              "Create a loop",
+              "Print a message"
+            ]
+          }
+        },
+        {
+          "question_text": "Which of the following is a primitive data type in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "double",
+            "other_options": ["String", "ArrayList", "Object"]
+          }
+        },
+        {
+          "question_text": "What is the output of 'System.out.println(5 + \"Java\")' in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "5Java",
+            "other_options": ["Error", "56", "Java5"]
+          }
+        },
+        {
+          "question_text": "In Java, what is the purpose of the 'static' keyword?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Define a class-level variable or method",
+            "other_options": [
+              "Create a new object",
+              "Access an instance variable",
+              "Initialize an object"
+            ]
+          }
+        },
+        {
+          "question_text": "Which method is used to obtain the length of an array in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "length",
+            "other_options": ["size", "count", "lengthOf"]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'super' keyword in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Refer to the parent class",
+            "other_options": [
+              "Call a static method",
+              "Access a child class",
+              "Create a new instance"
+            ]
+          }
+        },
+        {
+          "question_text": "Which interface must be implemented by a class to be runnable in a separate thread?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Runnable",
+            "other_options": ["Threadable", "Executer", "SyncThread"]
+          }
+        },
+        {
+          "question_text": "What is the default value of an instance variable in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Depends on the data type",
+            "other_options": ["0", "1", "null"]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'break' statement in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Terminate the loop or switch statement",
+            "other_options": [
+              "Declare a variable",
+              "Print a message",
+              "Create a new object"
+            ]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'default' case in a 'switch' statement in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Execute when no matching case is found",
+            "other_options": [
+              "Terminate the switch statement",
+              "Define a new case",
+              "Throw an exception"
+            ]
+          }
+        },
+        {
+          "question_text": "In Java, what is the purpose of the 'instanceof' operator?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Check if an object is an instance of a particular class",
+            "other_options": [
+              "Compare two objects",
+              "Create a new instance",
+              "Access a static variable"
+            ]
+          }
+        },
+        {
+          "question_text": "Which collection class is synchronized in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Vector",
+            "other_options": ["ArrayList", "LinkedList", "HashSet"]
+          }
+        },
+        {
+          "question_text": "In Java, what is the purpose of the 'finalize()' method?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Called by the garbage collector before reclaiming an object",
+            "other_options": [
+              "Initialize an object",
+              "Terminate a program",
+              "Define a constructor"
+            ]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'StringBuilder' class in Java?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Mutable sequence of characters",
+            "other_options": [
+              "Immutable sequence of characters",
+              "File handling",
+              "Network communication"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "category": "REST API",
+      "question_data": [
+        {
+          "question_text": "What does REST stand for?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Representational State Transfer",
+            "other_options": [
+              "Remote Execution of Stateful Transactions",
+              "Resource Endpoint Service Technology",
+              "Real-time Enhanced Service Transfer"
+            ]
+          }
+        },
+        {
+          "question_text": "Which HTTP method is used for retrieving a resource representation?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "GET",
+            "other_options": ["POST", "PUT", "DELETE"]
+          }
+        },
+        {
+          "question_text": "In REST, what is the term for a unique identifier for a resource?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "URI (Uniform Resource Identifier)",
+            "other_options": [
+              "URL (Uniform Resource Locator)",
+              "URN (Uniform Resource Name)",
+              "UUID (Universally Unique Identifier)"
+            ]
+          }
+        },
+        {
+          "question_text": "Which status code indicates that the server has successfully fulfilled the request?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "200 OK",
+            "other_options": [
+              "404 Not Found",
+              "500 Internal Server Error",
+              "201 Created"
+            ]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'OPTIONS' HTTP method in REST?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Retrieve information about communication options",
+            "other_options": [
+              "Update a resource",
+              "Delete a resource",
+              "Create a new resource"
+            ]
+          }
+        },
+        {
+          "question_text": "Which MIME type is commonly used for JSON?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "application/json",
+            "other_options": ["text/xml", "application/xml", "text/plain"]
+          }
+        },
+        {
+          "question_text": "What is the term for a stateless communication protocol that can be used with REST?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "HTTP (Hypertext Transfer Protocol)",
+            "other_options": [
+              "FTP (File Transfer Protocol)",
+              "SMTP (Simple Mail Transfer Protocol)",
+              "TCP (Transmission Control Protocol)"
+            ]
+          }
+        },
+        {
+          "question_text": "Which HTTP method is used for updating a resource on the server?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "PUT",
+            "other_options": ["POST", "GET", "DELETE"]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'HEAD' HTTP method in REST?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Retrieve metadata about a resource",
+            "other_options": [
+              "Create a new resource",
+              "Update a resource",
+              "Delete a resource"
+            ]
+          }
+        },
+        {
+          "question_text": "Which status code indicates that the requested resource has been permanently deleted?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "410 Gone",
+            "other_options": ["404 Not Found", "204 No Content", "200 OK"]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'PATCH' HTTP method in REST?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Partially update a resource",
+            "other_options": [
+              "Create a new resource",
+              "Update a resource",
+              "Delete a resource"
+            ]
+          }
+        },
+        {
+          "question_text": "Which HTTP status code indicates a successful response for a request that won't be completed immediately?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "202 Accepted",
+            "other_options": ["200 OK", "201 Created", "204 No Content"]
+          }
+        },
+        {
+          "question_text": "In REST, what is the term for a group of resources or representations?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Collection",
+            "other_options": ["Endpoint", "Entity", "Attribute"]
+          }
+        },
+        {
+          "question_text": "Which HTTP method is used for deleting a resource on the server?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "DELETE",
+            "other_options": ["POST", "PUT", "GET"]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'POST' HTTP method in REST?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Create a new resource",
+            "other_options": [
+              "Update a resource",
+              "Delete a resource",
+              "Retrieve a resource"
+            ]
+          }
+        },
+        {
+          "question_text": "Which HTTP header is used to negotiate the content type between the client and server?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Content-Type",
+            "other_options": ["Authorization", "Accept", "Location"]
+          }
+        },
+        {
+          "question_text": "What is the term for a constraint or restriction on the client's behavior with a resource?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "HATEOAS (Hypermedia As The Engine Of Application State)",
+            "other_options": ["OAuth", "JSON-RPC", "SOAP"]
+          }
+        },
+        {
+          "question_text": "What is the purpose of the 'PUT' HTTP method in REST?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Update a resource",
+            "other_options": [
+              "Create a new resource",
+              "Delete a resource",
+              "Retrieve a resource"
+            ]
+          }
+        },
+        {
+          "question_text": "Which HTTP status code indicates that the client must authenticate to get the requested response?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "401 Unauthorized",
+            "other_options": [
+              "403 Forbidden",
+              "404 Not Found",
+              "400 Bad Request"
+            ]
+          }
+        },
+        {
+          "question_text": "In REST, what is the term for a sub-resource associated with another resource?",
+          "question_type": "mcq",
+          "options": {
+            "answer": "Nested Resource",
+            "other_options": [
+              "Sibling Resource",
+              "Linked Resource",
+              "Main Resource"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
