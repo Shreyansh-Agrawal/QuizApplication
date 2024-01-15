@@ -6,7 +6,7 @@ from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
 from helpers.auth_handler import AuthHandler
 from helpers.quiz_handler import QuizHandler
 from helpers.user_handler import UserHandler
-from utils import json_to_db_loader
+from utils.quiz_data_loader import load_quiz_data
 from utils.custom_error import DataNotFoundError
 
 logger = logging.getLogger(__name__)
@@ -123,7 +123,7 @@ class AdminMenu:
                 case '3':
                     quiz_handler.handle_create_question(created_by=username)
                 case '4':
-                    json_to_db_loader.load_quiz_data_from_json(created_by_admin_username=username)
+                    load_quiz_data(admin_username=username)
                     print(DisplayMessage.LOAD_QUES_MSG)
                 case 'q':
                     break

@@ -11,7 +11,7 @@ class InitializationQueries:
             category_id VARCHAR(10) PRIMARY KEY,
             admin_id VARCHAR(10),
             admin_username VARCHAR(25),
-            category_name VARCHAR(25) UNIQUE
+            category_name VARCHAR(50) UNIQUE
         )'''
     CREATE_CREDENTIALS_TABLE= '''
         CREATE TABLE IF NOT EXISTS credentials (
@@ -25,7 +25,7 @@ class InitializationQueries:
         CREATE TABLE IF NOT EXISTS options (
             option_id VARCHAR(10) PRIMARY KEY,
             question_id VARCHAR(10),
-            option_text VARCHAR(50),
+            option_text VARCHAR(100),
             isCorrect INTEGER,
             FOREIGN KEY (question_id) REFERENCES questions (question_id) ON DELETE CASCADE ON UPDATE CASCADE
         )'''
@@ -35,7 +35,7 @@ class InitializationQueries:
             category_id VARCHAR(10),
             admin_id VARCHAR(10),
             admin_username VARCHAR(25),
-            question_text VARCHAR(100) UNIQUE,
+            question_text VARCHAR(250) UNIQUE,
             question_type VARCHAR(25),
             FOREIGN KEY (category_id) REFERENCES categories (category_id) ON DELETE CASCADE ON UPDATE CASCADE
         )'''

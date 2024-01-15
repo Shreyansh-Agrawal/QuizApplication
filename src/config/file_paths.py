@@ -6,3 +6,4 @@ class FilePaths:
 
     DATABASE_PATH = 'src\\database\\data.db'
     QUESTIONS_JSON_PATH = 'src\\config\\questions.json'
+    QUIZ_DATA_PATH = 'src\\config\\quiz_data.json'
