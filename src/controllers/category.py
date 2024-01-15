@@ -7,7 +7,7 @@ import mysql.connector
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import Queries
-from models.quiz.category import Category as CategoryModel
+from models.quiz.category import Category as CategoryModel, CategoryDB
 from utils.custom_error import DuplicateEntryError
 
 logger = logging.getLogger(__name__)
@@ -29,10 +29,10 @@ class Category:
         '''Add a Quiz Category'''
 
         logger.debug(LogMessage.CREATE_ENTITY, Headers.CATEGORY)
-        category = CategoryModel(category_data)
+        category = CategoryModel.get_instance(category_data)
 
         try:
-            category.save_to_database()
+            CategoryDB.save(category)
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.CATEGORY)) from e
 

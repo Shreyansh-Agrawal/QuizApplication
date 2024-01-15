@@ -2,34 +2,22 @@
 
 from typing import Dict
 
-from models.database.database_saver import DatabaseSaver
 from models.users.user import User
-from models.users.user_manager import UserManager
 
 
-class Player(User, DatabaseSaver):
+class Player(User):
     '''
     Class representing a player user.
 
     Inherits from:
-        User: Abstract Base Class for representing users.
-        DatabaseSaver: Interface for saving to the database.
+        User: Abstract Class for representing users.
 
     Methods:
-        save_to_database(): Saves the player to the database.
+        get_instance(): Create a new instance of Player class.
     '''
 
-    def __init__(self, player_data: Dict) -> None:
-        '''
-        Initializes a Player instance.
+    @classmethod
+    def get_instance(cls, user_data: Dict[str, str], role: str=None) -> 'Player':
+        'Factory method to create a new instance of Player class.'
 
-        Args:
-            player_data (Dict): A dictionary containing player details.
-        '''
-        super().__init__(user_data=player_data, role='player')
-
-    def save_to_database(self) -> None:
-        '''Save the player to the database.'''
-
-        player_manager = UserManager(self)
-        player_manager.save_to_database()
+        return super().get_instance(user_data, role='player')

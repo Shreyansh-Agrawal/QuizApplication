@@ -1,5 +1,6 @@
 '''Contains classes for Quiz, Category, Question and Option'''
 
+from dataclasses import dataclass
 from typing import Dict
 
 from config.queries import Queries
@@ -8,38 +9,40 @@ from models.database.database_saver import DatabaseSaver
 from models.quiz.quiz_entity import QuizEntity
 
 
-class Category(QuizEntity, DatabaseSaver):
+@dataclass
+class Category(QuizEntity):
     '''
     Class representing a Category in the quiz.
 
     Inherits from:
-        QuizEntity: Abstract Base Class for Quiz Entities.
-        DatabaseSaver: Interface for saving to the database.
-
-    Methods:
-        save_to_database(): Adds the category to the database.
+        QuizEntity: Abstract Class for Quiz Entities.
     '''
+    admin_id: str
+    admin_username: str
 
-    def __init__(self, category_data: Dict) -> None:
-        '''
-        Initializes a Category instance.
+    @classmethod
+    def get_instance(cls, entity_data: Dict[str, str]) -> 'Category':
+        '''Factory method to create a new instance of Category class.'''
 
-        Args:
-            category_data (Dict): A dictionary containing category details.
-        '''
+        return cls(
+            text=entity_data.get('category_name'),
+            quiz_entity='category',
+            admin_id=entity_data.get('admin_id'),
+            admin_username=entity_data.get('admin_username')
+        )
 
-        super().__init__(category_data.get('category_name'), quiz_entity='category')
-        self.admin_id = category_data.get('admin_id')
-        self.admin_username = category_data.get('admin_username')
 
-    def save_to_database(self) -> None:
+class CategoryDB(DatabaseSaver):
+    '''Class responsible for saving category to database'''
+
+    @classmethod
+    def save(cls, entity: Category) -> None:
         '''Adds the category to the database.'''
 
         category_data = (
-            self.entity_id,
-            self.admin_id,
-            self.admin_username,
-            self.text
+            entity.entity_id,
+            entity.admin_id,
+            entity.admin_username,
+            entity.text
         )
-
         db.write(Queries.INSERT_CATEGORY, category_data)

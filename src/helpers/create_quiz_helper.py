@@ -77,7 +77,7 @@ class CreateQuizHelper:
         '''Create options, returns a question object'''
 
         question_data = self.get_question_type(question_data)
-        question = Question(question_data)
+        question = Question.get_instance(question_data)
 
         match question_data['question_type']:
             case 'MCQ':
@@ -89,7 +89,7 @@ class CreateQuizHelper:
                     error_msg=DisplayMessage.INVALID_TEXT.format(Headers.OPTION)
                 ).title()
                 option_data['is_correct'] = 1
-                option = Option(option_data)
+                option = Option.get_instance(option_data)
                 question.add_option(option)
 
                 for _ in range(3):
@@ -100,7 +100,7 @@ class CreateQuizHelper:
                         error_msg=DisplayMessage.INVALID_TEXT.format(Headers.OPTION)
                     ).title()
                     option_data['is_correct'] = 0
-                    option = Option(option_data)
+                    option = Option.get_instance(option_data)
                     question.add_option(option)
             case 'T/F' | 'ONE WORD':
                 option_data = {}
@@ -112,7 +112,7 @@ class CreateQuizHelper:
                 ).title()
                 option_data['is_correct'] = 1
 
-                option = Option(option_data)
+                option = Option.get_instance(option_data)
                 question.add_option(option)
             case _:
                 logger.exception(LogMessage.INVALID_QUES_TYPE)

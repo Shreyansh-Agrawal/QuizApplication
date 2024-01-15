@@ -8,6 +8,7 @@ import mysql.connector
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import Queries
 from helpers.create_quiz_helper import CreateQuizHelper
+from models.quiz.question import QuestionDB
 from utils.custom_error import DuplicateEntryError
 
 logger = logging.getLogger(__name__)
@@ -52,7 +53,7 @@ class Question:
         question = create_quiz_helper.create_option(question_data)
 
         try:
-            question.save_to_database()
+            QuestionDB.save(question)
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.QUES)) from e
 

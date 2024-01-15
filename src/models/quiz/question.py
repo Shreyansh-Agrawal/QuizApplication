@@ -1,65 +1,72 @@
 '''Contains Question Class'''
 
-from typing import Dict
-from config.message_prompts import ErrorMessage
+from dataclasses import dataclass
+from typing import Dict, List
 
+from config.message_prompts import ErrorMessage
 from config.queries import Queries
 from models.database.database_access import db
 from models.database.database_saver import DatabaseSaver
+from models.quiz.option import Option, OptionDB
 from models.quiz.quiz_entity import QuizEntity
-from models.quiz.option import Option
 from utils.custom_error import DataNotFoundError
 
 
-class Question(QuizEntity, DatabaseSaver):
+@dataclass
+class Question(QuizEntity):
     '''
     Class representing a Question in the quiz.
 
     Inherits from:
         QuizEntity: Abstract Base Class for Quiz Entities.
-        DatabaseSaver: Interface for saving to the database.
 
     Methods:
         add_option(): Adds an option object to the question.
-        save_to_database(): Adds the question and its options to the database.
     '''
+    category_id: str
+    admin_id: str
+    admin_username: str
+    question_type: str
+    options: List
 
-    def __init__(self, question_data: Dict) -> None:
-        '''
-        Initializes a Question instance.
+    @classmethod
+    def get_instance(cls, entity_data: Dict[str, str]) -> 'Question':
+        '''Factory method to create a new instance of Question class.'''
 
-        Args:
-            question_data (Dict): A dictionary containing question details.
-        '''
-
-        super().__init__(question_data.get('question_text'), quiz_entity='question')
-        self.category_id = question_data.get('category_id')
-        self.admin_id = question_data.get('admin_id')
-        self.admin_username = question_data.get('admin_username')
-        self.question_type = question_data.get('question_type')
-        self.options = []
+        return cls(
+            text=entity_data.get('question_text'),
+            quiz_entity='question',
+            category_id = entity_data.get('category_id'),
+            admin_id = entity_data.get('admin_id'),
+            admin_username = entity_data.get('admin_username'),
+            question_type = entity_data.get('question_type'),
+            options = []
+        )
 
     def add_option(self, option: Option) -> None:
         '''Adds an option object to the question.'''
 
         self.options.append(option)
 
-    def save_to_database(self) -> None:
-        '''Adds the question and its options to the database.'''
+
+class QuestionDB(DatabaseSaver):
+    '''Class responsible for saving question to database'''
+
+    @classmethod
+    def save(cls, entity: Question) -> None:
+        '''Adds the question to the database.'''
 
         question_data = (
-            self.entity_id,
-            self.category_id,
-            self.admin_id,
-            self.admin_username,
-            self.text,
-            self.question_type
+            entity.entity_id,
+            entity.category_id,
+            entity.admin_id,
+            entity.admin_username,
+            entity.text,
+            entity.question_type
         )
-
-        if not self.options:
+        if not entity.options:
             raise DataNotFoundError(ErrorMessage.NO_OPTIONS_ERROR)
 
         db.write(Queries.INSERT_QUESTION, question_data)
-
-        for option in self.options:
-            option.save_to_database()
+        for option in entity.options:
+            OptionDB.save(option)

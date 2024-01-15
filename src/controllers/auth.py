@@ -8,6 +8,7 @@ import mysql.connector
 from config.message_prompts import DisplayMessage, ErrorMessage, LogMessage
 from config.queries import Queries
 from models.users.player import Player
+from models.users.user_db import UserDB
 from utils.custom_error import LoginError
 from utils.password_hasher import hash_password
 
@@ -44,10 +45,10 @@ class Authentication:
 
         logger.debug(LogMessage.SIGNUP_INITIATED)
         player_data['password'] = hash_password(player_data['password'])
-        player = Player(player_data)
+        player = Player.get_instance(player_data)
 
         try:
-            player.save_to_database()
+            UserDB.save(player)
         except mysql.connector.IntegrityError as e:
             raise LoginError(ErrorMessage.USER_EXISTS_ERROR) from e
 

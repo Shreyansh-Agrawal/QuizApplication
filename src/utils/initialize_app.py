@@ -11,6 +11,7 @@ from config.message_prompts import DisplayMessage, Headers, LogMessage
 from config.queries import Queries
 from models.database.database_access import db
 from models.users.super_admin import SuperAdmin
+from models.users.user_db import UserDB
 from utils.password_hasher import hash_password
 
 dotenv_path = Path('.env')
@@ -57,10 +58,10 @@ class Initializer:
         super_admin_data['username'] = os.getenv('SUPER_ADMIN_USERNAME')
         password = os.getenv('SUPER_ADMIN_PASSWORD')
         super_admin_data['password'] = hash_password(password)
-        super_admin = SuperAdmin(super_admin_data)
+        super_admin = SuperAdmin.get_instance(super_admin_data)
 
         try:
-            super_admin.save_to_database()
+            UserDB.save(super_admin)
         except mysql.connector.IntegrityError:
             logger.debug(LogMessage.SUPER_ADMIN_PRESENT)
 
