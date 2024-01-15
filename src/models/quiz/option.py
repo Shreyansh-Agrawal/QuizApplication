@@ -1,5 +1,6 @@
 '''Contains classes for Quiz, Category, Question and Option'''
 
+from dataclasses import dataclass
 from typing import Dict
 
 from config.queries import Queries
@@ -8,38 +9,41 @@ from models.database.database_saver import DatabaseSaver
 from models.quiz.quiz_entity import QuizEntity
 
 
-class Option(QuizEntity, DatabaseSaver):
+@dataclass
+class Option(QuizEntity):
     '''
     Class representing an Option for a question in the quiz.
 
     Inherits from:
-        QuizEntity: Abstract Base Class for Quiz Entities.
-        DatabaseSaver: Interface for saving to the database.
-
-    Methods:
-        save_to_database(): Adds the option to the database.
+        QuizEntity: Abstract Class for Quiz Entities.
     '''
+    question_id: str
+    is_correct: str
 
-    def __init__(self, option_data: Dict) -> None:
-        '''
-        Initializes an Option instance.
+    @classmethod
+    def get_instance(cls, entity_data: Dict[str, str]) -> 'Option':
+        '''Factory method to create a new instance of Option class.'''
 
-        Args:
-            option_data (Dict): A dictionary containing option details.
-        '''
+        return cls(
+            text=entity_data.get('option_text'),
+            quiz_entity='option',
+            question_id = entity_data.get('question_id'),
+            is_correct = entity_data.get('is_correct')
+        )
 
-        super().__init__(option_data.get('option_text'), quiz_entity='option')
-        self.question_id = option_data.get('question_id')
-        self.is_correct = option_data.get('is_correct')
 
-    def save_to_database(self) -> None:
+class OptionDB(DatabaseSaver):
+    '''Class responsible for saving option to database'''
+
+    @classmethod
+    def save(cls, entity: Option) -> None:
         '''Adds the option to the database.'''
 
         option_data = (
-            self.entity_id,
-            self.question_id,
-            self.text,
-            self.is_correct
+            entity.entity_id,
+            entity.question_id,
+            entity.text,
+            entity.is_correct
         )
 
         db.write(Queries.INSERT_OPTION, option_data)

@@ -2,34 +2,22 @@
 
 from typing import Dict
 
-from models.database.database_saver import DatabaseSaver
 from models.users.user import User
-from models.users.user_manager import UserManager
 
 
-class Admin(User, DatabaseSaver):
+class Admin(User):
     '''
     Class representing an admin user.
 
     Inherits from:
-        User: Abstract Base Class for representing users.
-        DatabaseSaver: Interface for saving to the database.
+        User: Abstract Class for representing users.
 
     Methods:
-        save_to_database(): Saves the admin to the database.
+        get_instance(): Create a new instance of Admin class.
     '''
 
-    def __init__(self, admin_data: Dict) -> None:
-        '''
-        Initializes an Admin instance.
+    @classmethod
+    def get_instance(cls, user_data: Dict[str, str], role: str=None) -> 'Admin':
+        'Factory method to create a new instance of Admin class.'
 
-        Args:
-            admin_data (Dict): A dictionary containing admin details.
-        '''
-        super().__init__(user_data=admin_data, role='admin')
-
-    def save_to_database(self) -> None:
-        '''Save the admin to the database.'''
-
-        admin_manager = UserManager(self)
-        admin_manager.save_to_database()
+        return super().get_instance(user_data, role='admin')

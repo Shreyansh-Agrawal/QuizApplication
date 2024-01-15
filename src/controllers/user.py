@@ -8,6 +8,7 @@ import mysql.connector
 from config.message_prompts import DisplayMessage, Headers, LogMessage, ErrorMessage
 from config.queries import Queries
 from models.users.admin import Admin
+from models.users.user_db import UserDB
 from utils.custom_error import LoginError
 
 logger = logging.getLogger(__name__)
@@ -34,9 +35,9 @@ class User:
     def create_admin(self, admin_data: Dict) -> None:
         '''Create a new Admin Account'''
 
-        admin = Admin(admin_data)
+        admin = Admin.get_instance(admin_data)
         try:
-            admin.save_to_database()
+            UserDB.save(admin)
         except mysql.connector.IntegrityError as e:
             raise LoginError(ErrorMessage.USER_EXISTS_ERROR) from e
 

@@ -1,43 +1,57 @@
 '''Contains User abstract class'''
 
 from abc import ABC
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Dict
 
 from utils import validations
 
 
+@dataclass
 class User(ABC):
     '''
-    Abstract Base Class for representing users.
+    Abstract Class for representing users.
 
     Attributes:
         name (str): The user's name.
         email (str): The user's email address.
         username (str): The user's username.
         password (str): The user's password.
-        user_id (str): The unique identifier for the user.
         role (str): The user's role (super admin, admin, player).
+        user_id (str): The unique identifier for the user.
         is_password_changed (int): Flag indicating if the user has changed their password.
         registration_date (str): The date and time of user registration in UTC format.
     '''
+    user_id: str = field(init=False)
+    name: str
+    email: str
+    role: str
+    registration_date: str = field(init=False)
+    username: str
+    password: str
+    is_password_changed: int = field(init=False)
 
-    def __init__(self, user_data: Dict, role: str) -> None:
+    def __post_init__(self) -> None:
+        self.is_password_changed = 0 if self.role == 'admin' else 1
+        self.user_id = validations.validate_id(entity=self.role)
+        self.registration_date = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+
+    @classmethod
+    def get_instance(cls, user_data: Dict[str, str], role) -> 'User':
         '''
-        Initializes a User instance.
+        Factory method to create a new instance of User class.
 
         Args:
             user_data (Dict): A dictionary containing user details.
-            role (str): The role of the user.
 
-        Raises:
-            KeyError: If required user data is missing.
+        Returns:
+            User: An instance of the User class.
         '''
-        self.name = user_data.get('name')
-        self.email = user_data.get('email')
-        self.username = user_data.get('username')
-        self.password = user_data.get('password')
-        self.user_id = validations.validate_id(entity=role)
-        self.role = role
-        self.is_password_changed = 0 if role == 'admin' else 1
-        self.registration_date = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+        return cls(
+            name=user_data.get('name'),
+            email=user_data.get('email'),
+            username=user_data.get('username'),
+            password=user_data.get('password'),
+            role=role
+        )
