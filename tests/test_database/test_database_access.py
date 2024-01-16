@@ -4,7 +4,7 @@ import mysql.connector
 
 import pytest
 
-from models.database.database_access import DatabaseAccess
+from database.database_access import DatabaseAccess
 
 
 class TestDatabaseAccess:

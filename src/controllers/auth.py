@@ -15,8 +15,8 @@ from utils.password_hasher import hash_password
 logger = logging.getLogger(__name__)
 
 
-class Authentication:
-    '''Authentication class containing login and signup methods'''
+class AuthController:
+    '''AuthController class containing login and signup methods'''
 
     def __init__(self, database) -> None:
         self.db = database

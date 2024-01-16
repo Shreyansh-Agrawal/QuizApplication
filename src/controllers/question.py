@@ -14,8 +14,8 @@ from utils.custom_error import DuplicateEntryError
 logger = logging.getLogger(__name__)
 
 
-class Question:
-    '''Question class for quiz's question management'''
+class QuestionController:
+    '''QuestionController class for quiz's question management'''
 
     def __init__(self, database) -> None:
         self.db = database

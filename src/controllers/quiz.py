@@ -7,16 +7,16 @@ from typing import List, Tuple
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import Queries
 from helpers.start_quiz_helper import StartQuizHelper
-from controllers.question import Question
-from models.database.database_access import db
+from controllers.question import QuestionController
+from database.database_access import db
 from utils.custom_error import DataNotFoundError
 from utils.pretty_print import pretty_print
 
 logger = logging.getLogger(__name__)
 
 
-class Quiz:
-    '''Quiz class for quiz management'''
+class QuizController:
+    '''QuizController class for quiz management'''
 
     def __init__(self, database) -> None:
         self.db = database
@@ -31,7 +31,7 @@ class Quiz:
         '''Start a New Quiz'''
 
         logger.debug(LogMessage.START_QUIZ, username)
-        question_controller = Question(db)
+        question_controller = QuestionController(db)
         start_quiz_helper = StartQuizHelper()
         if not category:
             data = question_controller.get_random_questions()

@@ -7,7 +7,7 @@ import mysql.connector
 from config.file_paths import FilePaths
 from config.message_prompts import LogMessage
 from config.queries import Queries
-from models.database.database_access import db
+from database.database_access import db
 from utils import validations
 
 logger = logging.getLogger(__name__)

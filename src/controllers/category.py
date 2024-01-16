@@ -7,14 +7,14 @@ import mysql.connector
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import Queries
-from models.quiz.category import Category as CategoryModel, CategoryDB
+from models.quiz.category import Category, CategoryDB
 from utils.custom_error import DuplicateEntryError
 
 logger = logging.getLogger(__name__)
 
 
-class Category:
-    '''Category class for category management'''
+class CategoryController:
+    '''CategoryController class for category management'''
 
     def __init__(self, database) -> None:
         self.db = database
@@ -29,7 +29,7 @@ class Category:
         '''Add a Quiz Category'''
 
         logger.debug(LogMessage.CREATE_ENTITY, Headers.CATEGORY)
-        category = CategoryModel.get_instance(category_data)
+        category = Category.get_instance(category_data)
 
         try:
             CategoryDB.save(category)

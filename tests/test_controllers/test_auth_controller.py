@@ -6,7 +6,7 @@ import pytest
 from pytest_mock import mocker
 
 from config.message_prompts import DisplayMessage, LogMessage
-from controllers.auth import Authentication
+from controllers.auth import AuthController
 from utils.custom_error import LoginError
 
 
@@ -23,7 +23,7 @@ class TestAuthController:
     password = 'test_password'
     user_data = [('hashed_password', 'role', '1')]
     moc_db = mocker.Mock()
-    auth_controller = Authentication(moc_db)
+    auth_controller = AuthController(moc_db)
 
     def test_login_success(self, mocker, capsys, caplog):
         '''Test method to test login success'''

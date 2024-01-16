@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage
 from config.queries import Queries
-from models.database.database_access import db
+from database.database_access import db
 from models.users.super_admin import SuperAdmin
 from models.users.user_db import UserDB
 from utils.password_hasher import hash_password

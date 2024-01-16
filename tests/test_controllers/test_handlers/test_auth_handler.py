@@ -22,7 +22,7 @@ class TestAuthHandler:
     def mock_auth_controller_class(self, mocker):
         '''Test fixture to mock Authentication class'''
 
-        return mocker.patch('controllers.handlers.auth_handler.Authentication')
+        return mocker.patch('controllers.handlers.auth_handler.AuthController')
 
     def test_handle_login_success(self, mocker, capsys, caplog, mock_auth_controller_class):
         '''Test method to test handle login for successful login'''

@@ -7,8 +7,8 @@ from typing import List, Tuple
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
-from controllers.category import Category
-from models.database.database_access import db
+from controllers.category import CategoryController
+from database.database_access import db
 from utils import validations
 from utils.custom_error import DataNotFoundError
 from utils.pretty_print import pretty_print
@@ -22,7 +22,7 @@ class StartQuizHelper:
     def select_category(self) -> str:
         '''Takes in player input for category'''
 
-        data = Category(db).get_all_categories()
+        data = CategoryController(db).get_all_categories()
         if not data:
             raise DataNotFoundError(ErrorMessage.NO_CATEGORY_ERROR)
 

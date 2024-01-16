@@ -6,8 +6,8 @@ from typing import Dict
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
-from controllers.category import Category
-from models.database.database_access import db
+from controllers.category import CategoryController
+from database.database_access import db
 from models.quiz.question import Question
 from models.quiz.option import Option
 from utils import validations
@@ -24,7 +24,7 @@ class CreateQuizHelper:
 
         logger.debug(LogMessage.CREATE_ENTITY, Headers.QUES)
         print(DisplayMessage.CREATE_QUES_MSG)
-        category_controller = Category(db)
+        category_controller = CategoryController(db)
         user_choice = validations.regex_validator(
             prompt=Prompts.SELECT_CATEGORY_PROMPT,
             regex_pattern=RegexPattern.NUMERIC_PATTERN,

@@ -8,10 +8,10 @@ from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from helpers.create_quiz_helper import CreateQuizHelper
 from helpers.start_quiz_helper import StartQuizHelper
-from controllers.quiz import Quiz
-from controllers.category import Category
-from controllers.question import Question
-from models.database.database_access import db
+from controllers.quiz import QuizController
+from controllers.category import CategoryController
+from controllers.question import QuestionController
+from database.database_access import db
 from utils import validations
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
 from utils.pretty_print import pretty_print
@@ -23,9 +23,9 @@ class QuizHandler:
     '''QuizHandler class containing methods for managing quiz'''
 
     def __init__(self) -> None:
-        self.quiz_controller = Quiz(db)
-        self.category_controller = Category(db)
-        self.question_controller = Question(db)
+        self.quiz_controller = QuizController(db)
+        self.category_controller = CategoryController(db)
+        self.question_controller = QuestionController(db)
         self.create_quiz_helper = CreateQuizHelper()
         self.start_quiz_helper = StartQuizHelper()
 

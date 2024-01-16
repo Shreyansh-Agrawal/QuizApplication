@@ -5,7 +5,7 @@ from typing import Dict, List
 
 from config.message_prompts import ErrorMessage
 from config.queries import Queries
-from models.database.database_access import db
+from database.database_access import db
 from models.database.database_saver import DatabaseSaver
 from models.quiz.option import Option, OptionDB
 from models.quiz.quiz_entity import QuizEntity

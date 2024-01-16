@@ -14,8 +14,8 @@ from utils.custom_error import LoginError
 logger = logging.getLogger(__name__)
 
 
-class User:
-    '''User class for user management'''
+class UserController:
+    '''UserController class for user management'''
 
     def __init__(self, database) -> None:
         self.db = database
