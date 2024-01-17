@@ -96,6 +96,3 @@ class DatabaseAccess:
         self.cursor.execute(InitializationQueries.CREATE_CATEGORIES_TABLE)
         self.cursor.execute(InitializationQueries.CREATE_QUESTIONS_TABLE)
         self.cursor.execute(InitializationQueries.CREATE_OPTIONS_TABLE)
-
-
-db = DatabaseAccess()

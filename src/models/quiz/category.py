@@ -3,9 +3,6 @@
 from dataclasses import dataclass
 from typing import Dict
 
-from config.queries import Queries
-from database.database_access import db
-from models.database.database_saver import DatabaseSaver
 from models.quiz.quiz_entity import QuizEntity
 
 
@@ -30,19 +27,3 @@ class Category(QuizEntity):
             admin_id=entity_data.get('admin_id'),
             admin_username=entity_data.get('admin_username')
         )
-
-
-class CategoryDB(DatabaseSaver):
-    '''Class responsible for saving category to database'''
-
-    @classmethod
-    def save(cls, entity: Category) -> None:
-        '''Adds the category to the database.'''
-
-        category_data = (
-            entity.entity_id,
-            entity.admin_id,
-            entity.admin_username,
-            entity.text
-        )
-        db.write(Queries.INSERT_CATEGORY, category_data)

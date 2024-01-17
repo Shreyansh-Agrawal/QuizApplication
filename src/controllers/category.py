@@ -7,7 +7,9 @@ import mysql.connector
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import Queries
-from models.quiz.category import Category, CategoryDB
+from database.database_access import DatabaseAccess
+from models.quiz.category import Category
+from models.database.category_db import CategoryDB
 from utils.custom_error import DuplicateEntryError
 
 logger = logging.getLogger(__name__)
@@ -16,8 +18,9 @@ logger = logging.getLogger(__name__)
 class CategoryController:
     '''CategoryController class for category management'''
 
-    def __init__(self, database) -> None:
+    def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
+        self.category_db = CategoryDB(self.db)
 
     def get_all_categories(self) -> List[Tuple]:
         '''Return all Quiz Categories'''
@@ -32,7 +35,7 @@ class CategoryController:
         category = Category.get_instance(category_data)
 
         try:
-            CategoryDB.save(category)
+            self.category_db.save(category)
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.CATEGORY)) from e
 

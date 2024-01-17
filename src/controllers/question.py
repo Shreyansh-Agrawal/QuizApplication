@@ -7,8 +7,9 @@ import mysql.connector
 
 from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import Queries
+from database.database_access import DatabaseAccess
 from helpers.create_quiz_helper import CreateQuizHelper
-from models.quiz.question import QuestionDB
+from models.database.question_db import QuestionDB
 from utils.custom_error import DuplicateEntryError
 
 logger = logging.getLogger(__name__)
@@ -17,8 +18,9 @@ logger = logging.getLogger(__name__)
 class QuestionController:
     '''QuestionController class for quiz's question management'''
 
-    def __init__(self, database) -> None:
+    def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
+        self.question_db = QuestionDB(self.db)
 
     def get_all_questions(self) -> List[Tuple]:
         '''Return all quiz questions'''
@@ -53,7 +55,7 @@ class QuestionController:
         question = create_quiz_helper.create_option(question_data)
 
         try:
-            QuestionDB.save(question)
+            self.question_db.save(question)
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.QUES)) from e
 

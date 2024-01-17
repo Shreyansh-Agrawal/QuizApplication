@@ -7,7 +7,7 @@ from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from controllers.auth import AuthController
-from database.database_access import db
+from database.database_access import DatabaseAccess
 from utils import validations
 from utils.custom_error import LoginError
 from utils.password_hasher import hash_password
@@ -19,7 +19,8 @@ class AuthHandler:
     '''AuthHandler class containing methods for handling authentication'''
 
     def __init__(self) -> None:
-        self.auth_controller = AuthController(db)
+        self.db = DatabaseAccess()
+        self.auth_controller = AuthController(self.db)
 
     def handle_login(self) -> List[Tuple]:
         '''Handles Login'''
@@ -113,7 +114,7 @@ class AuthHandler:
 
             hashed_password = hash_password(confirm_password)
             is_password_changed = 1
-            db.write(
+            self.db.write(
                 Queries.UPDATE_ADMIN_PASSWORD_BY_USERNAME,
                 (hashed_password, is_password_changed, username)
             )

@@ -1,9 +1,9 @@
-'''Contains UserManagerClass'''
+'''Contains UserDB Class'''
 
 from dataclasses import astuple
 
 from config.queries import Queries
-from database.database_access import db
+from database.database_access import DatabaseAccess
 from models.database.database_saver import DatabaseSaver
 from models.users.user import User
 
@@ -11,8 +11,10 @@ from models.users.user import User
 class UserDB(DatabaseSaver):
     '''Class responsible for saving users to the database.'''
 
-    @classmethod
-    def save(cls, entity: User) -> None:
+    def __init__(self, database: DatabaseAccess) -> None:
+        self.db = database
+
+    def save(self, entity: User) -> None:
         '''
         Saves the user data and their credentials to the database.
 
@@ -33,5 +35,5 @@ class UserDB(DatabaseSaver):
         user_data = astuple(entity)[:5]
         credentials = (astuple(entity)[0], ) + astuple(entity)[5:]
 
-        db.write(Queries.INSERT_USER_DATA, user_data)
-        db.write(Queries.INSERT_CREDENTIALS, credentials)
+        self.db.write(Queries.INSERT_USER_DATA, user_data)
+        self.db.write(Queries.INSERT_CREDENTIALS, credentials)

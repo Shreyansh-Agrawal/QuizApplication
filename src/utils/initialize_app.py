@@ -9,9 +9,9 @@ from dotenv import load_dotenv
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage
 from config.queries import Queries
-from database.database_access import db
+from database.database_access import DatabaseAccess
 from models.users.super_admin import SuperAdmin
-from models.users.user_db import UserDB
+from models.database.user_db import UserDB
 from utils.password_hasher import hash_password
 
 dotenv_path = Path('.env')
@@ -29,8 +29,11 @@ class Initializer:
         initialize_app(): Initializes the application by setting up necessary tables and the super admin.
     '''
 
-    @staticmethod
-    def create_super_admin() -> None:
+    def __init__(self, db: DatabaseAccess) -> None:
+        self.db = db
+        self.user_db = UserDB(self.db)
+
+    def create_super_admin(self) -> None:
         '''
         Creates a super admin account in the application.
 
@@ -46,7 +49,7 @@ class Initializer:
             None
         '''
 
-        user = db.read(Queries.GET_USER_BY_ROLE, ('super admin', ))
+        user = self.db.read(Queries.GET_USER_BY_ROLE, ('super admin', ))
         if user:
             return
 
@@ -61,22 +64,21 @@ class Initializer:
         super_admin = SuperAdmin.get_instance(super_admin_data)
 
         try:
-            UserDB.save(super_admin)
+            self.user_db.save(super_admin)
         except mysql.connector.IntegrityError:
             logger.debug(LogMessage.SUPER_ADMIN_PRESENT)
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.SUPER_ADMIN)
         print(DisplayMessage.CREATE_SUPER_ADMIN_SUCCESS_MSG)
 
-    @staticmethod
-    def initialize_app() -> None:
+    def initialize_app(self) -> None:
         '''
         Initializes the application by creating necessary tables and the super admin.
         Returns:
             None
         '''
-        db.create_tables()
-        Initializer.create_super_admin()
+        self.db.create_tables()
+        self.create_super_admin()
 
         logger.debug(LogMessage.INITIALIZE_APP_SUCCESS)
         print(DisplayMessage.INITIALIZATION_SUCCESS_MSG)

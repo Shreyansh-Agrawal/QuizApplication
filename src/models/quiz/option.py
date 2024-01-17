@@ -3,9 +3,6 @@
 from dataclasses import dataclass
 from typing import Dict
 
-from config.queries import Queries
-from database.database_access import db
-from models.database.database_saver import DatabaseSaver
 from models.quiz.quiz_entity import QuizEntity
 
 
@@ -30,20 +27,3 @@ class Option(QuizEntity):
             question_id = entity_data.get('question_id'),
             is_correct = entity_data.get('is_correct')
         )
-
-
-class OptionDB(DatabaseSaver):
-    '''Class responsible for saving option to database'''
-
-    @classmethod
-    def save(cls, entity: Option) -> None:
-        '''Adds the option to the database.'''
-
-        option_data = (
-            entity.entity_id,
-            entity.question_id,
-            entity.text,
-            entity.is_correct
-        )
-
-        db.write(Queries.INSERT_OPTION, option_data)

@@ -8,7 +8,7 @@ from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMes
 from config.queries import Queries
 from helpers.start_quiz_helper import StartQuizHelper
 from controllers.question import QuestionController
-from database.database_access import db
+from database.database_access import DatabaseAccess
 from utils.custom_error import DataNotFoundError
 from utils.pretty_print import pretty_print
 
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class QuizController:
     '''QuizController class for quiz management'''
 
-    def __init__(self, database) -> None:
+    def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
 
     def get_leaderboard(self) -> List[Tuple]:
@@ -31,6 +31,7 @@ class QuizController:
         '''Start a New Quiz'''
 
         logger.debug(LogMessage.START_QUIZ, username)
+        db = DatabaseAccess()
         question_controller = QuestionController(db)
         start_quiz_helper = StartQuizHelper()
         if not category:

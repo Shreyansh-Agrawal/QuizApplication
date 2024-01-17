@@ -3,13 +3,8 @@
 from dataclasses import dataclass
 from typing import Dict, List
 
-from config.message_prompts import ErrorMessage
-from config.queries import Queries
-from database.database_access import db
-from models.database.database_saver import DatabaseSaver
-from models.quiz.option import Option, OptionDB
+from models.quiz.option import Option
 from models.quiz.quiz_entity import QuizEntity
-from utils.custom_error import DataNotFoundError
 
 
 @dataclass
@@ -47,26 +42,3 @@ class Question(QuizEntity):
         '''Adds an option object to the question.'''
 
         self.options.append(option)
-
-
-class QuestionDB(DatabaseSaver):
-    '''Class responsible for saving question to database'''
-
-    @classmethod
-    def save(cls, entity: Question) -> None:
-        '''Adds the question to the database.'''
-
-        question_data = (
-            entity.entity_id,
-            entity.category_id,
-            entity.admin_id,
-            entity.admin_username,
-            entity.text,
-            entity.question_type
-        )
-        if not entity.options:
-            raise DataNotFoundError(ErrorMessage.NO_OPTIONS_ERROR)
-
-        db.write(Queries.INSERT_QUESTION, question_data)
-        for option in entity.options:
-            OptionDB.save(option)

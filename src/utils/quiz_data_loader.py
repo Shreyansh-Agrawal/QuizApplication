@@ -7,7 +7,7 @@ import mysql.connector
 from config.file_paths import FilePaths
 from config.message_prompts import LogMessage
 from config.queries import Queries
-from database.database_access import db
+from database.database_access import DatabaseAccess
 from utils import validations
 
 logger = logging.getLogger(__name__)
@@ -28,6 +28,7 @@ def load_quiz_data(admin_username: str) -> None:
         None
     '''
     logger.debug(LogMessage.LOAD_QUIZ_DATA_FROM_JSON)
+    db = DatabaseAccess()
     admin_data = db.read(Queries.GET_USER_ID_BY_USERNAME, (admin_username, ))
     admin_id = admin_data[0][0]
 

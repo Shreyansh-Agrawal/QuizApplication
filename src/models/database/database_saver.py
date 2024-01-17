@@ -13,9 +13,8 @@ class DatabaseSaver(ABC):
         save(): Abstract method that must be implemented by subclasses.
     '''
 
-    @classmethod
     @abstractmethod
-    def save(cls, entity) -> None:
+    def save(self, entity) -> None:
         '''
         Abstract method to save entity to the database.
 

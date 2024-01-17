@@ -8,7 +8,7 @@ from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMes
 from config.queries import Queries
 from config.regex_patterns import RegexPattern
 from controllers.category import CategoryController
-from database.database_access import db
+from database.database_access import DatabaseAccess
 from utils import validations
 from utils.custom_error import DataNotFoundError
 from utils.pretty_print import pretty_print
@@ -22,6 +22,7 @@ class StartQuizHelper:
     def select_category(self) -> str:
         '''Takes in player input for category'''
 
+        db = DatabaseAccess()
         data = CategoryController(db).get_all_categories()
         if not data:
             raise DataNotFoundError(ErrorMessage.NO_CATEGORY_ERROR)
@@ -97,6 +98,7 @@ class StartQuizHelper:
         '''Save Player's Quiz Score'''
 
         logger.debug(LogMessage.SAVE_QUIZ_SCORE, username)
+        db = DatabaseAccess()
         player_data = db.read(Queries.GET_USER_ID_BY_USERNAME, (username, ))
         user_id = player_data[0][0]
         score_id = validations.validate_id(entity='score')

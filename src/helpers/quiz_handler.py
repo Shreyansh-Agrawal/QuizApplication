@@ -11,7 +11,7 @@ from helpers.start_quiz_helper import StartQuizHelper
 from controllers.quiz import QuizController
 from controllers.category import CategoryController
 from controllers.question import QuestionController
-from database.database_access import db
+from database.database_access import DatabaseAccess
 from utils import validations
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
 from utils.pretty_print import pretty_print
@@ -23,6 +23,7 @@ class QuizHandler:
     '''QuizHandler class containing methods for managing quiz'''
 
     def __init__(self) -> None:
+        db = DatabaseAccess()
         self.quiz_controller = QuizController(db)
         self.category_controller = CategoryController(db)
         self.question_controller = QuestionController(db)
@@ -147,6 +148,7 @@ class QuizHandler:
         except DataNotFoundError as e:
             logger.warning(e)
             print(e)
+        db = DatabaseAccess()
         admin_data = db.read(Queries.GET_USER_ID_BY_USERNAME, (created_by, ))
         admin_id = admin_data[0][0]
         print(DisplayMessage.CREATE_CATEGORY_MSG)

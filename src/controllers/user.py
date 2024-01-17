@@ -8,7 +8,7 @@ import mysql.connector
 from config.message_prompts import DisplayMessage, Headers, LogMessage, ErrorMessage
 from config.queries import Queries
 from models.users.admin import Admin
-from models.users.user_db import UserDB
+from models.database.user_db import UserDB
 from utils.custom_error import LoginError
 
 logger = logging.getLogger(__name__)
@@ -19,6 +19,7 @@ class UserController:
 
     def __init__(self, database) -> None:
         self.db = database
+        self.user_db = UserDB(self.db)
 
     def get_player_scores_by_username(self, username: str) -> List[Tuple]:
         '''Return user's scores'''
@@ -37,7 +38,7 @@ class UserController:
 
         admin = Admin.get_instance(admin_data)
         try:
-            UserDB.save(admin)
+            self.user_db.save(admin)
         except mysql.connector.IntegrityError as e:
             raise LoginError(ErrorMessage.USER_EXISTS_ERROR) from e
 
