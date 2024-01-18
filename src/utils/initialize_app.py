@@ -7,7 +7,7 @@ from pathlib import Path
 import mysql.connector
 from dotenv import load_dotenv
 
-from config.message_prompts import DisplayMessage, Headers, LogMessage
+from config.message_prompts import Headers, LogMessage
 from config.queries import Queries
 from database.database_access import DatabaseAccess
 from models.users.super_admin import SuperAdmin
@@ -69,7 +69,6 @@ class Initializer:
             logger.debug(LogMessage.SUPER_ADMIN_PRESENT)
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.SUPER_ADMIN)
-        print(DisplayMessage.CREATE_SUPER_ADMIN_SUCCESS_MSG)
 
     def initialize_app(self) -> None:
         '''
@@ -81,4 +80,3 @@ class Initializer:
         self.create_super_admin()
 
         logger.debug(LogMessage.INITIALIZE_APP_SUCCESS)
-        print(DisplayMessage.INITIALIZATION_SUCCESS_MSG)

@@ -35,7 +35,7 @@ class DatabaseAccess:
                     password=MYSQL_PASSWORD,
                     host=MYSQL_HOST
                 )
-                DatabaseAccess.cursor = DatabaseAccess.connection.cursor()
+                DatabaseAccess.cursor = DatabaseAccess.connection.cursor(dictionary=True)
                 DatabaseAccess.cursor.execute(InitializationQueries.CREATE_DATABASE.format(MYSQL_DB))
                 DatabaseAccess.cursor.execute(InitializationQueries.USE_DATABASE.format(MYSQL_DB))
             except mysql.connector.Error as e:
