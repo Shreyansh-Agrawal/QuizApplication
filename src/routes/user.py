@@ -3,6 +3,9 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint
 
+from config.message_prompts import Roles
+from utils.rbac import access_level
+
 blp = Blueprint('User', __name__)
 
 
@@ -13,6 +16,7 @@ class Player(MethodView):
         Get all player details
     '''
 
+    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
     def get(self):
         'Get all player details'
 
@@ -25,9 +29,11 @@ class Admin(MethodView):
         Create a new admin account
     '''
 
+    @access_level(roles=[Roles.SUPER_ADMIN])
     def get(self):
         'Get all admin details'
 
+    @access_level(roles=[Roles.SUPER_ADMIN])
     def post(self):
         'Create a new admin account'
 
@@ -39,6 +45,7 @@ class AdminById(MethodView):
         Delete an existing admin
     '''
 
+    @access_level(roles=[Roles.SUPER_ADMIN])
     def delete(self, admin_id):
         'Delete an existing admin'
 
@@ -50,5 +57,6 @@ class PlayerById(MethodView):
         Delete an existing player
     '''
 
+    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
     def delete(self, admin_id):
         'Delete an existing player'

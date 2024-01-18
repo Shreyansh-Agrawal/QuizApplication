@@ -3,6 +3,9 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint
 
+from config.message_prompts import Roles
+from utils.rbac import access_level
+
 blp = Blueprint('Quiz', __name__)
 
 
@@ -13,6 +16,7 @@ class Leaderboard(MethodView):
         Get leaderboard details
     '''
 
+    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
     def get(self):
         'Get leaderboard details'
 
@@ -24,6 +28,7 @@ class ScoreByPlayerId(MethodView):
         Get player's past scores
     '''
 
+    @access_level(roles=[Roles.PLAYER])
     def get(self, player_id):
         'Get past scores of a player'
 
@@ -35,6 +40,7 @@ class Quiz(MethodView):
         Get random questions for quiz
     '''
 
+    @access_level(roles=[Roles.PLAYER])
     def get(self):
         '''
         Get random questions for quiz
@@ -50,5 +56,6 @@ class QuizAnswer(MethodView):
         Post player responses to the questions
     '''
 
+    @access_level(roles=[Roles.PLAYER])
     def post(self):
         'Post player responses to the questions'

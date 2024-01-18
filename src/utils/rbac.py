@@ -6,10 +6,12 @@ from typing import List
 from flask import jsonify
 from flask_jwt_extended import get_jwt, verify_jwt_in_request
 
+from config.message_prompts import Roles
+
 ROLE_MAPPING = {
-    'super_admin': 'SFAB6c',
-    'admin': 'SHVpHQ',
-    'player': 'SSwYVW'
+    Roles.SUPER_ADMIN: 'SFAB6c',
+    Roles.ADMIN: 'SHVpHQ',
+    Roles.PLAYER: 'SSwYVW'
 }
 
 def access_level(roles: List):

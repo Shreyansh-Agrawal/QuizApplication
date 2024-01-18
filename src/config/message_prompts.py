@@ -269,3 +269,10 @@ class ErrorMessage:
     NO_CATEGORY_ERROR='No Category Added!'
     NO_ROLE_ERROR='No {role} Currently!'
     NO_OPTIONS_ERROR='No Options added for this Question!'
+
+class Roles:
+    '''Contains all the user roles'''
+
+    SUPER_ADMIN='super_admin'
+    ADMIN='admin'
+    PLAYER='player'
