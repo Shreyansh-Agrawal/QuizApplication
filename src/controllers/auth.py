@@ -8,8 +8,8 @@ import mysql.connector
 from config.message_prompts import ErrorMessage, LogMessage
 from config.queries import Queries
 from database.database_access import DatabaseAccess
-from models.users.player import Player
 from models.database.user_db import UserDB
+from models.users.player import Player
 from utils.custom_error import LoginError
 from utils.password_hasher import hash_password
 

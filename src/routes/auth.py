@@ -29,7 +29,7 @@ class Register(MethodView):
         except LoginError as e:
             abort(409, message=str(e))
 
-        return {'msg': 'Successfully registered'}, 201
+        return {'message': 'Successfully registered'}, 201
 
 
 @blp.route('/login')
@@ -71,7 +71,7 @@ class Logout(MethodView):
 
         jti = get_jwt().get('jti')
         BLOCKLIST.add(jti)
-        return {'msg': 'Successfully logged out'}
+        return {'message': 'Successfully logged out'}
 
 
 @blp.route('/refresh')

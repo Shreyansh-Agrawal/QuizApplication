@@ -8,8 +8,8 @@ import mysql.connector
 from config.message_prompts import ErrorMessage, Headers, LogMessage
 from config.queries import Queries
 from database.database_access import DatabaseAccess
-from models.quiz.category import Category
 from models.database.category_db import CategoryDB
+from models.quiz.category import Category
 from utils.custom_error import DuplicateEntryError
 
 logger = logging.getLogger(__name__)

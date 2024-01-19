@@ -115,7 +115,7 @@ class Queries:
         ORDER BY RAND() LIMIT 10
     '''
     GET_USER_BY_ROLE = '''
-        SELECT username, name, email, registration_date
+        SELECT users.user_id, username, name, email, registration_date
         FROM users INNER JOIN credentials ON users.user_id = credentials.user_id
         WHERE role = %s
     '''
@@ -150,3 +150,4 @@ class Queries:
     DELETE_CATEGORY_BY_ID = 'DELETE FROM categories WHERE category_id = %s'
     DELETE_QUESTION_BY_ID = 'DELETE FROM questions WHERE question_id = %s'
     DELETE_USER_BY_EMAIL = 'DELETE FROM users WHERE email = %s'
+    DELETE_USER_BY_ID = 'DELETE FROM users WHERE user_id = %s'

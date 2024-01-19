@@ -5,10 +5,10 @@ from typing import Dict, List, Tuple
 
 import mysql.connector
 
-from config.message_prompts import DisplayMessage, Headers, LogMessage, ErrorMessage
+from config.message_prompts import ErrorMessage, Headers, LogMessage
 from config.queries import Queries
-from models.users.admin import Admin
 from models.database.user_db import UserDB
+from models.users.admin import Admin
 from utils.custom_error import LoginError
 
 logger = logging.getLogger(__name__)
@@ -49,11 +49,9 @@ class UserController:
             raise LoginError(ErrorMessage.USER_EXISTS_ERROR) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.ADMIN)
-        print(DisplayMessage.CREATE_ADMIN_SUCCESS_MSG)
 
-    def delete_user_by_email(self, role: str, email: str) -> None:
-        '''Delete a Player'''
+    def delete_user_by_id(self, user_id: str) -> None:
+        '''Delete a User'''
 
-        self.db.write(Queries.DELETE_USER_BY_EMAIL, (email, ))
+        self.db.write(Queries.DELETE_USER_BY_ID, (user_id, ))
         logger.debug(LogMessage.DELETE_SUCCESS, Headers.PLAYER)
-        print(DisplayMessage.DELETE_USER_SUCCESS_MSG.format(user=role.title(), email=email))

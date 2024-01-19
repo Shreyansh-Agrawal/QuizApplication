@@ -26,7 +26,7 @@ def access_level(roles: List):
             if claims["cap"] in mapped_roles:
                 return func(*args, **kwargs)
             else:
-                return jsonify(msg="Forbidden"), 403
+                return jsonify(message="Forbidden"), 403
         return wrapper
 
     return decorator

@@ -52,7 +52,7 @@ class Category(MethodView):
         except DuplicateEntryError as e:
             abort(409, message=str(e))
 
-        return {'message': f"Category: {category_data.get('category_name')} created successfully"}
+        return {'message': f"Category: {category_data.get('category_name')} created successfully"}, 201
 
 
 @blp.route('/categories/<string:category_id>')
