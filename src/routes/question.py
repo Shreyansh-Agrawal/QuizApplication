@@ -6,7 +6,7 @@ from flask_smorest import Blueprint
 from config.message_prompts import Roles
 from utils.rbac import access_level
 
-blp = Blueprint('Question', __name__)
+blp = Blueprint('Question', __name__, description='Routes for the Question related functionalities')
 
 
 @blp.route('/categories/questions')

@@ -6,7 +6,7 @@ from flask_smorest import Blueprint
 from config.message_prompts import Roles
 from utils.rbac import access_level
 
-blp = Blueprint('Quiz', __name__)
+blp = Blueprint('Quiz', __name__, description='Routes for the Quiz related functionalities')
 
 
 @blp.route('/leaderboard')

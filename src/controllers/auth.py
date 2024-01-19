@@ -31,15 +31,12 @@ class AuthController:
         user_data = self.db.read(Queries.GET_CREDENTIALS_BY_USERNAME, (username, ))
 
         if not user_data:
-            print(DisplayMessage.AUTH_INVALIDATE_MSG)
             return ()
-        user_password, role, is_password_changed = user_data[0]
+        user_password, role, is_password_changed = user_data[0].values()
         if user_password != password and user_password != hashed_password:
-            print(DisplayMessage.AUTH_INVALIDATE_MSG)
             return ()
 
         logger.debug(LogMessage.LOGIN_SUCCESS)
-        print(DisplayMessage.LOGIN_SUCCESS_MSG)
         return (username, role, is_password_changed)
 
     def signup(self, player_data: Dict) -> str:
@@ -55,5 +52,4 @@ class AuthController:
             raise LoginError(ErrorMessage.USER_EXISTS_ERROR) from e
 
         logger.debug(LogMessage.SIGNUP_SUCCESS)
-        print(DisplayMessage.SIGNUP_SUCCESS_MSG)
         return player_data['username']

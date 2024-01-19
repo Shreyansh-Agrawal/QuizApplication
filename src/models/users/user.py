@@ -18,7 +18,7 @@ class User(ABC):
         email (str): The user's email address.
         username (str): The user's username.
         password (str): The user's password.
-        role (str): The user's role (super admin, admin, player).
+        role (str): The user's role (super_admin, admin, player).
         user_id (str): The unique identifier for the user.
         is_password_changed (int): Flag indicating if the user has changed their password.
         registration_date (str): The date and time of user registration in UTC format.

@@ -6,7 +6,7 @@ from flask_smorest import Blueprint
 from config.message_prompts import Roles
 from utils.rbac import access_level
 
-blp = Blueprint('User', __name__)
+blp = Blueprint('User', __name__, description='Routes for the User related functionalities')
 
 
 @blp.route('/players')
