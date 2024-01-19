@@ -1,7 +1,7 @@
 'Routes for the Authentication related functionalities'
 
-from flask_smorest import Blueprint
 from flask.views import MethodView
+from flask_smorest import Blueprint
 
 blp = Blueprint('Auth', __name__)
 

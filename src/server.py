@@ -28,6 +28,7 @@ from routes.category import blp as CategoryBlueprint
 from routes.question import blp as QuestionBlueprint
 from routes.quiz import blp as QuizBlueprint
 from routes.user import blp as UserBlueprint
+from utils.error_handlers import handle_internal_server_error
 from utils.initialize_app import Initializer
 
 logging.basicConfig(
@@ -38,28 +39,35 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-app = Flask(__name__)
 
-app.config["PROPAGATE_EXCEPTIONS"] = True
-app.config["API_TITLE"] = "Quiz Application"
-app.config["API_VERSION"] = "v1"
-app.config["OPENAPI_VERSION"] = "3.0.3"
-app.config["OPENAPI_JSON_PATH"] = "api-spec.json"
-app.config["OPENAPI_URL_PREFIX"] = "/"
-app.config["OPENAPI_REDOC_PATH"] = "/redoc"
-app.config["OPENAPI_REDOC_URL"] = "https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"
-app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"
-app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
-app.config["OPENAPI_RAPIDOC_PATH"] = "/rapidoc"
-app.config["OPENAPI_RAPIDOC_URL"] = "https://unpkg.com/rapidoc/dist/rapidoc-min.js"
+def create_app():
+    '''Creates and configures the flask app'''
 
-api = Api(app)
+    app = Flask(__name__)
 
-api.register_blueprint(AuthBlueprint, url_prefix='/v1')
-api.register_blueprint(CategoryBlueprint, url_prefix='/v1')
-api.register_blueprint(QuestionBlueprint, url_prefix='/v1')
-api.register_blueprint(QuizBlueprint, url_prefix='/v1')
-api.register_blueprint(UserBlueprint, url_prefix='/v1')
+    app.config["PROPAGATE_EXCEPTIONS"] = True
+    app.config["API_TITLE"] = "Quiz Application"
+    app.config["API_VERSION"] = "v1"
+    app.config["OPENAPI_VERSION"] = "3.0.3"
+    app.config["OPENAPI_JSON_PATH"] = "api-spec.json"
+    app.config["OPENAPI_URL_PREFIX"] = "/"
+    app.config["OPENAPI_REDOC_PATH"] = "/redoc"
+    app.config["OPENAPI_REDOC_URL"] = "https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"
+    app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"
+    app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
+    app.config["OPENAPI_RAPIDOC_PATH"] = "/rapidoc"
+    app.config["OPENAPI_RAPIDOC_URL"] = "https://unpkg.com/rapidoc/dist/rapidoc-min.js"
+
+    app.register_error_handler(Exception, handle_internal_server_error)
+
+    api = Api(app)
+    api.register_blueprint(AuthBlueprint, url_prefix='/v1')
+    api.register_blueprint(CategoryBlueprint, url_prefix='/v1')
+    api.register_blueprint(QuestionBlueprint, url_prefix='/v1')
+    api.register_blueprint(QuizBlueprint, url_prefix='/v1')
+    api.register_blueprint(UserBlueprint, url_prefix='/v1')
+
+    return app
 
 
 def start_quiz_app():
@@ -79,11 +87,10 @@ def start_quiz_app():
     initializer = Initializer(db)
     try:
         initializer.initialize_app()
+        app = create_app()
         app.run(debug=True)
     except Exception as e: # pylint: disable=broad-exception-caught
         logger.exception(e)
-    finally:
-        db.connection.close()
 
     logger.info(LogMessage.SYSTEM_STOP)
 
