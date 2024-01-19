@@ -5,7 +5,7 @@ from typing import Dict, Tuple
 
 import mysql.connector
 
-from config.message_prompts import DisplayMessage, ErrorMessage, LogMessage
+from config.message_prompts import ErrorMessage, LogMessage
 from config.queries import Queries
 from database.database_access import DatabaseAccess
 from models.users.player import Player

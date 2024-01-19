@@ -67,7 +67,7 @@ class Queries:
     INSERT_USER_DATA = 'INSERT INTO users VALUES (%s, %s, %s, %s, %s)'
     INSERT_PLAYER_QUIZ_SCORE = 'INSERT INTO scores VALUES (%s, %s, %s, %s)'
     GET_ALL_CATEGORIES = '''
-        SELECT category_name, admin_username 
+        SELECT *
         FROM categories ORDER BY category_name'''
     GET_ALL_QUESTIONS_DETAIL = '''
         SELECT category_name, question_text, question_type, option_text, questions.admin_username
@@ -144,7 +144,9 @@ class Queries:
         WHERE username = %s
     '''
     UPDATE_CATEGORY_BY_NAME = 'UPDATE categories SET category_name = %s WHERE category_name = %s'
+    UPDATE_CATEGORY_BY_ID = 'UPDATE categories SET category_name = %s WHERE category_id = %s'
     UPDATE_QUESTION_TEXT_BY_ID = 'UPDATE questions SET question_text = %s WHERE question_id = %s'
     DELETE_CATEGORY_BY_NAME = 'DELETE FROM categories WHERE category_name = %s'
+    DELETE_CATEGORY_BY_ID = 'DELETE FROM categories WHERE category_id = %s'
     DELETE_QUESTION_BY_ID = 'DELETE FROM questions WHERE question_id = %s'
     DELETE_USER_BY_EMAIL = 'DELETE FROM users WHERE email = %s'

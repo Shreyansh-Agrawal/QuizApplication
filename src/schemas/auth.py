@@ -5,7 +5,6 @@ from marshmallow import Schema, fields, validate
 from config.regex_patterns import RegexPattern
 
 
-
 class LoginSchema(Schema):
     'Schema for login'
 

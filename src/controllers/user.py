@@ -21,6 +21,12 @@ class UserController:
         self.db = database
         self.user_db = UserDB(self.db)
 
+    def get_user_id(self, username: str) -> str:
+        '''Return user's id'''
+
+        data = self.db.read(Queries.GET_USER_ID_BY_USERNAME, (username, ))
+        return data
+
     def get_player_scores_by_username(self, username: str) -> List[Tuple]:
         '''Return user's scores'''
 
