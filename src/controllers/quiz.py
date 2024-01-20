@@ -1,16 +1,12 @@
 '''Controllers for Operations related to Quiz'''
 
 import logging
-import time
-from typing import List, Tuple
+from datetime import datetime, timezone
+from typing import Dict, List
 
-from config.message_prompts import DisplayMessage, ErrorMessage, Headers, LogMessage
 from config.queries import Queries
-from helpers.start_quiz_helper import StartQuizHelper
-from controllers.question import QuestionController
 from database.database_access import DatabaseAccess
-from utils.custom_error import DataNotFoundError
-from utils.pretty_print import pretty_print
+from utils import validations
 
 logger = logging.getLogger(__name__)
 
@@ -21,58 +17,70 @@ class QuizController:
     def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
 
-    def get_leaderboard(self) -> List[Tuple]:
+    def get_leaderboard(self) -> List[Dict]:
         '''Return top 10 scores for leaderboard'''
 
         data = self.db.read(Queries.GET_LEADERBOARD)
         return data
 
-    def start_quiz(self, username: str, category: str = None) -> None:
-        '''Start a New Quiz'''
+    def get_player_scores(self, player_id: str) -> List[Dict]:
+        '''Return user's scores'''
 
-        logger.debug(LogMessage.START_QUIZ, username)
-        db = DatabaseAccess()
-        question_controller = QuestionController(db)
-        start_quiz_helper = StartQuizHelper()
-        if not category:
-            data = question_controller.get_random_questions()
-        else:
-            data = question_controller.get_random_questions_by_category(category)
-        if len(data) < 10:
-            raise DataNotFoundError(ErrorMessage.INSUFFICIENT_QUESTIONS_ERROR)
+        data = self.db.read(Queries.GET_PLAYER_SCORES_BY_ID, (player_id, ))
+        return data
 
-        print(DisplayMessage.QUIZ_START_MSG)
-        end_time = time.time() + 5*60
-        score = 0
-        player_responses = []
+    def get_random_questions(self, category_id: str = None) -> List[Dict]:
+        '''Return random questions in a category if category_id present else across all categories'''
 
-        # Display question, take player's response and calculate score one by one
-        for question_no, question_data in enumerate(data, 1):
-            question_id, question_text, question_type, correct_answer = question_data
-            options_data = self.db.read(Queries.GET_OPTIONS_FOR_MCQ, (question_id, ))
+        query = Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY if category_id else Queries.GET_RANDOM_QUESTIONS
+        question_data = self.db.read(query, (category_id, ) if category_id else ())
 
-            remaining_time = end_time - time.time()
-            if remaining_time <= 0:
-                print('\nTime\'s up!') # pragma: no cover
-                break # pragma: no cover
+        # Organize the data into the desired format
+        result = [
+            {
+                'question_id': question['question_id'],
+                'question_text': question['question_text'],
+                'question_type': question['question_type'],
+                'options': question['options'].split(',') if question['question_type'].lower() == 'mcq' else []
+            }
+            for question in question_data
+        ]
+        return result
 
-            mins = int(remaining_time // 60)
-            formatted_mins = str(mins).zfill(2)
-            seconds = int(remaining_time % 60)
-            formatted_seconds = str(seconds).zfill(2)
-            print(f'\nTime remaining: {formatted_mins}:{formatted_seconds} mins')
+    def evaluate_player_answers(self, player_id: str, player_answers: List[Dict]) -> List[Dict]:
+        'Evaluate player answers and return score with correct answers'
 
-            start_quiz_helper.display_question(question_no, question_text, question_type, options_data)
-            player_answer = start_quiz_helper.get_player_response(question_type)
+        question_ids = tuple(response['question_id'] for response in player_answers)
+        formatted_query = Queries.GET_QUESTION_DATA_BY_QUESTION_ID % (', '.join(['%s'] * len(question_ids)))
+        question_data = self.db.read(formatted_query, question_ids)
+        result = {
+            'score': 0,
+            'responses': []
+        }
+        question_data = sorted(question_data, key=lambda x: x['question_id'])
+        player_answers = sorted(player_answers, key=lambda x: x['question_id'])
 
-            if question_type.lower() == 'mcq':
-                player_answer = options_data[player_answer-1][0]
-            if player_answer.lower() == correct_answer.lower():
-                score += 10
-            player_responses.append((question_text, player_answer, correct_answer))
+        for question_data, player_answers in zip(question_data, player_answers):
+            correct_answer = question_data['correct_answer']
+            is_correct = player_answers['user_answer'] == correct_answer
+            result['responses'].append({
+                'question_id': question_data['question_id'],
+                'question_text': question_data['question_text'],
+                'user_answer': player_answers['user_answer'],
+                'correct_answer': correct_answer,
+                'is_correct': is_correct
+            })
+            if is_correct:
+                result['score'] += 10
 
-        print(DisplayMessage.DISPLAY_SCORE_MSG.format(score=score))
-        print(DisplayMessage.REVIEW_RESPONSES_MSG)
-        pretty_print(data=player_responses, headers=(Headers.QUES, Headers.PLAYER_ANS, Headers.ANS))
-        start_quiz_helper.save_quiz_score(username, score)
-        logger.debug(LogMessage.COMPLETE_QUIZ, username)
+        self.save_quiz_score(player_id, result['score'])
+        return result
+
+    def save_quiz_score(self, player_id: str, score: int) -> None:
+        '''Save Player's Quiz Score'''
+
+        score_id = validations.validate_id(entity='score')
+        time = datetime.now(timezone.utc) # current utc time
+        timestamp = time.strftime('%Y-%m-%d %H:%M:%S') # yyyy-mm-dd
+
+        self.db.write(Queries.INSERT_PLAYER_QUIZ_SCORE, (score_id, player_id, score, timestamp))

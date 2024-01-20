@@ -1,13 +1,21 @@
 'Routes for the Quiz related functionalities'
 
+from flask import request
 from flask.views import MethodView
-from flask_smorest import Blueprint
+from flask_jwt_extended import get_jwt_identity
+from flask_smorest import Blueprint, abort
 
 from config.message_prompts import Roles
+from controllers.quiz import QuizController
+from controllers.user import UserController
+from database.database_access import DatabaseAccess
+from schemas.quiz import AnswerSchema
 from utils.rbac import access_level
 
 blp = Blueprint('Quiz', __name__, description='Routes for the Quiz related functionalities')
-
+db = DatabaseAccess()
+quiz_controller = QuizController(db)
+user_controller = UserController(db)
 
 @blp.route('/leaderboard')
 class Leaderboard(MethodView):
@@ -20,6 +28,11 @@ class Leaderboard(MethodView):
     def get(self):
         'Get leaderboard details'
 
+        leaderboard_data = quiz_controller.get_leaderboard()
+        if not leaderboard_data:
+            abort(404, message='No data in the leaderboard')
+        return leaderboard_data
+
 
 @blp.route('/scores/<string:player_id>')
 class ScoreByPlayerId(MethodView):
@@ -31,6 +44,11 @@ class ScoreByPlayerId(MethodView):
     @access_level(roles=[Roles.PLAYER])
     def get(self, player_id):
         'Get past scores of a player'
+
+        scores = quiz_controller.get_player_scores(player_id)
+        if not scores:
+            abort(404, message='No scores for this player')
+        return scores
 
 
 @blp.route('/quizzes')
@@ -47,6 +65,11 @@ class Quiz(MethodView):
 
         Query Parameters: category_id
         '''
+        category_id = request.args.get('category_id')
+        question_data = quiz_controller.get_random_questions(category_id)
+        if not question_data:
+            abort(404, message='No questions present')
+        return question_data
 
 
 @blp.route('/quizzes/answers')
@@ -57,5 +80,13 @@ class QuizAnswer(MethodView):
     '''
 
     @access_level(roles=[Roles.PLAYER])
-    def post(self):
+    @blp.arguments(AnswerSchema(many=True))
+    def post(self, player_answers):
         'Post player responses to the questions'
+
+        username = get_jwt_identity()
+        data = user_controller.get_user_id(username)
+        player_id = data[0].get('user_id')
+
+        result = quiz_controller.evaluate_player_answers(player_id, player_answers)
+        return result, 201

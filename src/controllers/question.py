@@ -33,23 +33,11 @@ class QuestionController:
         data = self.db.read(Queries.GET_ALL_QUESTIONS_DETAIL)
         return data
 
-    def get_random_questions(self) -> List[Tuple]:
-        '''Return random questions across all categories'''
-
-        data = self.db.read(Queries.GET_RANDOM_QUESTIONS)
-        return data
-
     def get_questions_by_category(self, category_id: str) -> List[Tuple]:
         '''Return quiz questions by category'''
 
         logger.debug(LogMessage.GET_QUES_BY_CATEGORY)
         data = self.db.read(Queries.GET_QUESTIONS_BY_CATEGORY, (category_id, ))
-        return data
-
-    def get_random_questions_by_category(self, category: str) -> List[Tuple]:
-        '''Return random questions by category'''
-
-        data = self.db.read(Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY, (category, ))
         return data
 
     def create_question(self, category_id: str, question_data: Dict, admin_username: str) -> None:

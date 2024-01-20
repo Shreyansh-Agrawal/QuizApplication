@@ -27,12 +27,6 @@ class UserController:
         data = self.db.read(Queries.GET_USER_ID_BY_USERNAME, (username, ))
         return data
 
-    def get_player_scores_by_username(self, username: str) -> List[Tuple]:
-        '''Return user's scores'''
-
-        data = self.db.read(Queries.GET_PLAYER_SCORES_BY_USERNAME, (username, ))
-        return data
-
     def get_all_users_by_role(self, role: str) -> List[Tuple]:
         '''Return all users with their details'''
 

@@ -84,11 +84,11 @@ class Queries:
         WHERE username = %s
     '''
     GET_LEADERBOARD = '''
-        SELECT username, MAX(score) as max_score, MIN(timestamp) as min_timestamp
+        SELECT player_id, username, MAX(score) as score, MIN(timestamp) as timestamp
         FROM scores
         INNER JOIN credentials ON scores.player_id = credentials.user_id
-        GROUP BY username
-        ORDER BY max_score DESC, min_timestamp ASC
+        GROUP BY player_id
+        ORDER BY score DESC, timestamp ASC
         LIMIT 10
     '''
     GET_OPTIONS_FOR_MCQ = 'SELECT option_text FROM options WHERE question_id = %s ORDER BY RAND()'
@@ -100,19 +100,19 @@ class Queries:
         WHERE options.isCorrect = 1 AND categories.category_id = %s
     '''
     GET_RANDOM_QUESTIONS = '''
-        SELECT questions.question_id, question_text, question_type, option_text
-        FROM questions
-        INNER JOIN options ON questions.question_id = options.question_id
-        WHERE options.isCorrect = 1
-        ORDER BY RAND() LIMIT 10
+        SELECT q.question_id, q.question_text, q.question_type, GROUP_CONCAT(o.option_text) as options
+        FROM Questions q
+        LEFT JOIN Options o ON q.question_id = o.question_id
+        GROUP BY q.question_id
+        ORDER BY RAND() LIMIT 10;
     '''
     GET_RANDOM_QUESTIONS_BY_CATEGORY = '''
-        SELECT questions.question_id, question_text, question_type, option_text
-        FROM questions 
-        INNER JOIN categories ON questions.category_id = categories.category_id
-        INNER JOIN options ON questions.question_id = options.question_id
-        WHERE options.isCorrect = 1 AND category_name = %s
-        ORDER BY RAND() LIMIT 10
+        SELECT q.question_id, q.question_text, q.question_type, GROUP_CONCAT(o.option_text) as options
+        FROM Questions q
+        LEFT JOIN Options o ON q.question_id = o.question_id
+        WHERE q.category_id = %s
+        GROUP BY q.question_id
+        ORDER BY RAND() LIMIT 10;
     '''
     GET_USER_BY_ROLE = '''
         SELECT users.user_id, username, name, email, registration_date
@@ -131,12 +131,18 @@ class Queries:
         INNER JOIN credentials ON users.user_id = credentials.user_id
         WHERE username = %s
     '''
-    GET_PLAYER_SCORES_BY_USERNAME = '''
-        SELECT timestamp, score 
+    GET_PLAYER_SCORES_BY_ID = '''
+        SELECT score_id, score, timestamp
         FROM scores 
         INNER JOIN credentials ON scores.player_id = credentials.user_id
-        WHERE username = %s
+        WHERE scores.player_id = %s
         ORDER BY timestamp DESC
+    '''
+    GET_QUESTION_DATA_BY_QUESTION_ID='''
+        SELECT q.question_id, q.question_text, o.option_text as correct_answer
+        FROM questions q
+        LEFT JOIN options o ON q.question_id = o.question_id AND o.isCorrect = 1
+        WHERE q.question_id IN (%s)
     '''
     UPDATE_ADMIN_PASSWORD_BY_USERNAME = '''
         UPDATE credentials 
