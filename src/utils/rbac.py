@@ -1,17 +1,23 @@
 'Role Based Access'
 
+import os
 from functools import wraps
+from pathlib import Path
 from typing import List
 
+from dotenv import load_dotenv
 from flask import jsonify
 from flask_jwt_extended import get_jwt, verify_jwt_in_request
 
 from config.message_prompts import Roles
 
+dotenv_path = Path('.env')
+load_dotenv(dotenv_path=dotenv_path)
+
 ROLE_MAPPING = {
-    Roles.SUPER_ADMIN: 'SFAB6c',
-    Roles.ADMIN: 'SHVpHQ',
-    Roles.PLAYER: 'SSwYVW'
+    Roles.SUPER_ADMIN: os.getenv('SUPER_ADMIN_MAPPING'),
+    Roles.ADMIN: os.getenv('ADMIN_MAPPING'),
+    Roles.PLAYER: os.getenv('PLAYER_MAPPING')
 }
 
 def access_level(roles: List):
@@ -25,8 +31,6 @@ def access_level(roles: List):
 
             if claims["cap"] in mapped_roles:
                 return func(*args, **kwargs)
-            else:
-                return jsonify(message="Forbidden"), 403
+            return jsonify(message="Forbidden"), 403
         return wrapper
-
     return decorator

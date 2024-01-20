@@ -1,6 +1,8 @@
 # QuizApplication
 
-This is a Python-based console application for Quiz management. The application is designed to manage users, categories, questions, and quizzes. It provides functionality for Super Admins, Admins, and Players. You can use `pipenv` to manage your project dependencies.
+Welcome to the Quiz Application! This application is designed to manage users, categories, questions, and quizzes. It provides functionality for Super Admins, Admins, and Players. Developed with Python and Flask, the application follows clean code principles, adhering to SOLID principles and object-oriented programming (OOPs) practices. Unit testing is implemented using pytest to ensure robust functionality. This application was created during an internship at WatchGuard, Noida. 
+
+Consider using `pipenv` to manage your project dependencies.
 
 ## Getting Started
 
@@ -15,6 +17,10 @@ MYSQL_USER=YourMySQLusername
 MYSQL_PASSWORD=YourMySQLpassword
 MYSQL_HOST=YourMySQLhost
 MYSQL_DB=YourMySQLdb
+JWT_SECRET_KEY=YourSecretKey
+SUPER_ADMIN_MAPPING=YourSuperAdminMapping
+ADMIN_MAPPING=YourAdminMapping
+PLAYER_MAPPING=YourPlayerMapping
 ```
 
 ### Prerequisites
@@ -52,12 +58,12 @@ python -m pipenv install
 To run the application, use the following command:
 
 ```bash
-pipenv run python .\src\app.py
+pipenv run python .\src\server.py
 ```
 
 ### Run the Tests
 
-To run the Tests, use the following command:
+The application includes unit testing implemented using pytest. To run the Tests, use the following command:
 
 ```bash
 pipenv shell
@@ -69,13 +75,14 @@ pytest
 ```bash
 QuizApplication/
 ├── docs/
-│   ├── documentation.pdf
+│   ├── API Endpoint Specification.pdf
+│   ├── Requirements and Design Specification.pdf
 ├── src/
 │   ├── config/
 │   │   ├── file_paths.py
 │   │   ├── message_prompts.py
 │   │   ├── queries.py
-│   │   ├── questions.json
+│   │   ├── quiz_data.json
 │   │   ├── regex_patterns.py
 │   ├── controllers/
 │   │   ├── auth.py
@@ -83,21 +90,16 @@ QuizApplication/
 │   │   ├── question.py
 │   │   ├── quiz.py
 │   │   ├── user.py
-│   ├── helpers/
-│   │   ├── auth_handler.py
-│   │   ├── create_quiz_helper.py
-│   │   ├── quiz_handler.py
-│   │   ├── start_quiz_helper.py
-│   │   ├── user_handler.py
-│   ├── menu/
-│   │   ├── admin_menu.py
-│   │   ├── main_menu.py
-│   │   ├── player_menu.py
-│   │   ├── super_admin_menu.py
+│   ├── database/
+│   │   ├── database_access.py
+│   │   ├── database_connection.py
 │   ├── models/
 │   │   ├── database/
-│   │   │   ├── database_access.py
+│   │   │   ├── category_db.py
 │   │   │   ├── database_saver.py
+│   │   │   ├── option_db.py
+│   │   │   ├── question_db.py
+│   │   │   ├── user_db.py
 │   │   ├── quiz/
 │   │   │   ├── category.py
 │   │   │   ├── option.py
@@ -107,16 +109,28 @@ QuizApplication/
 │   │   │   ├── admin.py
 │   │   │   ├── player.py
 │   │   │   ├── super_admin.py
-│   │   │   ├── user_manager.py
 │   │   │   ├── user.py
+│   ├── routes/
+│   │   ├── auth.py
+│   │   ├── category.py
+│   │   ├── question.py
+│   │   ├── quiz.py
+│   │   ├── user.py
+│   ├── schemas/
+│   │   ├── auth.py
+│   │   ├── category.py
+│   │   ├── question.py
+│   │   ├── quiz.py
+│   │   ├── user.py
 │   ├── utils/
+│   │   ├── blocklist.py
 │   │   ├── custom_error.py
+│   │   ├── error_handlers.py
 │   │   ├── initialize_app.py
-│   │   ├── json_to_db_loader.py
 │   │   ├── password_hasher.py
-│   │   ├── pretty_print.py
+│   │   ├── rbac.py
 │   │   ├── validations.py
-│   ├── app.py
+│   ├── server.py
 ├── tests/
 │   ├── test_config/
 │   │   ├── test_file_paths.py
@@ -125,23 +139,11 @@ QuizApplication/
 │   │   ├── test_questions.json
 │   │   ├── test_regex_patterns.py
 │   ├── test_controllers/
-│   │   ├── test_handlers/
-│   │   │   ├── test_auth_handler.py
-│   │   │   ├── test_quiz_handler.py
-│   │   │   ├── test_user_handler.py
-│   │   ├── test_helpers/
-│   │   │   ├── test_create_quiz_helper.py
-│   │   │   ├── test_start_quiz_helper.py
 │   │   ├── test_auth_controller.py
 │   │   ├── test_quiz_controller.py
 │   │   ├── test_user_controller.py
 │   ├── test_database/
 │   │   ├── test_database_access.py
-│   ├── test_menu/
-│   │   ├── test_admin_menu.py
-│   │   ├── test_main_menu.py
-│   │   ├── test_player_menu.py
-│   │   ├── test_super_admin_menu.py
 │   ├── test_models/
 │   │   ├── test_database_saver.py
 │   │   ├── test_quiz.py
@@ -156,32 +158,13 @@ QuizApplication/
 │   │   ├── test_validations.py
 │   ├── conftest.py
 │   ├── test_app.py
-├── .env
+├── .env.example
 ├── .gitignore
-├── logs.log
 ├── Pipfile
 ├── Pipfile.lock
 ├── pytest.ini
 ├── README.md
 ```
-
-## Models
-
-- **user.py**: Contains classes for users, including `User`, `SuperAdmin`, `Admin`, and `Player`.
-
-- **quiz.py**: Contains classes for quiz entities, such as `QuizEntity`, `Category`, `Option`, and `Question`.
-
-- **database_saver.py**: Contains interface for `DatabaseSaver`.
-
-- **user_manager.py**: Contains classes responsible for saving users to the database, such as `UserManager`.
-
-## Controllers
-
-- **auth_controller.py**: Manages user authentication, including signup and login functionalities.
-
-- **quiz_controller.py**: Manages quiz-related operations, including managing categories, questions, and options.
-
-- **user_controller.py**: Manages user-related operations, catering to superadmins, admins, and players.
 
 ## Database
 
@@ -198,19 +181,19 @@ The application employs an MySQL database with the following tables:
 
 ### Super Admin
 
-- **Create Admin Account**: Super Admins can create new admin accounts.
-- **View Admins**: Super Admins can view a list of admins.
-- **Delete Admin Details**: Super Admins can delete admin accounts.
+- **Create Admin Account**: Create new admin accounts.
+- **View Admins**: View a list of admins.
+- **Delete Admin Details**: Delete admin accounts.
 
 ### Admin
 
-- **Manage Players**: Admins can view player data and delete player accounts.
-- **Manage Quizzes**: Admins can add new quiz categories, add questions, and view existing categories and questions.
+- **Manage Players**: View player data and delete player accounts.
+- **Manage Quizzes**: Add, update, and delete quiz categories and questions. View existing categories and questions.
 
 ### Player
 
-- **Take a Quiz**: Players can participate in quizzes by selecting a category or can play a random quiz.
-- **View Leaderboard**: Players can see the quiz leaderboard.
-- **View Your Scores**: Players can view their own past quiz scores.
+- **Take a Quiz**: Participate in quizzes by selecting a category or can play a random quiz.
+- **View Leaderboard**: View the quiz leaderboard.
+- **View Your Scores**: View their own past quiz scores.
 
 Feel free to explore the project, and don't forget to set up your environment and database before running the application.

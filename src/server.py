@@ -67,7 +67,7 @@ def create_app():
     app.config["OPENAPI_RAPIDOC_URL"] = "https://unpkg.com/rapidoc/dist/rapidoc-min.js"
     app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
 
-    # app.register_error_handler(Exception, handle_internal_server_error)
+    app.register_error_handler(Exception, handle_internal_server_error)
 
     api = Api(app)
     jwt = JWTManager(app)
