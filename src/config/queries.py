@@ -70,7 +70,7 @@ class Queries:
         SELECT *
         FROM categories ORDER BY category_name'''
     GET_ALL_QUESTIONS_DETAIL = '''
-        SELECT category_name, question_text, question_type, option_text, questions.admin_username
+        SELECT category_name, question_text, question_type, option_text as answer, questions.admin_username
         FROM questions 
         INNER JOIN categories ON questions.category_id = categories.category_id
         INNER JOIN options ON questions.question_id = options.question_id
@@ -93,11 +93,11 @@ class Queries:
     '''
     GET_OPTIONS_FOR_MCQ = 'SELECT option_text FROM options WHERE question_id = %s ORDER BY RAND()'
     GET_QUESTIONS_BY_CATEGORY = '''
-        SELECT question_text, question_type, option_text, questions.admin_username
+        SELECT question_text, question_type, option_text as answer, questions.admin_username
         FROM questions 
         INNER JOIN categories ON questions.category_id = categories.category_id
         INNER JOIN options ON questions.question_id = options.question_id
-        WHERE options.isCorrect = 1 AND category_name = %s
+        WHERE options.isCorrect = 1 AND categories.category_id = %s
     '''
     GET_RANDOM_QUESTIONS = '''
         SELECT questions.question_id, question_text, question_type, option_text
