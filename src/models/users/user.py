@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Dict
 
-from utils import validations
+from utils.id_generator import generate_id
 
 
 @dataclass
@@ -34,7 +34,7 @@ class User(ABC):
 
     def __post_init__(self) -> None:
         self.is_password_changed = 0 if self.role == 'admin' else 1
-        self.user_id = validations.validate_id(entity=self.role)
+        self.user_id = generate_id(entity=self.role)
         self.registration_date = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 
     @classmethod

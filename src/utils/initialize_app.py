@@ -7,7 +7,7 @@ from pathlib import Path
 import mysql.connector
 from dotenv import load_dotenv
 
-from config.message_prompts import Headers, LogMessage
+from config.message_prompts import Headers, LogMessage, Roles
 from config.queries import Queries
 from database.database_access import DatabaseAccess
 from models.users.super_admin import SuperAdmin
@@ -49,7 +49,7 @@ class Initializer:
             None
         '''
 
-        user = self.db.read(Queries.GET_USER_BY_ROLE, ('super admin', ))
+        user = self.db.read(Queries.GET_USER_BY_ROLE, (Roles.SUPER_ADMIN, ))
         if user:
             return
 

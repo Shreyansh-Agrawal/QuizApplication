@@ -13,8 +13,8 @@ from database.database_access import DatabaseAccess
 from models.database.question_db import QuestionDB
 from models.quiz.option import Option
 from models.quiz.question import Question
-from utils import validations
 from utils.custom_error import DuplicateEntryError
+from utils.id_generator import generate_id
 
 logger = logging.getLogger(__name__)
 
@@ -27,18 +27,66 @@ class QuestionController:
         self.question_db = QuestionDB(self.db)
         self.user_controller = UserController(self.db)
 
-    def get_all_questions(self) -> List[Tuple]:
-        '''Return all quiz questions'''
+    def get_quiz_data(self, category_id: str = None) -> List[Tuple]:
+        '''Return the quiz data in a specified category or across all categories'''
 
-        data = self.db.read(Queries.GET_ALL_QUESTIONS_DETAIL)
-        return data
+        query = Queries.GET_QUIZ_DATA
+        params = ()
+        if category_id:
+            query += ' WHERE c.category_id = %s'
+            params = (category_id, )
 
-    def get_questions_by_category(self, category_id: str) -> List[Tuple]:
-        '''Return quiz questions by category'''
+        query += ' ORDER BY c.category_id, q.question_id, o.option_id'
+        data = self.db.read(query, params)
 
-        logger.debug(LogMessage.GET_QUES_BY_CATEGORY)
-        data = self.db.read(Queries.GET_QUESTIONS_BY_CATEGORY, (category_id, ))
-        return data
+        quiz_data = []
+        current_category = None
+        current_question = None
+        for question_data in data:
+            if question_data['category_id'] != current_category:
+                # New category
+                current_category = question_data['category_id']
+                quiz_data.append({
+                    'category_id': current_category,
+                    'category': question_data['category_name'],
+                    'created_by': question_data['category_creator_id'],
+                    'question_data': []
+                })
+                current_question = None
+
+            if question_data['question_id'] != current_question:
+                # New question
+                current_question = question_data['question_id']
+                correct_answer = None
+                other_options = []
+
+                if question_data['isCorrect']:
+                    correct_answer = question_data['option_text']
+                else:
+                    other_options.append(question_data['option_text'])
+
+                quiz_data[-1]['question_data'].append({
+                    'question_id': current_question,
+                    'question_text': question_data['question_text'],
+                    'question_type': question_data['question_type'],
+                    'created_by': question_data['question_creator_id'],
+                    'options': {
+                        'answer': correct_answer,
+                        'other_options': other_options
+                    }
+                })
+            else:
+                # Additional option for the same question
+                if question_data['isCorrect']:
+                    correct_answer = question_data['option_text']
+                else:
+                    other_options.append(question_data['option_text'])
+
+                quiz_data[-1]['question_data'][-1]['options'] = {
+                    'answer': correct_answer,
+                    'other_options': other_options
+                }
+        return quiz_data
 
     def create_question(self, category_id: str, question_data: Dict, admin_username: str) -> None:
         '''Add Questions in a Category'''
@@ -76,7 +124,7 @@ class QuestionController:
         user_data = self.user_controller.get_user_id(admin_username)
         admin_id = user_data[0].get('user_id')
         for category_data in quiz_data['quiz_data']:
-            category_id = validations.validate_id(entity='category')
+            category_id = generate_id(entity='category')
             category_name = category_data['category']
             try:
                 self.db.write(Queries.INSERT_CATEGORY, (category_id, admin_id, admin_username, category_name))
@@ -84,10 +132,10 @@ class QuestionController:
                 logger.debug(e)
 
             for question_data in category_data['question_data']:
-                question_id = validations.validate_id(entity='question')
+                question_id = generate_id(entity='question')
                 question_text = question_data['question_text']
                 question_type = question_data['question_type'].upper()
-                answer_id = validations.validate_id(entity='option')
+                answer_id = generate_id(entity='option')
                 answer_text = question_data['options']['answer']
                 try:
                     self.db.write(
@@ -98,7 +146,7 @@ class QuestionController:
 
                     if question_type.lower() == 'mcq':
                         for i in range(3):
-                            other_option_id = validations.validate_id(entity='option')
+                            other_option_id = generate_id(entity='option')
                             other_option = question_data['options']['other_options'][i]
 
                             self.db.write(Queries.INSERT_OPTION, (other_option_id, question_id, other_option, 0))

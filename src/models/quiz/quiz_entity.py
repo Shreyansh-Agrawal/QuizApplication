@@ -1,10 +1,10 @@
 '''Contains classes for Quiz, Category, Question and Option'''
 
 from abc import ABC, abstractmethod
-from typing import Dict
 from dataclasses import dataclass, field
+from typing import Dict
 
-from utils import validations
+from utils.id_generator import generate_id
 
 
 @dataclass
@@ -22,7 +22,7 @@ class QuizEntity(ABC):
     entity_id: str = field(init=False)
 
     def __post_init__(self) -> None:
-        self.entity_id = validations.validate_id(entity=self.quiz_entity)
+        self.entity_id = generate_id(entity=self.quiz_entity)
 
     @classmethod
     @abstractmethod

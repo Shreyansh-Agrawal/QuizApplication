@@ -3,7 +3,7 @@
 import hashlib
 
 
-def hash_password(password: str):
+def hash_password(password: str) -> str:
     '''
     Hashes a password using hashlib.
 

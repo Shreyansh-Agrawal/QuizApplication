@@ -58,7 +58,8 @@ python -m pipenv install
 To run the application, use the following command:
 
 ```bash
-pipenv run python .\src\server.py
+cd .\src\
+python -m flask --app server run
 ```
 
 ### Run the Tests
@@ -126,10 +127,11 @@ QuizApplication/
 │   │   ├── blocklist.py
 │   │   ├── custom_error.py
 │   │   ├── error_handlers.py
+│   │   ├── id_generator.py
 │   │   ├── initialize_app.py
 │   │   ├── password_hasher.py
 │   │   ├── rbac.py
-│   │   ├── validations.py
+│   ├── requirements.txt
 │   ├── server.py
 ├── tests/
 │   ├── test_config/

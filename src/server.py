@@ -48,9 +48,22 @@ dotenv_path = Path('.env')
 load_dotenv(dotenv_path=dotenv_path)
 
 
+def initialize_quiz_app():
+    '''Function to initialize the Application.'''
+
+    logger.info(LogMessage.SYSTEM_START)
+    db = DatabaseAccess()
+    initializer = Initializer(db)
+    try:
+        initializer.initialize_app()
+    except Exception as e: # pylint: disable=broad-exception-caught
+        logger.exception(e)
+
+
 def create_app():
     '''Creates and configures the flask app'''
 
+    initialize_quiz_app()
     app = Flask(__name__)
 
     app.config["PROPAGATE_EXCEPTIONS"] = True
@@ -134,30 +147,4 @@ def create_app():
     return app
 
 
-def start_quiz_app():
-    '''
-    Function to start the Application.
-
-    This function serves as the entry point to the Quiz API. 
-    It initializes the Flask application and sets up the necessary components 
-    for handling HTTP requests. It then starts the application, allowing clients 
-    to interact with the quiz functionalities through the defined API routes.
-
-    Returns:
-        None
-    '''
-    logger.info(LogMessage.SYSTEM_START)
-    db = DatabaseAccess()
-    initializer = Initializer(db)
-    try:
-        initializer.initialize_app()
-        app = create_app()
-        app.run(debug=True)
-    except Exception as e: # pylint: disable=broad-exception-caught
-        logger.exception(e)
-
-    logger.info(LogMessage.SYSTEM_STOP)
-
-
-if __name__ == '__main__':
-    start_quiz_app() # pragma: no cover
+flask_app = create_app()

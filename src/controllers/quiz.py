@@ -6,7 +6,7 @@ from typing import Dict, List
 
 from config.queries import Queries
 from database.database_access import DatabaseAccess
-from utils import validations
+from utils.id_generator import generate_id
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,8 @@ class QuizController:
 
         query = Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY if category_id else Queries.GET_RANDOM_QUESTIONS
         question_data = self.db.read(query, (category_id, ) if category_id else ())
-
+        if len(question_data) < 10:
+            return []
         # Organize the data into the desired format
         result = [
             {
@@ -62,7 +63,7 @@ class QuizController:
 
         for question_data, player_answers in zip(question_data, player_answers):
             correct_answer = question_data['correct_answer']
-            is_correct = player_answers['user_answer'] == correct_answer
+            is_correct = player_answers['user_answer'].lower() == correct_answer.lower()
             result['responses'].append({
                 'question_id': question_data['question_id'],
                 'question_text': question_data['question_text'],
@@ -79,7 +80,7 @@ class QuizController:
     def save_quiz_score(self, player_id: str, score: int) -> None:
         '''Save Player's Quiz Score'''
 
-        score_id = validations.validate_id(entity='score')
+        score_id = generate_id(entity='score')
         time = datetime.now(timezone.utc) # current utc time
         timestamp = time.strftime('%Y-%m-%d %H:%M:%S') # yyyy-mm-dd
 

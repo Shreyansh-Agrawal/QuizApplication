@@ -224,7 +224,7 @@ class LogMessage:
     LOGIN_SUCCESS='Login Successful'
     SIGNUP_INITIATED='Signup Initiated'
     SIGNUP_SUCCESS='Signup Successful'
-    SYSTEM_START='app.py running'
+    SYSTEM_START='System Started'
     SYSTEM_STOP='Stopping Application'
     INITIALIZE_APP_SUCCESS='Initialization Complete'
     CREATE_ENTITY='Creating %s'

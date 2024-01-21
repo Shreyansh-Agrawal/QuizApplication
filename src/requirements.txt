@@ -1,0 +1,7 @@
+shortuuid
+python-dotenv
+mysql-connector-python
+flask
+flask-jwt-extended
+flask-smorest
+gunicorn

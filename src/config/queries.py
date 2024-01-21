@@ -77,6 +77,21 @@ class Queries:
         WHERE options.isCorrect = 1
         ORDER BY category_name
     '''
+    GET_QUIZ_DATA = '''
+        SELECT
+            c.category_id,
+            c.category_name,
+            c.admin_id as category_creator_id,
+            q.question_id,
+            q.question_text,
+            q.admin_id as question_creator_id,
+            q.question_type,
+            o.option_text,
+            o.isCorrect
+        FROM Categories c
+        JOIN Questions q ON c.category_id = q.category_id
+        LEFT JOIN Options o ON q.question_id = o.question_id
+    '''
     GET_CATEGORY_ID_BY_NAME = 'SELECT category_id FROM categories WHERE category_name = %s'
     GET_CREDENTIALS_BY_USERNAME = '''
         SELECT password, role, isPasswordChanged
@@ -138,7 +153,7 @@ class Queries:
         WHERE scores.player_id = %s
         ORDER BY timestamp DESC
     '''
-    GET_QUESTION_DATA_BY_QUESTION_ID='''
+    GET_QUESTION_DATA_BY_QUESTION_ID = '''
         SELECT q.question_id, q.question_text, o.option_text as correct_answer
         FROM questions q
         LEFT JOIN options o ON q.question_id = o.question_id AND o.isCorrect = 1

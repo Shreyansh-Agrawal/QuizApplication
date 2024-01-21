@@ -29,22 +29,19 @@ class Question(MethodView):
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
-    @blp.response(200, QuestionSchema(many=True))
+    # @blp.response(200, QuestionSchema(many=True))
     def get(self):
         '''
-        Get all questions in a specified category or across all categories
+        Get quiz data in a specified category or across all categories
 
         Query Parameters: category_id
         '''
         category_id = request.args.get('category_id')
-        if category_id:
-            questions = question_controller.get_questions_by_category(category_id)
-        else:
-            questions = question_controller.get_all_questions()
+        quiz_data = question_controller.get_quiz_data(category_id)
 
-        if not questions:
+        if not quiz_data:
             abort(404, message='No questions present')
-        return questions
+        return {'quiz_data': quiz_data}
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
     @blp.arguments(QuizDataSchema)

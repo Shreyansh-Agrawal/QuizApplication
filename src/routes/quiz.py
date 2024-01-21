@@ -68,7 +68,7 @@ class Quiz(MethodView):
         category_id = request.args.get('category_id')
         question_data = quiz_controller.get_random_questions(category_id)
         if not question_data:
-            abort(404, message='No questions present')
+            abort(404, message='Not enough questions')
         return question_data
 
 
