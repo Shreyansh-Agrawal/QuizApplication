@@ -37,17 +37,14 @@ class Category(MethodView):
             abort(404, message='No category present')
         return category_data
 
-    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
+    @access_level(roles=[Roles.ADMIN])
     @blp.arguments(CategorySchema)
     def post(self, category_data):
         'Create a new category'
 
-        username = get_jwt_identity()
-        data = user_controller.get_user_id(username)
-        user_id = data[0].get('user_id')
+        user_id = get_jwt_identity()
         try:
             category_data['admin_id'] = user_id
-            category_data['admin_username'] = username
             category_controller.create_category(category_data)
         except DuplicateEntryError as e:
             abort(409, message=str(e))
@@ -63,22 +60,25 @@ class CategoryById(MethodView):
         Delete an existing category
     '''
 
-    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
+    @access_level(roles=[Roles.ADMIN])
     @blp.arguments(CategoryUpdateSchema)
-    def put(self, category_data, category_id):
+    def patch(self, category_data, category_id):
         'Update an existing category'
 
         updated_category_name = category_data.get('updated_category_name')
         try:
-            category_controller.update_category(category_id, updated_category_name)
+            row_affected = category_controller.update_category(category_id, updated_category_name)
         except DuplicateEntryError as e:
             abort(409, message=str(e))
-
+        if not row_affected:
+            abort(404, message='Category does not exists')
         return {'message': "Category updated successfully"}
 
-    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
+    @access_level(roles=[Roles.ADMIN])
     def delete(self, category_id):
         'Delete an existing category'
 
-        category_controller.delete_category(category_id)
+        row_affected = category_controller.delete_category(category_id)
+        if not row_affected:
+            abort(404, message='Category does not exists')
         return {'message': "Category deleted successfully"}

@@ -10,7 +10,6 @@ class InitializationQueries:
         CREATE TABLE IF NOT EXISTS categories (
             category_id VARCHAR(10) PRIMARY KEY,
             admin_id VARCHAR(10),
-            admin_username VARCHAR(25),
             category_name VARCHAR(50) UNIQUE
         )'''
     CREATE_CREDENTIALS_TABLE= '''
@@ -34,7 +33,6 @@ class InitializationQueries:
             question_id VARCHAR(10) PRIMARY KEY,
             category_id VARCHAR(10),
             admin_id VARCHAR(10),
-            admin_username VARCHAR(25),
             question_text VARCHAR(250) UNIQUE,
             question_type VARCHAR(25),
             FOREIGN KEY (category_id) REFERENCES categories (category_id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -60,12 +58,13 @@ class InitializationQueries:
 class Queries:
     '''Contains database queries'''
 
-    INSERT_CATEGORY = 'INSERT INTO categories VALUES (%s, %s, %s, %s)'
+    INSERT_CATEGORY = 'INSERT INTO categories VALUES (%s, %s, %s)'
     INSERT_CREDENTIALS = 'INSERT INTO credentials VALUES (%s, %s, %s, %s)'
     INSERT_OPTION = 'INSERT INTO options VALUES (%s, %s, %s, %s)'
-    INSERT_QUESTION = 'INSERT INTO questions VALUES (%s, %s, %s, %s, %s, %s)'
+    INSERT_QUESTION = 'INSERT INTO questions VALUES (%s, %s, %s, %s, %s)'
     INSERT_USER_DATA = 'INSERT INTO users VALUES (%s, %s, %s, %s, %s)'
     INSERT_PLAYER_QUIZ_SCORE = 'INSERT INTO scores VALUES (%s, %s, %s, %s)'
+    GET_USERNAME = 'SELECT username FROM credentials WHERE username = %s'
     GET_ALL_CATEGORIES = '''
         SELECT *
         FROM categories ORDER BY category_name'''
@@ -94,7 +93,7 @@ class Queries:
     '''
     GET_CATEGORY_ID_BY_NAME = 'SELECT category_id FROM categories WHERE category_name = %s'
     GET_CREDENTIALS_BY_USERNAME = '''
-        SELECT password, role, isPasswordChanged
+        SELECT credentials.user_id, password, role, isPasswordChanged
         FROM credentials INNER JOIN users ON credentials.user_id = users.user_id 
         WHERE username = %s
     '''
@@ -134,11 +133,11 @@ class Queries:
         FROM users INNER JOIN credentials ON users.user_id = credentials.user_id
         WHERE role = %s
     '''
-    GET_USER_BY_USERNAME = '''
+    GET_USER_BY_USER_ID = '''
         SELECT username, name, email, registration_date
         FROM users 
         INNER JOIN credentials ON users.user_id = credentials.user_id
-        WHERE username = %s
+        WHERE users.user_id = %s
     '''
     GET_USER_ID_BY_USERNAME = '''
         SELECT users.user_id
@@ -171,4 +170,4 @@ class Queries:
     DELETE_CATEGORY_BY_ID = 'DELETE FROM categories WHERE category_id = %s'
     DELETE_QUESTION_BY_ID = 'DELETE FROM questions WHERE question_id = %s'
     DELETE_USER_BY_EMAIL = 'DELETE FROM users WHERE email = %s'
-    DELETE_USER_BY_ID = 'DELETE FROM users WHERE user_id = %s'
+    DELETE_USER_BY_ID_ROLE = 'DELETE FROM users WHERE user_id = %s and role = %s'

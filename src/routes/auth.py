@@ -45,16 +45,16 @@ class Login(MethodView):
         if not user_data:
             abort(401, message='Invalid credentials')
 
-        username, role, *_ = user_data
+        user_id, role, *_ = user_data
         mapped_role = ROLE_MAPPING.get(role)
 
         access_token = create_access_token(
-            identity=username,
+            identity=user_id,
             fresh=True,
             additional_claims={'cap': mapped_role}
         )
         refresh_token = create_refresh_token(
-            identity=username,
+            identity=user_id,
             additional_claims={'cap': mapped_role}
         )
 

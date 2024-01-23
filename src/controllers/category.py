@@ -46,16 +46,16 @@ class CategoryController:
 
         logger.debug(LogMessage.UPDATE_ENTITY, Headers.CATEGORY)
         try:
-            self.db.write(Queries.UPDATE_CATEGORY_BY_ID, (new_category_name, old_category_id))
+            row_affected = self.db.write(Queries.UPDATE_CATEGORY_BY_ID, (new_category_name, old_category_id))
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.CATEGORY)) from e
-
         logger.debug(LogMessage.UPDATE_CATEGORY_SUCCESS, old_category_id, new_category_name)
+        return row_affected
 
     def delete_category(self, category_id: str) -> None:
         '''Delete a category by category id'''
 
         logger.warning(LogMessage.DELETE_CATEGORY, category_id)
-        self.db.write(Queries.DELETE_CATEGORY_BY_ID, (category_id, ))
-
+        row_affected = self.db.write(Queries.DELETE_CATEGORY_BY_ID, (category_id, ))
         logger.debug(LogMessage.DELETE_CATEGORY_SUCCESS, category_id)
+        return row_affected

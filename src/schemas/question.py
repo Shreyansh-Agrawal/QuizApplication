@@ -11,7 +11,6 @@ class QuestionSchema(Schema):
     category_name = fields.Str(dump_only=True, validate=validate.Regexp(RegexPattern.NAME_PATTERN))
     question_text = fields.Str(required=True, validate=validate.Regexp(RegexPattern.QUES_TEXT_PATTERN))
     question_type = fields.Str(required=True)
-    admin_username = fields.Str(dump_only=True)
     answer = fields.Str(required=True, validate=validate.Regexp(RegexPattern.OPTION_TEXT_PATTERN))
     other_options = fields.List(fields.Str)
 

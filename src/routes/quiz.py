@@ -34,7 +34,7 @@ class Leaderboard(MethodView):
         return leaderboard_data
 
 
-@blp.route('/scores/<string:player_id>')
+@blp.route('/scores')
 class ScoreByPlayerId(MethodView):
     '''
     Routes to:
@@ -42,9 +42,10 @@ class ScoreByPlayerId(MethodView):
     '''
 
     @access_level(roles=[Roles.PLAYER])
-    def get(self, player_id):
+    def get(self):
         'Get past scores of a player'
 
+        player_id = get_jwt_identity()
         scores = quiz_controller.get_player_scores(player_id)
         if not scores:
             abort(404, message='No scores for this player')
@@ -84,9 +85,6 @@ class QuizAnswer(MethodView):
     def post(self, player_answers):
         'Post player responses to the questions'
 
-        username = get_jwt_identity()
-        data = user_controller.get_user_id(username)
-        player_id = data[0].get('user_id')
-
+        player_id = get_jwt_identity()
         result = quiz_controller.evaluate_player_answers(player_id, player_answers)
         return result, 201

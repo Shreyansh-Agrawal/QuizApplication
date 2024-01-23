@@ -88,14 +88,11 @@ class QuestionController:
                 }
         return quiz_data
 
-    def create_question(self, category_id: str, question_data: Dict, admin_username: str) -> None:
+    def create_question(self, category_id: str, question_data: Dict, admin_id: str) -> None:
         '''Add Questions in a Category'''
 
-        data = self.user_controller.get_user_id(admin_username)
-        admin_id = data[0].get('user_id')
         question_data['category_id'] = category_id
         question_data['admin_id'] = admin_id
-        question_data['admin_username'] = admin_username
 
         question = Question.get_instance(question_data)
 
@@ -118,16 +115,14 @@ class QuestionController:
             raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.QUES)) from e
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.QUES)
 
-    def post_quiz_data(self, quiz_data: Dict, admin_username: str) -> None:
+    def post_quiz_data(self, quiz_data: Dict, admin_id: str) -> None:
         '''Posts quiz data to the database'''
 
-        user_data = self.user_controller.get_user_id(admin_username)
-        admin_id = user_data[0].get('user_id')
         for category_data in quiz_data['quiz_data']:
             category_id = generate_id(entity='category')
             category_name = category_data['category']
             try:
-                self.db.write(Queries.INSERT_CATEGORY, (category_id, admin_id, admin_username, category_name))
+                self.db.write(Queries.INSERT_CATEGORY, (category_id, admin_id, category_name))
             except mysql.connector.IntegrityError as e:
                 logger.debug(e)
 
@@ -140,7 +135,7 @@ class QuestionController:
                 try:
                     self.db.write(
                         Queries.INSERT_QUESTION,
-                        (question_id, category_id, admin_id, admin_username, question_text, question_type)
+                        (question_id, category_id, admin_id, question_text, question_type)
                     )
                     self.db.write(Queries.INSERT_OPTION, (answer_id, question_id, answer_text, 1))
 
@@ -156,11 +151,13 @@ class QuestionController:
     def update_question(self, question_id: str, new_ques_text: str) -> None:
         '''Update question text by question id'''
         try:
-            self.db.write(Queries.UPDATE_QUESTION_TEXT_BY_ID, (new_ques_text, question_id))
+            row_affected = self.db.write(Queries.UPDATE_QUESTION_TEXT_BY_ID, (new_ques_text, question_id))
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.CATEGORY)) from e
+        return row_affected
 
-    def delete_question(self, question_id: str) -> None:
+    def delete_question(self, question_id: str) -> bool:
         '''Delete a question and its options by question id'''
 
-        self.db.write(Queries.DELETE_QUESTION_BY_ID, (question_id, ))
+        row_affected = self.db.write(Queries.DELETE_QUESTION_BY_ID, (question_id, ))
+        return row_affected

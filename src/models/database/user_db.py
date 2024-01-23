@@ -2,6 +2,8 @@
 
 from dataclasses import astuple
 
+import mysql.connector
+
 from config.queries import Queries
 from database.database_access import DatabaseAccess
 from models.database.database_saver import DatabaseSaver
@@ -34,6 +36,8 @@ class UserDB(DatabaseSaver):
         '''
         user_data = astuple(entity)[:5]
         credentials = (astuple(entity)[0], ) + astuple(entity)[5:]
-
+        username = self.db.read(Queries.GET_USERNAME, (entity.username, ))
+        if username:
+            raise mysql.connector.IntegrityError
         self.db.write(Queries.INSERT_USER_DATA, user_data)
         self.db.write(Queries.INSERT_CREDENTIALS, credentials)

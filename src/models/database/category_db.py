@@ -18,7 +18,6 @@ class CategoryDB(DatabaseSaver):
         category_data = (
             entity.entity_id,
             entity.admin_id,
-            entity.admin_username,
             entity.text
         )
         self.db.write(Queries.INSERT_CATEGORY, category_data)

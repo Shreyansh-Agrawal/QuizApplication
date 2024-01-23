@@ -39,6 +39,10 @@ class DatabaseAccess:
                     cursor.execute(query)
                 else:
                     cursor.execute(query, data)
+                cursor.execute('SELECT ROW_COUNT()')
+                rows_affected = cursor.fetchone()[0]
+                if rows_affected:
+                    return True
             except mysql.connector.OperationalError as e:
                 logger.exception(e)
 

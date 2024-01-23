@@ -23,7 +23,6 @@ class QuestionDB(DatabaseSaver):
             entity.entity_id,
             entity.category_id,
             entity.admin_id,
-            entity.admin_username,
             entity.text,
             entity.question_type
         )

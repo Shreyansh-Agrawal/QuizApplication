@@ -32,12 +32,12 @@ class AuthController:
 
         if not user_data:
             return ()
-        user_password, role, is_password_changed = user_data[0].values()
+        user_id, user_password, role, is_password_changed = user_data[0].values()
         if user_password != password and user_password != hashed_password:
             return ()
 
         logger.debug(LogMessage.LOGIN_SUCCESS)
-        return (username, role, is_password_changed)
+        return (user_id, role, is_password_changed)
 
     def signup(self, player_data: Dict) -> str:
         '''Method for signup, only for player'''

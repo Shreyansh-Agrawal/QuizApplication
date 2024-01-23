@@ -20,7 +20,6 @@ class Question(QuizEntity):
     '''
     category_id: str
     admin_id: str
-    admin_username: str
     question_type: str
     options: List
 
@@ -33,7 +32,6 @@ class Question(QuizEntity):
             quiz_entity='question',
             category_id = entity_data.get('category_id'),
             admin_id = entity_data.get('admin_id'),
-            admin_username = entity_data.get('admin_username'),
             question_type = entity_data.get('question_type'),
             options = []
         )

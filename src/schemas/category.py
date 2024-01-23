@@ -10,7 +10,6 @@ class CategorySchema(Schema):
 
     category_id = fields.Str(dump_only=True)
     admin_id = fields.Str(dump_only=True)
-    admin_username = fields.Str(dump_only=True)
     category_name = fields.Str(required=True, validate=validate.Regexp(RegexPattern.NAME_PATTERN))
 
 

@@ -15,7 +15,6 @@ class Category(QuizEntity):
         QuizEntity: Abstract Class for Quiz Entities.
     '''
     admin_id: str
-    admin_username: str
 
     @classmethod
     def get_instance(cls, entity_data: Dict[str, str]) -> 'Category':
@@ -24,6 +23,5 @@ class Category(QuizEntity):
         return cls(
             text=entity_data.get('category_name'),
             quiz_entity='category',
-            admin_id=entity_data.get('admin_id'),
-            admin_username=entity_data.get('admin_username')
+            admin_id=entity_data.get('admin_id')
         )

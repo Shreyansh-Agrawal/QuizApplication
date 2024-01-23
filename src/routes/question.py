@@ -43,13 +43,13 @@ class Question(MethodView):
             abort(404, message='No questions present')
         return {'quiz_data': quiz_data}
 
-    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
+    @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuizDataSchema)
     def post(self, quiz_data):
         'Upload quiz data including questions, categories and options'
 
-        admin_username = get_jwt_identity()
-        question_controller.post_quiz_data(quiz_data, admin_username)
+        admin_id= get_jwt_identity()
+        question_controller.post_quiz_data(quiz_data, admin_id)
 
         return {'message': 'Posted Quiz data successfully'}, 201
 
@@ -61,14 +61,14 @@ class QuestionByCategoryId(MethodView):
         Create a question in a specified category
     '''
 
-    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
+    @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuestionSchema)
     def post(self, question_data, category_id):
         'Create a question in a specified category'
 
-        admin_username = get_jwt_identity()
+        admin_id = get_jwt_identity()
         try:
-            question_controller.create_question(category_id, question_data, admin_username)
+            question_controller.create_question(category_id, question_data, admin_id)
         except DuplicateEntryError as e:
             abort(409, message=str(e))
 
@@ -83,22 +83,25 @@ class QuestionById(MethodView):
         Delete a question and its options
     '''
 
-    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
+    @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuestionUpdateSchema)
     def patch(self, question_data, question_id):
         'Update a question text'
 
         new_ques_text = question_data.get('question_text')
         try:
-            question_controller.update_question(question_id, new_ques_text)
+            row_affected = question_controller.update_question(question_id, new_ques_text)
         except DuplicateEntryError as e:
             abort(409, message=str(e))
-
+        if not row_affected:
+            abort(404, message='Question does not exists')
         return {'message': "Question updated successfully"}
 
-    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
+    @access_level(roles=[Roles.ADMIN])
     def delete(self, question_id):
         'Delete a question and its options'
 
-        question_controller.delete_question(question_id)
+        row_affected = question_controller.delete_question(question_id)
+        if not row_affected:
+            abort(404, message='Question does not exists')
         return {'message': "Question deleted successfully"}

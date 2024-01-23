@@ -13,3 +13,12 @@ class UserSchema(Schema):
     name = fields.Str(required=True, validate=validate.Regexp(RegexPattern.NAME_PATTERN))
     email = fields.Str(required=True, validate=validate.Regexp(RegexPattern.EMAIL_PATTERN))
     registration_date = fields.Str(dump_only=True)
+    password = fields.Str(load_only=True)
+
+class UserUpdateSchema(Schema):
+    'Schema for update profile'
+
+    username = fields.Str(load_only=True, validate=validate.Regexp(RegexPattern.USERNAME_PATTERN))
+    name = fields.Str(load_only=True, validate=validate.Regexp(RegexPattern.NAME_PATTERN))
+    email = fields.Str(load_only=True, validate=validate.Regexp(RegexPattern.EMAIL_PATTERN))
+    password = fields.Str(load_only=True)
