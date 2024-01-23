@@ -1,6 +1,6 @@
-# QuizApplication
+# SmartQuiz REST API
 
-Welcome to the Quiz Application! This application is designed to manage users, categories, questions, and quizzes. It provides functionality for Super Admins, Admins, and Players. Developed with Python and Flask, the application follows clean code principles, adhering to SOLID principles and object-oriented programming (OOPs) practices. Unit testing is implemented using pytest to ensure robust functionality. This application was created during an internship at WatchGuard, Noida. 
+Welcome to SmartQuiz! This application is designed to manage users, categories, questions, and quizzes. It provides functionality for Super Admins, Admins, and Players. Developed with Python and Flask, the application follows clean code principles, adhering to SOLID principles and object-oriented programming (OOPs) practices. Unit testing is implemented using pytest to ensure robust functionality. This application was created during the internship at WatchGuard, Noida. 
 
 Consider using `pipenv` to manage your project dependencies.
 
