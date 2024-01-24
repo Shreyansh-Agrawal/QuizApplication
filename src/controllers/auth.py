@@ -3,15 +3,15 @@
 import logging
 from typing import Dict, Tuple
 
-import mysql.connector
+from flask_jwt_extended import create_access_token, create_refresh_token
 
-from config.message_prompts import ErrorMessage, LogMessage
-from config.queries import Queries
+from business.auth import AuthBusiness
+from config.message_prompts import Message, StatusCodes
 from database.database_access import DatabaseAccess
-from models.database.user_db import UserDB
-from models.users.player import Player
-from utils.custom_error import LoginError
-from utils.password_hasher import hash_password
+from utils.blocklist import BLOCKLIST
+from utils.custom_error import DuplicateEntryError, InvalidCredentialsError
+from utils.rbac import ROLE_MAPPING
+from utils.success_message import SuccessMessage
 
 logger = logging.getLogger(__name__)
 
@@ -21,35 +21,54 @@ class AuthController:
 
     def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
-        self.user_db = UserDB(self.db)
+        self.auth_business = AuthBusiness(self.db)
 
-    def login(self, username: str, password: str) -> Tuple:
+    def login(self, login_data: Dict) -> Tuple:
         '''Method for user login'''
 
-        logger.debug(LogMessage.LOGIN_INITIATED)
-        hashed_password = hash_password(password)
-        user_data = self.db.read(Queries.GET_CREDENTIALS_BY_USERNAME, (username, ))
+        username, password = login_data.values()
+        try:
+            user_data = self.auth_business.login(username, password)
+        except InvalidCredentialsError as e:
+            return e.error_info, e.code
 
-        if not user_data:
-            return ()
-        user_id, user_password, role, is_password_changed = user_data[0].values()
-        if user_password != password and user_password != hashed_password:
-            return ()
+        user_id, role, *_ = user_data
+        mapped_role = ROLE_MAPPING.get(role)
 
-        logger.debug(LogMessage.LOGIN_SUCCESS)
-        return (user_id, role, is_password_changed)
+        access_token = create_access_token(
+            identity=user_id,
+            fresh=True,
+            additional_claims={'cap': mapped_role}
+        )
+        refresh_token = create_refresh_token(
+            identity=user_id,
+            additional_claims={'cap': mapped_role}
+        )
+        data = {"access_token": access_token, "refresh_token": refresh_token}
+        return SuccessMessage(status=StatusCodes.OK, message=Message.LOGIN_SUCCESS, data=data).message_info
 
-    def signup(self, player_data: Dict) -> str:
+    def register(self, player_data: Dict) -> str:
         '''Method for signup, only for player'''
 
-        logger.debug(LogMessage.SIGNUP_INITIATED)
-        player_data['password'] = hash_password(player_data['password'])
-        player = Player.get_instance(player_data)
-
         try:
-            self.user_db.save(player)
-        except mysql.connector.IntegrityError as e:
-            raise LoginError(ErrorMessage.USER_EXISTS_ERROR) from e
+            self.auth_business.register(player_data)
+        except DuplicateEntryError as e:
+            return e.error_info, e.code
+        return SuccessMessage(status=StatusCodes.CREATED, message=Message.SIGNUP_SUCCESS).message_info
 
-        logger.debug(LogMessage.SIGNUP_SUCCESS)
-        return player_data['username']
+    def logout(self, token_id: str):
+        '''Method to logout an authenticated user'''
+
+        BLOCKLIST.add(token_id)
+        return SuccessMessage(status=StatusCodes.OK, message=Message.LOGOUT_SUCCESS).message_info
+
+    def refresh(self, user_id: str, role: str):
+        '''Method to get a non fresh access token'''
+
+        new_access_token = create_access_token(
+            identity=user_id,
+            fresh=False,
+            additional_claims={'cap': role}
+        )
+        data = {"access_token": new_access_token}
+        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=data).message_info

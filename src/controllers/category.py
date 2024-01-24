@@ -3,14 +3,11 @@
 import logging
 from typing import Dict, List, Tuple
 
-import mysql.connector
-
-from config.message_prompts import ErrorMessage, Headers, LogMessage
-from config.queries import Queries
+from business.category import CategoryBusiness
+from config.message_prompts import Message, StatusCodes
 from database.database_access import DatabaseAccess
-from models.database.category_db import CategoryDB
-from models.quiz.category import Category
-from utils.custom_error import DuplicateEntryError
+from utils.custom_error import DataNotFoundError, DuplicateEntryError
+from utils.success_message import SuccessMessage
 
 logger = logging.getLogger(__name__)
 
@@ -20,42 +17,44 @@ class CategoryController:
 
     def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
-        self.category_db = CategoryDB(self.db)
+        self.category_business = CategoryBusiness(self.db)
 
     def get_all_categories(self) -> List[Tuple]:
         '''Return all Quiz Categories'''
 
-        data = self.db.read(Queries.GET_ALL_CATEGORIES)
-        return data
+        try:
+            category_data = self.category_business.get_all_categories()
+        except DataNotFoundError as e:
+            return e.error_info, e.code
+        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=category_data).message_info
 
-    def create_category(self, category_data: Dict) -> None:
+    def create_category(self, category_data: Dict, user_id: str) -> None:
         '''Add a Quiz Category'''
 
-        logger.debug(LogMessage.CREATE_ENTITY, Headers.CATEGORY)
-        category = Category.get_instance(category_data)
-
         try:
-            self.category_db.save(category)
-        except mysql.connector.IntegrityError as e:
-            raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.CATEGORY)) from e
+            category_data['admin_id'] = user_id
+            self.category_business.create_category(category_data)
+        except DuplicateEntryError as e:
+            return e.error_info, e.code
+        return SuccessMessage(status=StatusCodes.CREATED, message=Message.CREATE_CATEGORY_SUCCESS).message_info
 
-        logger.debug(LogMessage.CREATE_SUCCESS, Headers.CATEGORY)
-
-    def update_category(self, old_category_id: str, new_category_name: str) -> None:
+    def update_category(self, category_data: Dict, category_id: str) -> None:
         '''Update a category name by category id'''
 
-        logger.debug(LogMessage.UPDATE_ENTITY, Headers.CATEGORY)
+        updated_category_name = category_data.get('updated_category_name')
         try:
-            row_affected = self.db.write(Queries.UPDATE_CATEGORY_BY_ID, (new_category_name, old_category_id))
-        except mysql.connector.IntegrityError as e:
-            raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity=Headers.CATEGORY)) from e
-        logger.debug(LogMessage.UPDATE_CATEGORY_SUCCESS, old_category_id, new_category_name)
-        return row_affected
+            self.category_business.update_category(category_id, updated_category_name)
+        except DuplicateEntryError as e:
+            return e.error_info, e.code
+        except DataNotFoundError as e:
+            return e.error_info, e.code
+        return SuccessMessage(status=StatusCodes.OK, message=Message.UPDATE_CATEGORY_SUCCESS).message_info
 
     def delete_category(self, category_id: str) -> None:
         '''Delete a category by category id'''
 
-        logger.warning(LogMessage.DELETE_CATEGORY, category_id)
-        row_affected = self.db.write(Queries.DELETE_CATEGORY_BY_ID, (category_id, ))
-        logger.debug(LogMessage.DELETE_CATEGORY_SUCCESS, category_id)
-        return row_affected
+        try:
+            self.category_business.delete_category(category_id)
+        except DataNotFoundError as e:
+            return e.error_info, e.code
+        return SuccessMessage(status=StatusCodes.OK, message=Message.DELETE_CATEGORY_SUCCESS).message_info

@@ -37,20 +37,16 @@ class DatabaseConnection:
     def setup_connection(self) -> None:
         'sets up connection to MySQL'
 
-        try:
-            self.connection = mysql.connector.connect(
-                user=DatabaseConnection.MYSQL_USER,
-                password=DatabaseConnection.MYSQL_PASSWORD,
-                host=DatabaseConnection.MYSQL_HOST,
-                pool_name=DatabaseConnection.MYSQL_POOL_NAME,
-                pool_size=DatabaseConnection.MYSQL_POOL_SIZE
-            )
-            self.cursor = self.connection.cursor()
-            self.cursor.execute(InitializationQueries.CREATE_DATABASE.format(DatabaseConnection.MYSQL_DB))
-            self.cursor.execute(InitializationQueries.USE_DATABASE.format(DatabaseConnection.MYSQL_DB))
-        except mysql.connector.Error as e:
-            logger.exception(e)
-            raise mysql.connector.Error from e
+        self.connection = mysql.connector.connect(
+            user=DatabaseConnection.MYSQL_USER,
+            password=DatabaseConnection.MYSQL_PASSWORD,
+            host=DatabaseConnection.MYSQL_HOST,
+            pool_name=DatabaseConnection.MYSQL_POOL_NAME,
+            pool_size=DatabaseConnection.MYSQL_POOL_SIZE
+        )
+        self.cursor = self.connection.cursor()
+        self.cursor.execute(InitializationQueries.CREATE_DATABASE.format(DatabaseConnection.MYSQL_DB))
+        self.cursor.execute(InitializationQueries.USE_DATABASE.format(DatabaseConnection.MYSQL_DB))
 
     def __enter__(self) -> mysql.connector.connection.MySQLConnection:
         return self.connection

@@ -1,9 +1,7 @@
 '''Contains methods for establishing database connection'''
 
 import logging
-from typing import List, Tuple
-
-import mysql.connector
+from typing import Dict, List, Tuple
 
 from config.queries import InitializationQueries
 from database.database_connection import DatabaseConnection
@@ -14,37 +12,33 @@ logger = logging.getLogger(__name__)
 class DatabaseAccess:
     '''A class for database methods.'''
 
-    def read(self, query: str, data: Tuple = None) -> List:
+    def read(self, query: str, data: Tuple = None) -> List[Dict]:
         '''Reads data from database.'''
 
         with DatabaseConnection() as connection:
             cursor = connection.cursor(dictionary=True)
-            try:
-                if not data:
-                    cursor.execute(query)
-                else:
-                    cursor.execute(query, data)
-            except mysql.connector.OperationalError as e:
-                logger.exception(e)
-                return []
+            if not data:
+                cursor.execute(query)
+            else:
+                cursor.execute(query, data)
+
             return cursor.fetchall()
 
-    def write(self, query: str, data: Tuple = None) -> None:
+    def write(self, query: str, data: Tuple = None) -> bool:
         '''CREATE TABLE / Add / Update / Delete data from database.'''
 
         with DatabaseConnection() as connection:
             cursor = connection.cursor()
-            try:
-                if not data:
-                    cursor.execute(query)
-                else:
-                    cursor.execute(query, data)
-                cursor.execute('SELECT ROW_COUNT()')
-                rows_affected = cursor.fetchone()[0]
-                if rows_affected:
-                    return True
-            except mysql.connector.OperationalError as e:
-                logger.exception(e)
+            if not data:
+                cursor.execute(query)
+            else:
+                cursor.execute(query, data)
+            cursor.execute('SELECT ROW_COUNT()')
+
+            rows_affected = cursor.fetchone()[0]
+            if rows_affected:
+                return True
+            return False
 
     def create_tables(self) -> None:
         '''
