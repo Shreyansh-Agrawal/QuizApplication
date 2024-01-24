@@ -2,13 +2,12 @@
 
 from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity
-from flask_smorest import Blueprint, abort
+from flask_smorest import Blueprint
 
 from config.message_prompts import Roles
 from controllers.user import UserController
 from database.database_access import DatabaseAccess
 from schemas.user import UserSchema, UserUpdateSchema
-from utils.custom_error import DuplicateEntryError
 from utils.rbac import access_level
 
 blp = Blueprint('User', __name__, description='Routes for the User related functionalities')
@@ -17,7 +16,7 @@ db = DatabaseAccess()
 user_controller = UserController(db)
 
 
-@blp.route('/users/profile')
+@blp.route('/profile/me')
 class UserById(MethodView):
     '''
     Routes to:
@@ -29,24 +28,15 @@ class UserById(MethodView):
     @blp.response(200, UserSchema)
     def get(self):
         'Get user profile data'
-
         user_id = get_jwt_identity()
-        user_data = user_controller.get_user_profile_data(user_id)
-        if not user_data:
-            abort(404, message='User data not found')
-        return user_data[0]
+        return user_controller.get_user_profile_data(user_id)
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
     @blp.arguments(UserUpdateSchema)
     def patch(self, user_data):
         'Update user profile'
-
         user_id = get_jwt_identity()
-        try:
-            user_controller.update_user_data(user_id, user_data)
-        except DuplicateEntryError as e:
-            abort(409, message=str(e))
-        return {'message': 'Profile updated successfully'}, 200
+        return user_controller.update_user_data(user_id, user_data)
 
 
 @blp.route('/players')
@@ -60,11 +50,7 @@ class Player(MethodView):
     @blp.response(200, UserSchema(many=True))
     def get(self):
         'Get all player details'
-
-        player_data = user_controller.get_all_users_by_role(role=Roles.PLAYER)
-        if not player_data:
-            abort(404, message='No players exist')
-        return player_data
+        return user_controller.get_all_players()
 
 
 @blp.route('/admins')
@@ -79,22 +65,14 @@ class Admin(MethodView):
     @blp.response(200, UserSchema(many=True))
     def get(self):
         'Get all admin details'
+        return user_controller.get_all_admins()
 
-        admin_data = user_controller.get_all_users_by_role(role=Roles.ADMIN)
-        if not admin_data:
-            abort(404, message='No admins exist')
-        return admin_data
 
     @access_level(roles=[Roles.SUPER_ADMIN])
     @blp.arguments(UserSchema)
     def post(self, admin_data):
         'Create a new admin account'
-        try:
-            user_controller.create_admin(admin_data)
-        except DuplicateEntryError as e:
-            abort(409, message=str(e))
-
-        return {'message': 'Admin created successfully'}, 201
+        return user_controller.create_admin(admin_data)
 
 
 @blp.route('/admins/<string:admin_id>')
@@ -107,11 +85,7 @@ class AdminById(MethodView):
     @access_level(roles=[Roles.SUPER_ADMIN])
     def delete(self, admin_id):
         'Delete an existing admin'
-
-        row_affected = user_controller.delete_admin_by_id(admin_id)
-        if not row_affected:
-            abort(404, message='Admin does not exists')
-        return {'message': "Admin deleted successfully"}
+        return user_controller.delete_admin_by_id(admin_id)
 
 
 @blp.route('/players/<string:player_id>')
@@ -124,8 +98,4 @@ class PlayerById(MethodView):
     @access_level(roles=[Roles.ADMIN])
     def delete(self, player_id):
         'Delete an existing player'
-
-        row_affected = user_controller.delete_player_by_id(player_id)
-        if not row_affected:
-            abort(404, message='Player does not exists')
-        return {'message': "Player deleted successfully"}
+        return user_controller.delete_player_by_id(player_id)

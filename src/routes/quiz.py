@@ -34,7 +34,7 @@ class Leaderboard(MethodView):
         return leaderboard_data
 
 
-@blp.route('/scores')
+@blp.route('/scores/me')
 class ScoreByPlayerId(MethodView):
     '''
     Routes to:
@@ -52,7 +52,7 @@ class ScoreByPlayerId(MethodView):
         return scores
 
 
-@blp.route('/quizzes')
+@blp.route('/quiz')
 class Quiz(MethodView):
     '''
     Routes to:
@@ -73,7 +73,7 @@ class Quiz(MethodView):
         return question_data
 
 
-@blp.route('/quizzes/answers')
+@blp.route('/quiz/answers')
 class QuizAnswer(MethodView):
     '''
     Routes to:

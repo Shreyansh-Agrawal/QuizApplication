@@ -74,6 +74,11 @@ class Message:
     SELECT_QUIZ='-----SELECT QUIZ MODE-----'
     SUCCESS='Request successful'
     LOGOUT_SUCCESS='Logged out successfully'
+    ADMIN_CREATED='Admin created successfully'
+    PLAYER_CREATED='Player created successfully'
+    ADMIN_DELETED='Admin deleted successfully'
+    PLAYER_DELETED='Player deleted successfully'
+    PROFILE_UPDATED='User data updated successfully'
 
 
 class Prompts:
@@ -264,6 +269,7 @@ class LogMessage:
     QUES_DATA_NOT_FOUND='No Questions added'
     RUNNING_ADMIN_MENU='Running Admin: Manage %s Menu'
     LOAD_QUIZ_DATA_FROM_JSON='Loading Quiz Data from JSON'
+    GET_ALL_CATEGORIES='Fetching all categories'
 
 
 class ErrorMessage:
@@ -279,6 +285,9 @@ class ErrorMessage:
     NO_ROLE='No {role} Currently!'
     NO_OPTIONS='No Options added for this Question!'
     CATEGORY_NOT_FOUND='Category does not exists'
+    USER_NOT_FOUND='User does not exists'
+    EMAIL_TAKEN='This email is not available'
+    USERNAME_TAKEN='This username is not available'
 
 
 class Roles:

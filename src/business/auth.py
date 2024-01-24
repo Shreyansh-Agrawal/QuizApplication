@@ -44,6 +44,7 @@ class AuthBusiness:
         '''Method for signup, only for player'''
 
         logger.debug(LogMessage.SIGNUP_INITIATED)
+
         player_data['password'] = hash_password(player_data['password'])
         player = Player.get_instance(player_data)
         try:

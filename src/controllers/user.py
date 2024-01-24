@@ -1,18 +1,12 @@
 '''Controllers for Operations related to Users: SuperAdmin, Admin, Player'''
 
 import logging
-import random
-import string
 from typing import Dict, List, Tuple
 
-import mysql.connector
-
-from config.message_prompts import ErrorMessage, Headers, LogMessage, Roles
-from config.queries import Queries
-from models.database.user_db import UserDB
-from models.users.admin import Admin
-from utils.custom_error import DuplicateEntryError
-from utils.password_hasher import hash_password
+from business.user import UserBusiness
+from config.message_prompts import Message, Roles, StatusCodes
+from utils.custom_response import SuccessMessage
+from utils.error_handlers import handle_custom_errors
 
 logger = logging.getLogger(__name__)
 
@@ -22,93 +16,53 @@ class UserController:
 
     def __init__(self, database) -> None:
         self.db = database
-        self.user_db = UserDB(self.db)
+        self.user_business = UserBusiness(self.db)
 
-    def get_user_id(self, username: str) -> str:
-        '''Return user's id'''
+    @handle_custom_errors
+    def get_all_admins(self) -> List[Tuple]:
+        '''Return all admins with their details'''
 
-        data = self.db.read(Queries.GET_USER_ID_BY_USERNAME, (username, ))
-        return data
+        admin_data = self.user_business.get_all_users_by_role(role=Roles.ADMIN)
+        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=admin_data).message_info
 
-    def get_all_users_by_role(self, role: str) -> List[Tuple]:
-        '''Return all users with their details'''
+    @handle_custom_errors
+    def get_all_players(self) -> List[Tuple]:
+        '''Return all players with their details'''
 
-        data = self.db.read(Queries.GET_USER_BY_ROLE, (role, ))
-        return data
+        player_data = self.user_business.get_all_users_by_role(role=Roles.PLAYER)
+        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=player_data).message_info
 
+    @handle_custom_errors
     def get_user_profile_data(self, user_id: str) -> str:
         '''Return user's profile data'''
 
-        data = self.db.read(Queries.GET_USER_BY_USER_ID, (user_id, ))
-        return data
+        user_data = self.user_business.get_user_profile_data(user_id)
+        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=user_data[0]).message_info
 
+    @handle_custom_errors
     def create_admin(self, admin_data: Dict) -> None:
         '''Create a new Admin Account'''
 
-        characters = string.ascii_letters + string.digits + '@#$&'
-        password = ''.join(random.choice(characters) for _ in range(6))
-        admin_data['password'] = password
-        admin = Admin.get_instance(admin_data)
-        try:
-            self.user_db.save(admin)
-        except mysql.connector.IntegrityError as e:
-            raise DuplicateEntryError(ErrorMessage.USER_EXISTS_ERROR) from e
+        self.user_business.create_admin(admin_data)
+        return SuccessMessage(status=StatusCodes.CREATED, message=Message.ADMIN_CREATED).message_info
 
-        logger.debug(LogMessage.CREATE_SUCCESS, Headers.ADMIN)
-
+    @handle_custom_errors
     def update_user_data(self, user_id: str, user_data: Dict):
         '''Update user profile'''
 
-        users_query = 'UPDATE users SET '
-        credentials_query = 'UPDATE credentials SET '
-        users_update_values = []
-        credentials_update_values = []
+        self.user_business.update_user_data(user_id, user_data)
+        return SuccessMessage(status=StatusCodes.OK, message=Message.PROFILE_UPDATED).message_info
 
-        if 'name' in user_data:
-            users_query += 'name = %s, '
-            users_update_values.append(user_data['name'])
+    @handle_custom_errors
+    def delete_admin_by_id(self, admin_id: str) -> None:
+        '''Delete a Admin'''
 
-        if 'email' in user_data:
-            users_query += 'email = %s, '
-            users_update_values.append(user_data['email'])
+        self.user_business.delete_user_by_id(admin_id, role=Roles.ADMIN)
+        return SuccessMessage(status=StatusCodes.OK, message=Message.ADMIN_DELETED).message_info
 
-        if 'username' in user_data:
-            credentials_query += 'username = %s, '
-            credentials_update_values.append(user_data['username'])
+    @handle_custom_errors
+    def delete_player_by_id(self, player_id: str) -> None:
+        '''Delete a Player'''
 
-        if 'password' in user_data:
-            credentials_query += 'password = %s, '
-            credentials_update_values.append(hash_password(user_data['password']))
-
-        # Remove the trailing comma and space
-        users_query = users_query.rstrip(', ')
-        credentials_query = credentials_query.rstrip(', ')
-
-        users_query += ' WHERE user_id = %s'
-        credentials_query += ' WHERE user_id = %s'
-        users_update_values.append(user_id)
-        credentials_update_values.append(user_id)
-        try:
-            if len(users_update_values) > 1:
-                self.db.write(users_query, tuple(users_update_values))
-        except mysql.connector.IntegrityError as e:
-            raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity='Email')) from e
-        try:
-            if len(credentials_update_values) > 1:
-                self.db.write(credentials_query, tuple(credentials_update_values))
-        except mysql.connector.IntegrityError as e:
-            raise DuplicateEntryError(ErrorMessage.ENTITY_EXISTS_ERROR.format(entity='Username')) from e
-
-    def delete_admin_by_id(self, user_id: str) -> None:
-        '''Delete a User'''
-
-        row_affected = self.db.write(Queries.DELETE_USER_BY_ID_ROLE, (user_id, Roles.ADMIN))
-        logger.debug(LogMessage.DELETE_SUCCESS, Roles.ADMIN)
-        return row_affected
-
-    def delete_player_by_id(self, user_id: str) -> None:
-        '''Delete a User'''
-
-        row_affected = self.db.write(Queries.DELETE_USER_BY_ID_ROLE, (user_id, Roles.PLAYER))
-        logger.debug(LogMessage.DELETE_SUCCESS, Roles.PLAYER)
-        return row_affected
+        self.user_business.delete_user_by_id(player_id, role=Roles.PLAYER)
+        return SuccessMessage(status=StatusCodes.OK, message=Message.PLAYER_DELETED).message_info

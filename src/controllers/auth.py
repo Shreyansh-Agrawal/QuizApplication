@@ -9,9 +9,9 @@ from business.auth import AuthBusiness
 from config.message_prompts import Message, StatusCodes
 from database.database_access import DatabaseAccess
 from utils.blocklist import BLOCKLIST
-from utils.custom_error import DuplicateEntryError, InvalidCredentialsError
+from utils.custom_response import SuccessMessage
+from utils.error_handlers import handle_custom_errors
 from utils.rbac import ROLE_MAPPING
-from utils.success_message import SuccessMessage
 
 logger = logging.getLogger(__name__)
 
@@ -23,14 +23,12 @@ class AuthController:
         self.db = database
         self.auth_business = AuthBusiness(self.db)
 
+    @handle_custom_errors
     def login(self, login_data: Dict) -> Tuple:
         '''Method for user login'''
 
         username, password = login_data.values()
-        try:
-            user_data = self.auth_business.login(username, password)
-        except InvalidCredentialsError as e:
-            return e.error_info, e.code
+        user_data = self.auth_business.login(username, password)
 
         user_id, role, *_ = user_data
         mapped_role = ROLE_MAPPING.get(role)
@@ -47,13 +45,11 @@ class AuthController:
         data = {"access_token": access_token, "refresh_token": refresh_token}
         return SuccessMessage(status=StatusCodes.OK, message=Message.LOGIN_SUCCESS, data=data).message_info
 
+    @handle_custom_errors
     def register(self, player_data: Dict) -> str:
         '''Method for signup, only for player'''
 
-        try:
-            self.auth_business.register(player_data)
-        except DuplicateEntryError as e:
-            return e.error_info, e.code
+        self.auth_business.register(player_data)
         return SuccessMessage(status=StatusCodes.CREATED, message=Message.SIGNUP_SUCCESS).message_info
 
     def logout(self, token_id: str):
