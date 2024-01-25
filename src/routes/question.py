@@ -28,7 +28,6 @@ class Question(MethodView):
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
-    # @blp.response(200, QuestionSchema(many=True))
     def get(self):
         '''
         Get quiz data in a specified category or across all categories

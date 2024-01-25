@@ -46,7 +46,7 @@ class DataNotFoundError(CustomError):
 
 class InvalidInputError(CustomError):
     '''
-    Exception raised when invalid input is received.
+    Exception raised when invalid input format is received.
 
     This error signifies that the input provided does not meet the expected criteria or is invalid.
     It helps handle situations where incorrect or unacceptable input is detected.
@@ -59,4 +59,13 @@ class DuplicateEntryError(CustomError):
 
     This error is raised when an attempt is made to insert duplicate data into a database
     or another data structure that prohibits duplicate entries.
+    '''
+
+
+class ValidationError(CustomError):
+    '''
+    Exception raised when invalid input data is received.
+
+    This error signifies that the input provided does not meet the expected criteria or is invalid.
+    It helps handle situations where incorrect or unacceptable input is detected.
     '''

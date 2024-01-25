@@ -21,11 +21,11 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify
+from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_smorest import Api
 
-from config.message_prompts import LogMessage
+from config.message_prompts import ErrorMessage, LogMessage, StatusCodes
 from database.database_access import DatabaseAccess
 from routes.auth import blp as AuthBlueprint
 from routes.category import blp as CategoryBlueprint
@@ -33,7 +33,8 @@ from routes.question import blp as QuestionBlueprint
 from routes.quiz import blp as QuizBlueprint
 from routes.user import blp as UserBlueprint
 from utils.blocklist import BLOCKLIST
-from utils.error_handlers import handle_internal_server_error
+from utils.custom_error import CustomError, ValidationError
+from utils.error_handlers import handle_internal_server_error, handle_validation_error, handle_bad_request
 from utils.initialize_app import Initializer
 
 logging.basicConfig(
@@ -80,7 +81,9 @@ def create_app():
     app.config["OPENAPI_RAPIDOC_URL"] = "https://unpkg.com/rapidoc/dist/rapidoc-min.js"
     app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
 
-    # app.register_error_handler(Exception, handle_internal_server_error)
+    app.register_error_handler(400, handle_bad_request)
+    app.register_error_handler(ValidationError, handle_validation_error)
+    app.register_error_handler(Exception, handle_internal_server_error)
 
     api = Api(app)
     jwt = JWTManager(app)
@@ -91,52 +94,28 @@ def create_app():
 
     @jwt.revoked_token_loader
     def revoked_token_callback(_jwt_header, _jwt_payload):
-        return (
-            jsonify(
-                {"description": "The token has been revoked.", "error": "token_revoked"}
-            ),
-            401,
-        )
+        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.TokenRevoked)
+        return error.error_info, error.code
 
     @jwt.needs_fresh_token_loader
     def token_not_fresh_callback(_jwt_header, _jwt_payload):
-        return (
-            jsonify(
-                {
-                    "description": "The token is not fresh.",
-                    "error": "fresh_token_required",
-                }
-            ),
-            401,
-        )
+        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.TokenNotFresh)
+        return error.error_info, error.code
 
     @jwt.expired_token_loader
     def expired_token_callback(_jwt_header, _jwt_payload):
-        return (
-            jsonify({"message": "The token has expired.", "error": "token_expired"}),
-            401,
-        )
+        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.TokenExpired)
+        return error.error_info, error.code
 
     @jwt.invalid_token_loader
     def invalid_token_callback(_error):
-        return (
-            jsonify(
-                {"message": "Signature verification failed.", "error": "invalid_token"}
-            ),
-            401,
-        )
+        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.InvalidToken)
+        return error.error_info, error.code
 
     @jwt.unauthorized_loader
     def missing_token_callback(_error):
-        return (
-            jsonify(
-                {
-                    "description": "Request does not contain an access token.",
-                    "error": "authorization_required",
-                }
-            ),
-            401,
-        )
+        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.MissingToken)
+        return error.error_info, error.code
 
     api.register_blueprint(AuthBlueprint, url_prefix='/v1')
     api.register_blueprint(CategoryBlueprint, url_prefix='/v1')

@@ -2,15 +2,29 @@
 
 import functools
 
-from flask import jsonify
+from config.message_prompts import StatusCodes, ErrorMessage
+from utils.custom_error import (
+    CustomError,
+    DataNotFoundError,
+    DuplicateEntryError,
+    InvalidCredentialsError,
+    InvalidInputError,
+)
 
-from utils.custom_error import DataNotFoundError, DuplicateEntryError, InvalidCredentialsError, InvalidInputError
+def handle_bad_request(_err):
+    '''Function to handle bad request'''
+    error = CustomError(StatusCodes.BAD_REQUEST, message=ErrorMessage.BadRequest)
+    return error.error_info, error.code
 
+def handle_validation_error(err):
+    '''Function to handle validation errors'''
+    error = CustomError(StatusCodes.UNPROCESSABLE_ENTITY, message=str(err.message))
+    return error.error_info, error.code
 
 def handle_internal_server_error(_err):
     '''Function to handle server side errors'''
-
-    return jsonify({'code': 500, 'status': 'Something went wrong'}), 500
+    error = CustomError(StatusCodes.INTERNAL_SERVER_ERROR, message=ErrorMessage.ServerError)
+    return error.error_info, error.code
 
 
 def handle_custom_errors(func):

@@ -25,7 +25,6 @@ class Profile(MethodView):
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
-    @blp.response(200, UserSchema)
     def get(self):
         'Get user profile data'
         user_id = get_jwt_identity()
@@ -47,7 +46,6 @@ class Player(MethodView):
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
-    @blp.response(200, UserSchema(many=True))
     def get(self):
         'Get all player details'
         return user_controller.get_all_players()
@@ -62,7 +60,6 @@ class Admin(MethodView):
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN])
-    @blp.response(200, UserSchema(many=True))
     def get(self):
         'Get all admin details'
         return user_controller.get_all_admins()

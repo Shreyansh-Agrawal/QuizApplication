@@ -1,11 +1,12 @@
 'Schema for Auth data'
 
-from marshmallow import Schema, fields, validate
+from marshmallow import fields, validate
 
 from config.regex_patterns import RegexPattern
+from schemas.config_schema import CustomSchema
 
 
-class LoginSchema(Schema):
+class LoginSchema(CustomSchema):
     'Schema for login'
 
     username = fields.Str(required=True, validate=validate.Regexp(RegexPattern.USERNAME_PATTERN))

@@ -1,11 +1,12 @@
 'Schema for Category data'
 
-from marshmallow import Schema, fields, validate
+from marshmallow import fields, validate
 
 from config.regex_patterns import RegexPattern
+from schemas.config_schema import CustomSchema
 
 
-class CategorySchema(Schema):
+class CategorySchema(CustomSchema):
     'Schema for Category data'
 
     category_id = fields.Str(dump_only=True)
@@ -13,7 +14,7 @@ class CategorySchema(Schema):
     category_name = fields.Str(required=True, validate=validate.Regexp(RegexPattern.NAME_PATTERN))
 
 
-class CategoryUpdateSchema(Schema):
+class CategoryUpdateSchema(CustomSchema):
     'Schema for Category update data'
 
     updated_category_name = fields.Str(required=True)

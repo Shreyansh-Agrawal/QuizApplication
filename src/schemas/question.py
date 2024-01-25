@@ -1,11 +1,12 @@
 'Schema for Question data'
 
-from marshmallow import Schema, fields, validate
+from marshmallow import fields, validate
 
 from config.regex_patterns import RegexPattern
+from schemas.config_schema import CustomSchema
 
 
-class QuestionSchema(Schema):
+class QuestionSchema(CustomSchema):
     'Schema for Question data'
 
     category_name = fields.Str(dump_only=True, validate=validate.Regexp(RegexPattern.NAME_PATTERN))
@@ -15,14 +16,14 @@ class QuestionSchema(Schema):
     other_options = fields.List(fields.Str)
 
 
-class QuestionOptionsSchema(Schema):
+class QuestionOptionsSchema(CustomSchema):
     'Schema for Options data'
 
     answer = fields.Str(required=True)
     other_options = fields.List(fields.Str(), missing=[])
 
 
-class QuizQuestionSchema(Schema):
+class QuizQuestionSchema(CustomSchema):
     'Schema for Quiz Question data'
 
     question_text = fields.Str(required=True)
@@ -30,20 +31,20 @@ class QuizQuestionSchema(Schema):
     options = fields.Nested(QuestionOptionsSchema, required=True)
 
 
-class QuizCategorySchema(Schema):
+class QuizCategorySchema(CustomSchema):
     'Schema for Quiz Category data'
 
     category = fields.Str(required=True)
     question_data = fields.List(fields.Nested(QuizQuestionSchema), required=True)
 
 
-class QuizDataSchema(Schema):
+class QuizDataSchema(CustomSchema):
     'Schema for Quiz data'
 
     quiz_data = fields.List(fields.Nested(QuizCategorySchema), required=True)
 
 
-class QuestionUpdateSchema(Schema):
+class QuestionUpdateSchema(CustomSchema):
     'Schema for updating a Question'
 
     question_text = fields.Str(required=True)

@@ -25,7 +25,6 @@ class Category(MethodView):
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
-    # @blp.response(200, CategorySchema(many=True))
     def get(self):
         'Get all categories details'
         return category_controller.get_all_categories()

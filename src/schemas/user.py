@@ -1,11 +1,12 @@
 'Schema for User data'
 
-from marshmallow import Schema, fields, validate
+from marshmallow import fields, validate
 
 from config.regex_patterns import RegexPattern
+from schemas.config_schema import CustomSchema
 
 
-class UserSchema(Schema):
+class UserSchema(CustomSchema):
     'Schema for admin and player data'
 
     user_id = fields.Str(dump_only=True, validate=validate.Regexp(RegexPattern.ID_PATTERN))
@@ -15,7 +16,7 @@ class UserSchema(Schema):
     registration_date = fields.Str(dump_only=True)
     password = fields.Str(load_only=True)
 
-class UserUpdateSchema(Schema):
+class UserUpdateSchema(CustomSchema):
     'Schema for update profile'
 
     username = fields.Str(load_only=True, validate=validate.Regexp(RegexPattern.USERNAME_PATTERN))
