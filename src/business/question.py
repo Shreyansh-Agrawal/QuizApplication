@@ -1,7 +1,7 @@
 '''Businesss for Operations related to Quiz'''
 
 import logging
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 import mysql.connector
 
@@ -26,7 +26,7 @@ class QuestionBusiness:
         self.question_db = QuestionDB(self.db)
         self.user_business = UserBusiness(self.db)
 
-    def get_quiz_data(self, category_id: str = None) -> List[Tuple]:
+    def get_quiz_data(self, category_id: str = None) -> List[Dict]:
         '''Return the quiz data in a specified category or across all categories'''
 
         query = Queries.GET_QUIZ_DATA
@@ -157,7 +157,7 @@ class QuestionBusiness:
         if not row_affected:
             raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTION_NOT_FOUND)
 
-    def delete_question(self, question_id: str) -> bool:
+    def delete_question(self, question_id: str) -> None:
         '''Delete a question and its options by question id'''
 
         row_affected = self.db.write(Queries.DELETE_QUESTION_BY_ID, (question_id, ))

@@ -1,7 +1,7 @@
 '''Business Logic for Operations related to Quiz'''
 
 import logging
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 import mysql.connector
 
@@ -22,7 +22,7 @@ class CategoryBusiness:
         self.db = database
         self.category_db = CategoryDB(self.db)
 
-    def get_all_categories(self) -> List[Tuple]:
+    def get_all_categories(self) -> List[Dict]:
         '''Return all Quiz Categories'''
 
         logger.debug(LogMessage.GET_ALL_CATEGORIES)

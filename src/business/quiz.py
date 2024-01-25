@@ -64,7 +64,7 @@ class QuizBusiness:
 
         self.db.write(Queries.INSERT_PLAYER_QUIZ_SCORE, (score_id, player_id, score, timestamp))
 
-    def evaluate_player_answers(self, player_id: str, player_answers: List[Dict]) -> List[Dict]:
+    def evaluate_player_answers(self, player_id: str, player_answers: List[Dict]) -> Dict:
         'Evaluate player answers and return score with correct answers'
 
         question_ids = tuple(response['question_id'] for response in player_answers)

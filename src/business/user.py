@@ -1,7 +1,7 @@
 '''Business for Operations related to Users: SuperAdmin, Admin, Player'''
 
 import logging
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 import mysql.connector
 
@@ -23,7 +23,7 @@ class UserBusiness:
         self.db = database
         self.user_db = UserDB(self.db)
 
-    def get_all_users_by_role(self, role: str) -> List[Tuple]:
+    def get_all_users_by_role(self, role: str) -> List[Dict]:
         '''Return all users with their details'''
 
         data = self.db.read(Queries.GET_USER_BY_ROLE, (role, ))
@@ -51,7 +51,7 @@ class UserBusiness:
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.ADMIN)
 
-    def update_user_data(self, user_id: str, user_data: Dict):
+    def update_user_data(self, user_id: str, user_data: Dict) -> None:
         '''Update user profile'''
 
         users_query = 'UPDATE users SET '

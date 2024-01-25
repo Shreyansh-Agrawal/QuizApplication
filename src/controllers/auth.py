@@ -1,7 +1,7 @@
 '''Controllers for Operations related to Authentication'''
 
 import logging
-from typing import Dict, Tuple
+from typing import Dict
 
 from business.auth import AuthBusiness
 from config.message_prompts import Message, StatusCodes
@@ -20,14 +20,14 @@ class AuthController:
         self.auth_business = AuthBusiness(self.db)
 
     @handle_custom_errors
-    def login(self, login_data: Dict) -> Tuple:
+    def login(self, login_data: Dict):
         '''Method for user login'''
 
         token_data = self.auth_business.login(login_data)
         return SuccessMessage(status=StatusCodes.OK, message=Message.LOGIN_SUCCESS, data=token_data).message_info
 
     @handle_custom_errors
-    def register(self, player_data: Dict) -> str:
+    def register(self, player_data: Dict):
         '''Method for signup, only for player'''
 
         self.auth_business.register(player_data)

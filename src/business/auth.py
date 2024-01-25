@@ -1,7 +1,7 @@
 '''Business Logic for Operations related to Authentication'''
 
 import logging
-from typing import Dict, Tuple
+from typing import Dict
 
 import mysql.connector
 from flask_jwt_extended import create_access_token, create_refresh_token
@@ -26,7 +26,7 @@ class AuthBusiness:
         self.db = database
         self.user_db = UserDB(self.db)
 
-    def login(self, login_data: Dict) -> Tuple:
+    def login(self, login_data: Dict) -> Dict:
         '''Method for user login'''
 
         logger.debug(LogMessage.LOGIN_INITIATED)
@@ -56,7 +56,7 @@ class AuthBusiness:
         token_data = {"access_token": access_token, "refresh_token": refresh_token, "password_type": password_type}
         return token_data
 
-    def register(self, player_data: Dict) -> str:
+    def register(self, player_data: Dict) -> None:
         '''Method for signup, only for player'''
 
         logger.debug(LogMessage.SIGNUP_INITIATED)
@@ -70,12 +70,12 @@ class AuthBusiness:
 
         logger.debug(LogMessage.SIGNUP_SUCCESS)
 
-    def logout(self, token_id: str):
+    def logout(self, token_id: str) -> None:
         '''Method to logout an authenticated user'''
 
         BLOCKLIST.add(token_id)
 
-    def refresh(self, user_id: str, mapped_role: str):
+    def refresh(self, user_id: str, mapped_role: str) -> Dict:
         '''Method to get a non fresh access token'''
 
         new_access_token = create_access_token(

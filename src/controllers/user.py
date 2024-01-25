@@ -1,7 +1,7 @@
 '''Controllers for Operations related to Users: SuperAdmin, Admin, Player'''
 
 import logging
-from typing import Dict, List, Tuple
+from typing import Dict
 
 from business.user import UserBusiness
 from config.message_prompts import Message, Roles, StatusCodes
@@ -19,28 +19,28 @@ class UserController:
         self.user_business = UserBusiness(self.db)
 
     @handle_custom_errors
-    def get_all_admins(self) -> List[Tuple]:
+    def get_all_admins(self):
         '''Return all admins with their details'''
 
         admin_data = self.user_business.get_all_users_by_role(role=Roles.ADMIN)
         return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=admin_data).message_info
 
     @handle_custom_errors
-    def get_all_players(self) -> List[Tuple]:
+    def get_all_players(self):
         '''Return all players with their details'''
 
         player_data = self.user_business.get_all_users_by_role(role=Roles.PLAYER)
         return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=player_data).message_info
 
     @handle_custom_errors
-    def get_user_profile_data(self, user_id: str) -> str:
+    def get_user_profile_data(self, user_id: str):
         '''Return user's profile data'''
 
         user_data = self.user_business.get_user_profile_data(user_id)
         return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=user_data[0]).message_info
 
     @handle_custom_errors
-    def create_admin(self, admin_data: Dict) -> None:
+    def create_admin(self, admin_data: Dict):
         '''Create a new Admin Account'''
 
         self.user_business.create_admin(admin_data)
@@ -54,14 +54,14 @@ class UserController:
         return SuccessMessage(status=StatusCodes.OK, message=Message.PROFILE_UPDATED).message_info
 
     @handle_custom_errors
-    def delete_admin_by_id(self, admin_id: str) -> None:
+    def delete_admin_by_id(self, admin_id: str):
         '''Delete a Admin'''
 
         self.user_business.delete_user_by_id(admin_id, role=Roles.ADMIN)
         return SuccessMessage(status=StatusCodes.OK, message=Message.ADMIN_DELETED).message_info
 
     @handle_custom_errors
-    def delete_player_by_id(self, player_id: str) -> None:
+    def delete_player_by_id(self, player_id: str):
         '''Delete a Player'''
 
         self.user_business.delete_user_by_id(player_id, role=Roles.PLAYER)
