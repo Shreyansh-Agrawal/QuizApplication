@@ -79,6 +79,12 @@ QuizApplication/
 │   ├── API Endpoint Specification.pdf
 │   ├── Requirements and Design Specification.pdf
 ├── src/
+│   ├── business/
+│   │   ├── auth.py
+│   │   ├── category.py
+│   │   ├── question.py
+│   │   ├── quiz.py
+│   │   ├── user.py
 │   ├── config/
 │   │   ├── file_paths.py
 │   │   ├── message_prompts.py
@@ -95,12 +101,6 @@ QuizApplication/
 │   │   ├── database_access.py
 │   │   ├── database_connection.py
 │   ├── models/
-│   │   ├── database/
-│   │   │   ├── category_db.py
-│   │   │   ├── database_saver.py
-│   │   │   ├── option_db.py
-│   │   │   ├── question_db.py
-│   │   │   ├── user_db.py
 │   │   ├── quiz/
 │   │   │   ├── category.py
 │   │   │   ├── option.py
@@ -120,46 +120,23 @@ QuizApplication/
 │   ├── schemas/
 │   │   ├── auth.py
 │   │   ├── category.py
+│   │   ├── config_schema.py
 │   │   ├── question.py
 │   │   ├── quiz.py
 │   │   ├── user.py
 │   ├── utils/
 │   │   ├── blocklist.py
 │   │   ├── custom_error.py
+│   │   ├── custom_response.py
 │   │   ├── error_handlers.py
 │   │   ├── id_generator.py
 │   │   ├── initialize_app.py
+│   │   ├── password_generator.py
 │   │   ├── password_hasher.py
 │   │   ├── rbac.py
 │   ├── requirements.txt
 │   ├── server.py
-├── tests/
-│   ├── test_config/
-│   │   ├── test_file_paths.py
-│   │   ├── test_message_prompts.py
-│   │   ├── test_queries.py
-│   │   ├── test_questions.json
-│   │   ├── test_regex_patterns.py
-│   ├── test_controllers/
-│   │   ├── test_auth_controller.py
-│   │   ├── test_quiz_controller.py
-│   │   ├── test_user_controller.py
-│   ├── test_database/
-│   │   ├── test_database_access.py
-│   ├── test_models/
-│   │   ├── test_database_saver.py
-│   │   ├── test_quiz.py
-│   │   ├── test_user_manager.py
-│   │   ├── test_user.py
-│   ├── test_utils/
-│   │   ├── test_custom_error.py
-│   │   ├── test_initialize_app.py
-│   │   ├── test_json_to_db_loader.py
-│   │   ├── test_pretty_print.py
-│   │   ├── test_password_hasher.py
-│   │   ├── test_validations.py
-│   ├── conftest.py
-│   ├── test_app.py
+├── tests/...
 ├── .env.example
 ├── .gitignore
 ├── Pipfile

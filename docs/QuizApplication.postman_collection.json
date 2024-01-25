@@ -1,651 +1,806 @@
 {
-  "info": {
-    "_postman_id": "ee8ee898-015c-4a75-967c-52881a53f3ef",
-    "name": "QuizApplication",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "18540543"
-  },
-  "item": [
-    {
-      "name": "Auth",
-      "item": [
-        {
-          "name": "Login",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.globals.set(\"access_token_quizapp\", pm.response.json().access_token)\r",
-                  "pm.globals.set(\"refresh_token_quizapp\", pm.response.json().refresh_token)\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{ \r\n    \"username\": \"charlie\",\r\n    \"password\": \"123456\"\r\n} ",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{QuizApp_URL}}/login",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["login"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Register",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{ \r\n    \"name\": \"Charlie Cox\",\r\n    \"email\": \"charlie@gmail.com\", \r\n    \"username\": \"charlie\",\r\n    \"password\": \"123456\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{QuizApp_URL}}/register",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["register"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Logout",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{QuizApp_URL}}/logout",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["logout"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Refresh",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.globals.set(\"access_token_quizapp\", pm.response.json().access_token)\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{refresh_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{QuizApp_URL}}/refresh",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["refresh"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Category",
-      "item": [
-        {
-          "name": "Get all categories",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{QuizApp_URL}}/categories",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["categories"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create a category",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{ \r\n    \"category_name\": \"Maths\" \r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{QuizApp_URL}}/categories",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["categories"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update a category",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{ \r\n    \"updated_category_name\": \"Mathematics\" \r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{QuizApp_URL}}/categories/CT8zvY",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["categories", "CT8zvY"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete a Category",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{QuizApp_URL}}/categories/C3t8bs",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["categories", "C3t8bs"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Question",
-      "item": [
-        {
-          "name": "Get Questions",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{QuizApp_URL}}/categories/questions?category_id=CSsuc5",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["categories", "questions"],
-              "query": [
-                {
-                  "key": "category_id",
-                  "value": "CSsuc5"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create a question",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{ \r\n    \"question_text\": \"Test question\", \r\n    \"question_type\": \"MCQ\", \r\n    \"answer\": \"Delhi\", \r\n    \"other_options\": [\"Mumbai\", \"Bangalore\", \"Chennai\"] \r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{QuizApp_URL}}/categories/CSsuc5/questions",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["categories", "CSsuc5", "questions"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Post Quiz Data",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"quiz_data\": [\r\n        {\r\n            \"category\": \"Science\",\r\n            \"question_data\": [\r\n                {\r\n                    \"question_text\": \"What is the chemical symbol for water?\",\r\n                    \"question_type\": \"one word\",\r\n                    \"options\": {\r\n                        \"answer\": \"H2O\",\r\n                        \"other_options\": []\r\n                    }\r\n                },\r\n                {\r\n                    \"question_text\": \"Which gas is responsible for the Earth's greenhouse effect?\",\r\n                    \"question_type\": \"mcq\",\r\n                    \"options\": {\r\n                        \"answer\": \"Carbon dioxide\",\r\n                        \"other_options\": [\r\n                            \"Oxygen\",\r\n                            \"Nitrogen\",\r\n                            \"Methane\"\r\n                        ]\r\n                    }\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"category\": \"Mathematics\",\r\n            \"question_data\": [\r\n                {\r\n                    \"question_text\": \"What is the square root of 16?\",\r\n                    \"question_type\": \"one word\",\r\n                    \"options\": {\r\n                        \"answer\": \"4\",\r\n                        \"other_options\": []\r\n                    }\r\n                },\r\n                {\r\n                    \"question_text\": \"Is the sum of all angles in a triangle 180 degrees? (True/False)\",\r\n                    \"question_type\": \"t/f\",\r\n                    \"options\": {\r\n                        \"answer\": \"True\",\r\n                        \"other_options\": []\r\n                    }\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{QuizApp_URL}}/categories/questions",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["categories", "questions"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update a Question",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "PATCH",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"question_text\": \"Updated test question\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{QuizApp_URL}}/categories/questions/QFyZ32",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["categories", "questions", "QFyZ32"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete a Question",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{QuizApp_URL}}/categories/questions/QFyZ32",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["categories", "questions", "QFyZ32"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Quiz",
-      "item": [
-        {
-          "name": "Get Leaderboard",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{QuizApp_URL}}/leaderboard",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["leaderboard"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Player Scores",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{QuizApp_URL}}/scores/PDLXiB",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["scores", "PDLXiB"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Questions for Quiz",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{QuizApp_URL}}/quizzes?category_id=CSsuc5",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["quizzes"],
-              "query": [
-                {
-                  "key": "category_id",
-                  "value": "CSsuc5"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Post Player Answers",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "[\r\n    {\r\n        \"question_id\": \"QQdh82\",\r\n        \"user_answer\": \"H2O\"\r\n    },\r\n    {\r\n        \"question_id\": \"QJpJQv\",\r\n        \"user_answer\": \"Carbon dioxide\"\r\n    }\r\n]\r\n",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{QuizApp_URL}}/quizzes/answers",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["quizzes", "answers"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "User",
-      "item": [
-        {
-          "name": "Get all Players",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{QuizApp_URL}}/players",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["players"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get all Admins",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{QuizApp_URL}}/admins",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["admins"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create an Admin",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{ \r\n    \"name\": \"Mathew Murdock\", \r\n    \"email\": \"matty@example.com\", \r\n    \"username\": \"matty\" \r\n} ",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{QuizApp_URL}}/admins",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["admins"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete an Admin",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{QuizApp_URL}}/admins/ABLFrA",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["admins", "ABLFrA"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete a Player",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{access_token_quizapp}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{QuizApp_URL}}/players/PC9kXH",
-              "host": ["{{QuizApp_URL}}"],
-              "path": ["players", "PC9kXH"]
-            }
-          },
-          "response": []
-        }
-      ]
-    }
-  ]
+	"info": {
+		"_postman_id": "ee8ee898-015c-4a75-967c-52881a53f3ef",
+		"name": "QuizApplication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18540543"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"access_token_quizapp\", pm.response.json().data.access_token)\r",
+									"pm.globals.set(\"refresh_token_quizapp\", pm.response.json().data.refresh_token)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"username\": \"charlie\",\r\n    \"password\": \"123456\"\r\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{QuizApp_URL}}/login",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"name\": \"Charlie Cox\",\r\n    \"email\": \"charlie123@gmail.com\", \r\n    \"username\": \"charlie123\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{QuizApp_URL}}/register",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/logout",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"access_token_quizapp\", pm.response.json().data.access_token)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{refresh_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/refresh",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Get all categories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/categories",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"category_name\": \"Science\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{QuizApp_URL}}/categories",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"updated_category_name\": \"Mathematics\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{QuizApp_URL}}/categories/CT8zvYw",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"categories",
+								"CT8zvYw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/categories/C3t8bs",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"categories",
+								"C3t8bs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Question",
+			"item": [
+				{
+					"name": "Get Questions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/categories/questions",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"categories",
+								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a question",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"question_text\": \"Test question\", \r\n    \"question_type\": \"MCQ\", \r\n    \"answer\": \"Delhi\", \r\n    \"other_options\": [\"Mumbai\", \"Bangalore\", \"Chennai\"] \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{QuizApp_URL}}/categories/CSsuc5/questions",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"categories",
+								"CSsuc5",
+								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Quiz Data",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quiz_data\": [\r\n        {\r\n            \"category\": \"Science\",\r\n            \"question_data\": [\r\n                {\r\n                    \"question_text\": \"What is the chemical symbol for water?\",\r\n                    \"question_type\": \"one word\",\r\n                    \"options\": {\r\n                        \"answer\": \"H2O\",\r\n                        \"other_options\": []\r\n                    }\r\n                },\r\n                {\r\n                    \"question_text\": \"Which gas is responsible for the Earth's greenhouse effect?\",\r\n                    \"question_type\": \"mcq\",\r\n                    \"options\": {\r\n                        \"answer\": \"Carbon dioxide\",\r\n                        \"other_options\": [\r\n                            \"Oxygen\",\r\n                            \"Nitrogen\",\r\n                            \"Methane\"\r\n                        ]\r\n                    }\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"category\": \"Mathematics\",\r\n            \"question_data\": [\r\n                {\r\n                    \"question_text\": \"What is the square root of 16?\",\r\n                    \"question_type\": \"one word\",\r\n                    \"options\": {\r\n                        \"answer\": \"4\",\r\n                        \"other_options\": []\r\n                    }\r\n                },\r\n                {\r\n                    \"question_text\": \"Is the sum of all angles in a triangle 180 degrees? (True/False)\",\r\n                    \"question_type\": \"t/f\",\r\n                    \"options\": {\r\n                        \"answer\": \"True\",\r\n                        \"other_options\": []\r\n                    }\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{QuizApp_URL}}/categories/questions",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"categories",
+								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Question",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"question_text\": \"Updated test question\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{QuizApp_URL}}/categories/questions/QEMa6Q",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"categories",
+								"questions",
+								"QEMa6Q"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Question",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/categories/questions/QFyZ32",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"categories",
+								"questions",
+								"QFyZ32"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Quiz",
+			"item": [
+				{
+					"name": "Get Leaderboard",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/leaderboard",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"leaderboard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Player Scores",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/scores/me",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"scores",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Questions for Quiz",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{QuizApp_URL}}/quiz",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"quiz"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Player Answers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"question_id\": \"QSign9\",\r\n        \"user_answer\": \"delete\"\r\n    },\r\n    {\r\n        \"question_id\": \"QKTh9Q\",\r\n        \"user_answer\": \"Carbon dioxide\"\r\n    }\r\n]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{QuizApp_URL}}/quiz/answers",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"quiz",
+								"answers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get all Players",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/players",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"players"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Admins",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/admins",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"admins"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/profile/me",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"profile",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create an Admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"name\": \"Mathew Murdock\", \r\n    \"email\": \"matty@example.com\", \r\n    \"username\": \"matty\" \r\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{QuizApp_URL}}/admins",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"admins"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"matty\",\r\n    \"name\": \"Mathew\",\r\n    \"email\": \"dummy@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{QuizApp_URL}}/profile/me",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"profile",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an Admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/admins/ABLFrA",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"admins",
+								"ABLFrA"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Player",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_quizapp}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{QuizApp_URL}}/players/PC9kXH",
+							"host": [
+								"{{QuizApp_URL}}"
+							],
+							"path": [
+								"players",
+								"PC9kXH"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
 }
