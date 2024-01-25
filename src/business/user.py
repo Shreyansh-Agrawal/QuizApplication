@@ -73,6 +73,7 @@ class UserBusiness:
 
         if 'password' in user_data:
             credentials_query += 'password = %s, '
+            credentials_query += 'isPasswordChanged = 1, '
             credentials_update_values.append(hash_password(user_data['password']))
 
         # Remove the trailing comma and space

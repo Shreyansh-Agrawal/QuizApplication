@@ -54,5 +54,5 @@ class Refresh(MethodView):
         'Issue a non fresh access token'
         claims = get_jwt()
         user_id = claims.get('sub')
-        role = claims.get('cap')
-        return auth_controller.refresh(user_id, role)
+        mapped_role = claims.get('cap')
+        return auth_controller.refresh(user_id, mapped_role)

@@ -76,9 +76,14 @@ class Message:
     LOGOUT_SUCCESS='Logged out successfully'
     ADMIN_CREATED='Admin created successfully'
     PLAYER_CREATED='Player created successfully'
+    QUESTION_CREATED='Question created successfully'
+    QUIZ_POSTED='Quiz data posted successfully'
     ADMIN_DELETED='Admin deleted successfully'
     PLAYER_DELETED='Player deleted successfully'
+    QUESTION_DELETED='Question deleted successfully'
+    QUESTION_UPDATED='Question updated successfully'
     PROFILE_UPDATED='User data updated successfully'
+    SUBMISSION_SUCCESS='Response submitted successfully'
 
 
 class Prompts:
@@ -279,6 +284,7 @@ class ErrorMessage:
     INVALID_CREDENTIALS='Invalid credentials'
     ENTITY_EXISTS='{entity} already exists!'
     CATEGORY_EXISTS='Category already exists!'
+    QUESTION_EXISTS='Question already exists!'
     INSUFFICIENT_QUESTIONS='Not enough questions!'
     INVALID_CATEGORY_SELECTION='No such Category! Please choose from above!!'
     NO_CATEGORY='No Category Added!'
@@ -288,6 +294,11 @@ class ErrorMessage:
     USER_NOT_FOUND='User does not exists'
     EMAIL_TAKEN='This email is not available'
     USERNAME_TAKEN='This username is not available'
+    LEADERBOARD_NOT_FOUND='No data in the leaderboard'
+    SCORES_NOT_FOUND='No scores for this player'
+    QUESTIONS_NOT_FOUND='No questions present'
+    QUESTION_NOT_FOUND='Question not found'
+    QUIZ_NOT_FOUND='Quiz data not found'
 
 
 class Roles:

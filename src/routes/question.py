@@ -3,14 +3,13 @@
 from flask import request
 from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity
-from flask_smorest import Blueprint, abort
+from flask_smorest import Blueprint
 
 from config.message_prompts import Roles
 from controllers.question import QuestionController
 from controllers.user import UserController
 from database.database_access import DatabaseAccess
 from schemas.question import QuestionSchema, QuizDataSchema, QuestionUpdateSchema
-from utils.custom_error import DuplicateEntryError
 from utils.rbac import access_level
 
 blp = Blueprint('Question', __name__, description='Routes for the Question related functionalities')
@@ -33,25 +32,17 @@ class Question(MethodView):
     def get(self):
         '''
         Get quiz data in a specified category or across all categories
-
         Query Parameters: category_id
         '''
         category_id = request.args.get('category_id')
-        quiz_data = question_controller.get_quiz_data(category_id)
-
-        if not quiz_data:
-            abort(404, message='No questions present')
-        return {'quiz_data': quiz_data}
+        return question_controller.get_quiz_data(category_id)
 
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuizDataSchema)
     def post(self, quiz_data):
         'Upload quiz data including questions, categories and options'
-
         admin_id= get_jwt_identity()
-        question_controller.post_quiz_data(quiz_data, admin_id)
-
-        return {'message': 'Posted Quiz data successfully'}, 201
+        return question_controller.post_quiz_data(quiz_data, admin_id)
 
 
 @blp.route('/categories/<string:category_id>/questions')
@@ -65,14 +56,8 @@ class QuestionByCategoryId(MethodView):
     @blp.arguments(QuestionSchema)
     def post(self, question_data, category_id):
         'Create a question in a specified category'
-
         admin_id = get_jwt_identity()
-        try:
-            question_controller.create_question(category_id, question_data, admin_id)
-        except DuplicateEntryError as e:
-            abort(409, message=str(e))
-
-        return {'message': 'Question added successfully'}, 201
+        return question_controller.create_question(category_id, question_data, admin_id)
 
 
 @blp.route('/categories/questions/<string:question_id>')
@@ -87,21 +72,9 @@ class QuestionById(MethodView):
     @blp.arguments(QuestionUpdateSchema)
     def patch(self, question_data, question_id):
         'Update a question text'
-
-        new_ques_text = question_data.get('question_text')
-        try:
-            row_affected = question_controller.update_question(question_id, new_ques_text)
-        except DuplicateEntryError as e:
-            abort(409, message=str(e))
-        if not row_affected:
-            abort(404, message='Question does not exists')
-        return {'message': "Question updated successfully"}
+        return question_controller.update_question(question_id, question_data)
 
     @access_level(roles=[Roles.ADMIN])
     def delete(self, question_id):
         'Delete a question and its options'
-
-        row_affected = question_controller.delete_question(question_id)
-        if not row_affected:
-            abort(404, message='Question does not exists')
-        return {'message': "Question deleted successfully"}
+        return question_controller.delete_question(question_id)

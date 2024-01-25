@@ -17,7 +17,7 @@ user_controller = UserController(db)
 
 
 @blp.route('/profile/me')
-class UserById(MethodView):
+class Profile(MethodView):
     '''
     Routes to:
         View user profile
