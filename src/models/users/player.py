@@ -18,6 +18,6 @@ class Player(User):
 
     @classmethod
     def get_instance(cls, user_data: Dict[str, str], role: str=None) -> 'Player':
-        'Factory method to create a new instance of Player class.'
+        'Factory method to create a new instance of Player model.'
 
         return super().get_instance(user_data, role='player')

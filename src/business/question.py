@@ -1,15 +1,13 @@
-'''Businesss for Operations related to Quiz'''
+'''Business logic for Operations related to Question'''
 
 import logging
 from typing import Dict, List
 
 import mysql.connector
 
-from business.user import UserBusiness
 from config.message_prompts import ErrorMessage, Headers, LogMessage, StatusCodes
 from config.queries import Queries
 from database.database_access import DatabaseAccess
-from models.database.question_db import QuestionDB
 from models.quiz.option import Option
 from models.quiz.question import Question
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
@@ -23,8 +21,34 @@ class QuestionBusiness:
 
     def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
-        self.question_db = QuestionDB(self.db)
-        self.user_business = UserBusiness(self.db)
+
+    def save_option(self, entity: Option) -> None:
+        '''Adds the option to the database.'''
+
+        option_data = (
+            entity.entity_id,
+            entity.question_id,
+            entity.text,
+            entity.is_correct
+        )
+        self.db.write(Queries.INSERT_OPTION, option_data)
+
+    def save_question(self, entity: Question) -> None:
+        '''Adds the question to the database.'''
+
+        question_data = (
+            entity.entity_id,
+            entity.category_id,
+            entity.admin_id,
+            entity.text,
+            entity.question_type
+        )
+        if not entity.options:
+            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.NO_OPTIONS)
+
+        self.db.write(Queries.INSERT_QUESTION, question_data)
+        for option in entity.options:
+            self.save_option(option)
 
     def get_quiz_data(self, category_id: str = None) -> List[Dict]:
         '''Return the quiz data in a specified category or across all categories'''
@@ -110,7 +134,7 @@ class QuestionBusiness:
             option = Option.get_instance(option_data)
             question.add_option(option)
         try:
-            self.question_db.save(question)
+            self.save_question(question)
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.QUESTION_EXISTS) from e
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.QUES)

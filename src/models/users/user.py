@@ -40,7 +40,7 @@ class User(ABC):
     @classmethod
     def get_instance(cls, user_data: Dict[str, str], role) -> 'User':
         '''
-        Factory method to create a new instance of User class.
+        Factory method to create a new instance of User model.
 
         Args:
             user_data (Dict): A dictionary containing user details.

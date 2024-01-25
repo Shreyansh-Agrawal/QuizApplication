@@ -6,10 +6,10 @@ from typing import Dict
 import mysql.connector
 from flask_jwt_extended import create_access_token, create_refresh_token
 
+from business.user import UserBusiness
 from config.message_prompts import ErrorMessage, LogMessage, StatusCodes
 from config.queries import Queries
 from database.database_access import DatabaseAccess
-from models.database.user_db import UserDB
 from models.users.player import Player
 from utils.blocklist import BLOCKLIST
 from utils.custom_error import DuplicateEntryError, InvalidCredentialsError
@@ -24,7 +24,7 @@ class AuthBusiness:
 
     def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
-        self.user_db = UserDB(self.db)
+        self.user_business = UserBusiness(self.db)
 
     def login(self, login_data: Dict) -> Dict:
         '''Method for user login'''
@@ -64,7 +64,7 @@ class AuthBusiness:
         player_data['password'] = hash_password(player_data['password'])
         player = Player.get_instance(player_data)
         try:
-            self.user_db.save(player)
+            self.user_business.save_user(player)
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.USER_EXISTS) from e
 

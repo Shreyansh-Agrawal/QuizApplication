@@ -25,7 +25,7 @@ class Question(QuizEntity):
 
     @classmethod
     def get_instance(cls, entity_data: Dict[str, str]) -> 'Question':
-        '''Factory method to create a new instance of Question class.'''
+        '''Factory method to create a new instance of Question model.'''
 
         return cls(
             text=entity_data.get('question_text'),

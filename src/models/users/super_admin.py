@@ -18,6 +18,6 @@ class SuperAdmin(User):
 
     @classmethod
     def get_instance(cls, user_data: Dict[str, str], role: str=None) -> 'SuperAdmin':
-        'Factory method to create a new instance of SuperAdmin class.'
+        'Factory method to create a new instance of SuperAdmin model.'
 
         return super().get_instance(user_data, role='super_admin')

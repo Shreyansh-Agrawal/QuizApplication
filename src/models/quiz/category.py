@@ -18,7 +18,7 @@ class Category(QuizEntity):
 
     @classmethod
     def get_instance(cls, entity_data: Dict[str, str]) -> 'Category':
-        '''Factory method to create a new instance of Category class.'''
+        '''Factory method to create a new instance of Category model.'''
 
         return cls(
             text=entity_data.get('category_name'),

@@ -1,14 +1,15 @@
-'''Business for Operations related to Users: SuperAdmin, Admin, Player'''
+'''Business logic for Operations related to Users: SuperAdmin, Admin, Player'''
 
 import logging
+from dataclasses import astuple
 from typing import Dict, List
 
 import mysql.connector
 
 from config.message_prompts import ErrorMessage, Headers, LogMessage, Roles, StatusCodes
 from config.queries import Queries
-from models.database.user_db import UserDB
 from models.users.admin import Admin
+from models.users.user import User
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
 from utils.password_hasher import hash_password
 from utils.password_generator import generate_password
@@ -21,7 +22,32 @@ class UserBusiness:
 
     def __init__(self, database) -> None:
         self.db = database
-        self.user_db = UserDB(self.db)
+
+    def save_user(self, entity: User) -> None:
+        '''
+        Saves the user data and their credentials to the database.
+
+        user_data = (
+            user.user_id,
+            user.name,
+            user.email,
+            user.role,
+            user.registration_date
+        )
+        credentials = (
+            user.user_id,
+            user.username,
+            user.password,
+            user.is_password_changed
+        )
+        '''
+        user_data = astuple(entity)[:5]
+        credentials = (astuple(entity)[0], ) + astuple(entity)[5:]
+        username = self.db.read(Queries.GET_USERNAME, (entity.username, ))
+        if username:
+            raise mysql.connector.IntegrityError
+        self.db.write(Queries.INSERT_USER_DATA, user_data)
+        self.db.write(Queries.INSERT_CREDENTIALS, credentials)
 
     def get_all_users_by_role(self, role: str) -> List[Dict]:
         '''Return all users with their details'''
@@ -45,7 +71,7 @@ class UserBusiness:
         admin_data['password'] = generate_password()
         admin = Admin.get_instance(admin_data)
         try:
-            self.user_db.save(admin)
+            self.save_user(admin)
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.USER_EXISTS) from e
 

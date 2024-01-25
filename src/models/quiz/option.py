@@ -19,7 +19,7 @@ class Option(QuizEntity):
 
     @classmethod
     def get_instance(cls, entity_data: Dict[str, str]) -> 'Option':
-        '''Factory method to create a new instance of Option class.'''
+        '''Factory method to create a new instance of Option model.'''
 
         return cls(
             text=entity_data.get('option_text'),

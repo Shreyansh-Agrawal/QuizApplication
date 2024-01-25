@@ -7,11 +7,11 @@ from pathlib import Path
 import mysql.connector
 from dotenv import load_dotenv
 
+from business.user import UserBusiness
 from config.message_prompts import Headers, LogMessage, Roles
 from config.queries import Queries
 from database.database_access import DatabaseAccess
 from models.users.super_admin import SuperAdmin
-from models.database.user_db import UserDB
 from utils.password_hasher import hash_password
 
 dotenv_path = Path('.env')
@@ -31,7 +31,7 @@ class Initializer:
 
     def __init__(self, db: DatabaseAccess) -> None:
         self.db = db
-        self.user_db = UserDB(self.db)
+        self.user_business = UserBusiness(self.db)
 
     def create_super_admin(self) -> None:
         '''
@@ -64,7 +64,7 @@ class Initializer:
         super_admin = SuperAdmin.get_instance(super_admin_data)
 
         try:
-            self.user_db.save(super_admin)
+            self.user_business.save_user(super_admin)
         except mysql.connector.IntegrityError:
             logger.debug(LogMessage.SUPER_ADMIN_PRESENT)
 

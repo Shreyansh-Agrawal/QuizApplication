@@ -27,4 +27,4 @@ class QuizEntity(ABC):
     @classmethod
     @abstractmethod
     def get_instance(cls, entity_data: Dict[str, str]) -> 'QuizEntity':
-        '''Factory method to create a new instance of QuizEntity class.'''
+        '''Factory method to create a new instance of QuizEntity model.'''

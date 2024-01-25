@@ -1,4 +1,4 @@
-'''Business Logic for Operations related to Quiz'''
+'''Business logic for Operations related to Category'''
 
 import logging
 from typing import Dict, List
@@ -8,7 +8,6 @@ import mysql.connector
 from config.message_prompts import ErrorMessage, Headers, LogMessage, StatusCodes
 from config.queries import Queries
 from database.database_access import DatabaseAccess
-from models.database.category_db import CategoryDB
 from models.quiz.category import Category
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
 
@@ -20,7 +19,16 @@ class CategoryBusiness:
 
     def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
-        self.category_db = CategoryDB(self.db)
+
+    def save_category(self, entity: Category) -> None:
+        '''Adds the category to the database.'''
+
+        category_data = (
+            entity.entity_id,
+            entity.admin_id,
+            entity.text
+        )
+        self.db.write(Queries.INSERT_CATEGORY, category_data)
 
     def get_all_categories(self) -> List[Dict]:
         '''Return all Quiz Categories'''
@@ -39,7 +47,7 @@ class CategoryBusiness:
 
         category = Category.get_instance(category_data)
         try:
-            self.category_db.save(category)
+            self.save_category(category)
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
 

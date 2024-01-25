@@ -1,4 +1,4 @@
-'''Controllers for Operations related to Quiz'''
+'''Controllers for Operations related to Question'''
 
 import logging
 from typing import Dict
