@@ -6,8 +6,6 @@ name = "pypi"
 [packages]
 pylint = "*"
 shortuuid = "*"
-maskpass = "*"
-tabulate = "*"
 python-dotenv = "*"
 pytest-mock = "*"
 pytest-cov = "*"

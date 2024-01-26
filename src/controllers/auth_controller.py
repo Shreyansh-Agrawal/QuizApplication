@@ -3,7 +3,7 @@
 import logging
 from typing import Dict
 
-from business.auth import AuthBusiness
+from business.auth_business import AuthBusiness
 from config.message_prompts import Message, StatusCodes
 from database.database_access import DatabaseAccess
 from utils.custom_response import SuccessMessage

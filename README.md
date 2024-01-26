@@ -77,14 +77,15 @@ pytest
 QuizApplication/
 ├── docs/
 │   ├── API Endpoint Specification.pdf
+│   ├── QuizApplication.postman_collection.json
 │   ├── Requirements and Design Specification.pdf
 ├── src/
 │   ├── business/
-│   │   ├── auth.py
-│   │   ├── category.py
-│   │   ├── question.py
-│   │   ├── quiz.py
-│   │   ├── user.py
+│   │   ├── auth_business.py
+│   │   ├── category_business.py
+│   │   ├── question_business.py
+│   │   ├── quiz_business.py
+│   │   ├── user_business.py
 │   ├── config/
 │   │   ├── file_paths.py
 │   │   ├── message_prompts.py
@@ -92,11 +93,11 @@ QuizApplication/
 │   │   ├── quiz_data.json
 │   │   ├── regex_patterns.py
 │   ├── controllers/
-│   │   ├── auth.py
-│   │   ├── category.py
-│   │   ├── question.py
-│   │   ├── quiz.py
-│   │   ├── user.py
+│   │   ├── auth_controller.py
+│   │   ├── category_controller.py
+│   │   ├── question_controller.py
+│   │   ├── quiz_controller.py
+│   │   ├── user_controller.py
 │   ├── database/
 │   │   ├── database_access.py
 │   │   ├── database_connection.py
@@ -112,11 +113,11 @@ QuizApplication/
 │   │   │   ├── super_admin.py
 │   │   │   ├── user.py
 │   ├── routes/
-│   │   ├── auth.py
-│   │   ├── category.py
-│   │   ├── question.py
-│   │   ├── quiz.py
-│   │   ├── user.py
+│   │   ├── auth_routes.py
+│   │   ├── category_routes.py
+│   │   ├── question_routes.py
+│   │   ├── quiz_routes.py
+│   │   ├── user_routes.py
 │   ├── schemas/
 │   │   ├── auth.py
 │   │   ├── category.py

@@ -3,7 +3,7 @@
 import logging
 from typing import Dict, List
 
-from business.quiz import QuizBusiness
+from business.quiz_business import QuizBusiness
 from config.message_prompts import Message, StatusCodes
 from database.database_access import DatabaseAccess
 from utils.custom_response import SuccessMessage

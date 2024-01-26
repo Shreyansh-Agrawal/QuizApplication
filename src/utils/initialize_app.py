@@ -7,7 +7,7 @@ from pathlib import Path
 import mysql.connector
 from dotenv import load_dotenv
 
-from business.user import UserBusiness
+from business.user_business import UserBusiness
 from config.message_prompts import Headers, LogMessage, Roles
 from config.queries import Queries
 from database.database_access import DatabaseAccess

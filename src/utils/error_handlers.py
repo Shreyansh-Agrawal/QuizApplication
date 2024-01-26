@@ -13,7 +13,7 @@ from utils.custom_error import (
 
 def handle_bad_request(_err):
     '''Function to handle bad request'''
-    error = CustomError(StatusCodes.BAD_REQUEST, message=ErrorMessage.BadRequest)
+    error = CustomError(StatusCodes.BAD_REQUEST, message=ErrorMessage.BAD_REQUEST)
     return error.error_info, error.code
 
 def handle_validation_error(err):
@@ -23,7 +23,7 @@ def handle_validation_error(err):
 
 def handle_internal_server_error(_err):
     '''Function to handle server side errors'''
-    error = CustomError(StatusCodes.INTERNAL_SERVER_ERROR, message=ErrorMessage.ServerError)
+    error = CustomError(StatusCodes.INTERNAL_SERVER_ERROR, message=ErrorMessage.SERVER_ERROR)
     return error.error_info, error.code
 
 

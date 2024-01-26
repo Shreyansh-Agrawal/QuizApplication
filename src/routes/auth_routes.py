@@ -4,7 +4,7 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt, jwt_required
 from flask_smorest import Blueprint
 
-from controllers.auth import AuthController
+from controllers.auth_controller import AuthController
 from database.database_access import DatabaseAccess
 from schemas.auth import LoginSchema, RegistrationSchema
 

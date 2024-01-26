@@ -5,7 +5,7 @@ from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
 from config.message_prompts import Roles
-from controllers.category import CategoryController
+from controllers.category_controller import CategoryController
 from database.database_access import DatabaseAccess
 from schemas.category import CategorySchema, CategoryUpdateSchema
 from utils.rbac import access_level

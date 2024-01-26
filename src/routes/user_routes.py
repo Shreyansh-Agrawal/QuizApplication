@@ -5,7 +5,7 @@ from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
 from config.message_prompts import Roles
-from controllers.user import UserController
+from controllers.user_controller import UserController
 from database.database_access import DatabaseAccess
 from schemas.user import UserSchema, UserUpdateSchema
 from utils.rbac import access_level

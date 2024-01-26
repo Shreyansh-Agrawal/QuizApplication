@@ -1,9 +1,9 @@
 '''Contains all the messages and prompts displayed to user'''
 
-
 from collections import namedtuple
 
 INFO = namedtuple('StatusCodes', 'code status')
+
 
 class Message:
     '''Contains all the print messages as class variables'''
@@ -69,20 +69,20 @@ class Message:
     INVALID_TEXT = 'Invalid {}'
     INVALID_CHOICE = 'Select a number from above options!'
     INVALID_PASSWORD = 'Invalid password! Length cannot be less than 6!'
-    CONFIRMATION='Type "YES" if you wish to continuePress any other key to go back: '
-    SELECT_QUIZ='-----SELECT QUIZ MODE-----'
-    SUCCESS='Request successful'
-    LOGOUT_SUCCESS='Logged out successfully'
-    ADMIN_CREATED='Admin created successfully'
-    PLAYER_CREATED='Player created successfully'
-    QUESTION_CREATED='Question created successfully'
-    QUIZ_POSTED='Quiz data posted successfully'
-    ADMIN_DELETED='Admin deleted successfully'
-    PLAYER_DELETED='Player deleted successfully'
-    QUESTION_DELETED='Question deleted successfully'
-    QUESTION_UPDATED='Question updated successfully'
-    PROFILE_UPDATED='User data updated successfully'
-    SUBMISSION_SUCCESS='Response submitted successfully'
+    CONFIRMATION = 'Type "YES" if you wish to continuePress any other key to go back: '
+    SELECT_QUIZ = '-----SELECT QUIZ MODE-----'
+    SUCCESS = 'Request successful'
+    LOGOUT_SUCCESS = 'Logged out successfully'
+    ADMIN_CREATED = 'Admin created successfully'
+    PLAYER_CREATED = 'Player created successfully'
+    QUESTION_CREATED = 'Question created successfully'
+    QUIZ_POSTED = 'Quiz data posted successfully'
+    ADMIN_DELETED = 'Admin deleted successfully'
+    PLAYER_DELETED = 'Player deleted successfully'
+    QUESTION_DELETED = 'Question deleted successfully'
+    QUESTION_UPDATED = 'Question updated successfully'
+    PROFILE_UPDATED = 'User data updated successfully'
+    SUBMISSION_SUCCESS = 'Response submitted successfully'
 
 
 class Prompts:
@@ -166,7 +166,6 @@ Enter -
 
 Enter your choice: '''
 
-
     QUESTION_TYPE_PROMPTS = '''
 Enter -
         1> Multiple Choice Question Type
@@ -174,7 +173,6 @@ Enter -
         3> One Word Type
 
 Select Question Type: '''
-
 
     SELECT_MODE_PROMPTS = '''
 Enter -
@@ -185,145 +183,146 @@ Enter -
 
 Select Mode: '''
 
-    USERNAME_PROMPT='Enter your username: '
-    CREATE_USERNAME_PROMPT='Create your username: '
-    PASSWORD_PROMPT='Enter your password: '
-    CREATE_PASSWORD_PROMPT='Create your password: '
-    CONFIRM_PASSWORD_PROMPT='Confirm Password: '
-    NEW_PASSWORD_PROMPT='Enter New Password: '
-    NAME_PROMPT='Enter your name: '
-    EMAIL_PROMPT='Enter your email: '
-    SELECT_CATEGORY_PROMPT='Choose a Category: '
-    NEW_CATEGORY_NAME_PROMPT='Enter New Category Name: '
-    UPDATED_CATEGORY_NAME_PROMPT='Enter updated category name: '
-    ADMIN_NAME_PROMPT='Enter admin name: '
-    ADMIN_EMAIL_PROMPT='Enter admin email: '
-    ADMIN_USERNAME_PROMPT='Create admin username: '
-    USER_EMAIL_PROMPT='Enter {role} Email: '
-    QUES_TEXT_PROMPT='Enter Question Text: '
-    ANS_PROMPT='Enter Answer: '
-    OPTION_PROMPT='Enter Other Option: '
-    SELECT_OPTION_PROMPT='Choose an option: '
-    ANS_INPUT_PROMPT='-> Enter your answer: '
+    USERNAME_PROMPT = 'Enter your username: '
+    CREATE_USERNAME_PROMPT = 'Create your username: '
+    PASSWORD_PROMPT = 'Enter your password: '
+    CREATE_PASSWORD_PROMPT = 'Create your password: '
+    CONFIRM_PASSWORD_PROMPT = 'Confirm Password: '
+    NEW_PASSWORD_PROMPT = 'Enter New Password: '
+    NAME_PROMPT = 'Enter your name: '
+    EMAIL_PROMPT = 'Enter your email: '
+    SELECT_CATEGORY_PROMPT = 'Choose a Category: '
+    NEW_CATEGORY_NAME_PROMPT = 'Enter New Category Name: '
+    UPDATED_CATEGORY_NAME_PROMPT = 'Enter updated category name: '
+    ADMIN_NAME_PROMPT = 'Enter admin name: '
+    ADMIN_EMAIL_PROMPT = 'Enter admin email: '
+    ADMIN_USERNAME_PROMPT = 'Create admin username: '
+    USER_EMAIL_PROMPT = 'Enter {role} Email: '
+    QUES_TEXT_PROMPT = 'Enter Question Text: '
+    ANS_PROMPT = 'Enter Answer: '
+    OPTION_PROMPT = 'Enter Other Option: '
+    SELECT_OPTION_PROMPT = 'Choose an option: '
+    ANS_INPUT_PROMPT = '-> Enter your answer: '
     ATTEMPT_LIMIT = 3
 
 
 class Headers:
     '''Contains all the headings as class variables'''
 
-    USERNAME='Username'
-    NAME='Name'
-    EMAIL='Email'
-    PASSWORD='Password'
-    REG_DATE='Registration Date'
-    CATEGORY='Category'
-    CATEGORIES='Categories'
-    QUES='Question'
-    QUES_TYPE='Question Type'
-    ANS='Correct Answer'
-    CREATED_BY='Created By'
-    SCORE='Score'
-    TIME='Time'
-    ID='ID'
-    OPTION='Option'
-    PLAYER_ANS='Your Answer'
-    SUPER_ADMIN='Super Admin'
-    ADMIN='Admin'
-    PLAYER='Player'
-    QUIZZES='Quizzes'
+    USERNAME = 'Username'
+    NAME = 'Name'
+    EMAIL = 'Email'
+    PASSWORD = 'Password'
+    REG_DATE = 'Registration Date'
+    CATEGORY = 'Category'
+    CATEGORIES = 'Categories'
+    QUES = 'Question'
+    QUES_TYPE = 'Question Type'
+    ANS = 'Correct Answer'
+    CREATED_BY = 'Created By'
+    SCORE = 'Score'
+    TIME = 'Time'
+    ID = 'ID'
+    OPTION = 'Option'
+    PLAYER_ANS = 'Your Answer'
+    SUPER_ADMIN = 'Super Admin'
+    ADMIN = 'Admin'
+    PLAYER = 'Player'
+    QUIZZES = 'Quizzes'
 
 
 class LogMessage:
     '''Contains all the log messages as class variables'''
 
-    LOGIN_INITIATED='Login Initiated'
-    LOGIN_SUCCESS='Login Successful'
-    SIGNUP_INITIATED='Signup Initiated'
-    SIGNUP_SUCCESS='Signup Successful'
-    SYSTEM_START='System Started'
-    SYSTEM_STOP='Stopping Application'
-    INITIALIZE_APP_SUCCESS='Initialization Complete'
-    CREATE_ENTITY='Creating %s'
-    CREATE_SUCCESS='%s Created'
-    UPDATE_ENTITY='Updating %s'
-    UPDATE_SUCCESS='%s Updated'
-    DELETE_ENTITY='Deleting %s'
-    DELETE_SUCCESS='%s Deleted'
-    DELETE_CATEGORY='Deleting Category %s'
-    DELETE_CATEGORY_SUCCESS='Category %s deleted'
-    CHANGE_DEFAULT_ADMIN_PSW='Changing Default Admin Password'
-    CHANGE_DEFAULT_ADMIN_PSW_SUCCESS='Default Admin Password Changed'
-    UPDATE_CATEGORY_SUCCESS='Category %s updated to %s'
-    GET_QUES_BY_CATEGORY='Get Questions by Category'
-    START_QUIZ='Starting Quiz for: %s'
-    COMPLETE_QUIZ='Quiz Completed for: %s'
-    RUNNING_USER_MENU='Running %s Menu'
-    RUNNING_AUTH_MENU='Running auth_menu'
-    ASSIGN_MENU='Assigning menu according to the role'
-    SUPER_ADMIN_PRESENT='Super Admin Present'
-    TABULATE_ERROR='Tabulate error: %s'
-    SAVE_QUIZ_SCORE='Saving score for: %s'
-    SAVE_QUIZ_SCORE_SUCCESS='Score saved for: %s'
-    DISPLAY_QUIZ_SCORE='Display score for: %s'
-    DISPLAY_ALL_ENTITY='Display all %s'
-    DISPLAY_QUES_BY_CATEGORY='Display Questions By Category'
-    INVALID_QUES_TYPE='Invalid Ques Type!'
-    LOGIN_ATTEMPTS_EXHAUSTED='Login attempts exhausted'
-    LEADERBOARD_DATA_NOT_FOUND='No Data in Leaderboard'
-    QUES_DATA_NOT_FOUND='No Questions added'
-    RUNNING_ADMIN_MENU='Running Admin: Manage %s Menu'
-    LOAD_QUIZ_DATA_FROM_JSON='Loading Quiz Data from JSON'
-    GET_ALL_CATEGORIES='Fetching all categories'
+    LOGIN_INITIATED = 'Login Initiated'
+    LOGIN_SUCCESS = 'Login Successful'
+    SIGNUP_INITIATED = 'Signup Initiated'
+    SIGNUP_SUCCESS = 'Signup Successful'
+    SYSTEM_START = 'System Started'
+    SYSTEM_STOP = 'Stopping Application'
+    INITIALIZE_APP_SUCCESS = 'Initialization Complete'
+    CREATE_ENTITY = 'Creating %s'
+    CREATE_SUCCESS = '%s Created'
+    UPDATE_ENTITY = 'Updating %s'
+    UPDATE_SUCCESS = '%s Updated'
+    DELETE_ENTITY = 'Deleting %s'
+    DELETE_SUCCESS = '%s Deleted'
+    DELETE_CATEGORY = 'Deleting Category %s'
+    DELETE_CATEGORY_SUCCESS = 'Category %s deleted'
+    CHANGE_DEFAULT_ADMIN_PSW = 'Changing Default Admin Password'
+    CHANGE_DEFAULT_ADMIN_PSW_SUCCESS = 'Default Admin Password Changed'
+    UPDATE_CATEGORY_SUCCESS = 'Category %s updated to %s'
+    GET_QUES_BY_CATEGORY = 'Get Questions by Category'
+    START_QUIZ = 'Starting Quiz for: %s'
+    COMPLETE_QUIZ = 'Quiz Completed for: %s'
+    RUNNING_USER_MENU = 'Running %s Menu'
+    RUNNING_AUTH_MENU = 'Running auth_menu'
+    ASSIGN_MENU = 'Assigning menu according to the role'
+    SUPER_ADMIN_PRESENT = 'Super Admin Present'
+    TABULATE_ERROR = 'Tabulate error: %s'
+    SAVE_QUIZ_SCORE = 'Saving score for: %s'
+    SAVE_QUIZ_SCORE_SUCCESS = 'Score saved for: %s'
+    DISPLAY_QUIZ_SCORE = 'Display score for: %s'
+    DISPLAY_ALL_ENTITY = 'Display all %s'
+    DISPLAY_QUES_BY_CATEGORY = 'Display Questions By Category'
+    INVALID_QUES_TYPE = 'Invalid Ques Type!'
+    LOGIN_ATTEMPTS_EXHAUSTED = 'Login attempts exhausted'
+    LEADERBOARD_DATA_NOT_FOUND = 'No Data in Leaderboard'
+    QUES_DATA_NOT_FOUND = 'No Questions added'
+    RUNNING_ADMIN_MENU = 'Running Admin: Manage %s Menu'
+    LOAD_QUIZ_DATA_FROM_JSON = 'Loading Quiz Data from JSON'
+    GET_ALL_CATEGORIES = 'Fetching all categories'
 
 
 class ErrorMessage:
     '''Contains all the error messages as class variables'''
 
-    USER_EXISTS='User already exists'
-    INVALID_CREDENTIALS='Invalid credentials'
-    ENTITY_EXISTS='{entity} already exists!'
-    CATEGORY_EXISTS='Category already exists!'
-    QUESTION_EXISTS='Question already exists!'
-    INSUFFICIENT_QUESTIONS='Not enough questions!'
-    INVALID_CATEGORY_SELECTION='No such Category! Please choose from above!!'
-    NO_CATEGORY='No Category Added!'
-    NO_ROLE='No {role} Currently!'
-    NO_OPTIONS='No Options added for this Question!'
-    CATEGORY_NOT_FOUND='Category does not exists'
-    USER_NOT_FOUND='User does not exists'
-    EMAIL_TAKEN='This email is not available'
-    USERNAME_TAKEN='This username is not available'
-    LEADERBOARD_NOT_FOUND='No data in the leaderboard'
-    SCORES_NOT_FOUND='No scores for this player'
-    QUESTIONS_NOT_FOUND='No questions present'
-    QUESTION_NOT_FOUND='Question not found'
-    QUIZ_NOT_FOUND='Quiz data not found'
-    TokenRevoked='The token has been revoked'
-    TokenNotFresh='The token is not fresh'
-    TokenExpired='The token has expired'
-    InvalidToken='Signature verification failed'
-    MissingToken='Request does not contain an access token'
-    ServerError='Something went wrong'
-    BadRequest='Invalid request syntax'
+    USER_EXISTS = 'User already exists'
+    INVALID_CREDENTIALS = 'Invalid credentials'
+    ENTITY_EXISTS = '{entity} already exists!'
+    CATEGORY_EXISTS = 'Category already exists!'
+    QUESTION_EXISTS = 'Question already exists!'
+    INSUFFICIENT_QUESTIONS = 'Not enough questions!'
+    INVALID_CATEGORY_SELECTION = 'No such Category! Please choose from above!!'
+    NO_CATEGORY = 'No Category Added!'
+    NO_ROLE = 'No {role} Currently!'
+    NO_OPTIONS = 'No Options added for this Question!'
+    CATEGORY_NOT_FOUND = 'Category does not exists'
+    USER_NOT_FOUND = 'User does not exists'
+    EMAIL_TAKEN = 'This email is not available'
+    USERNAME_TAKEN = 'This username is not available'
+    LEADERBOARD_NOT_FOUND = 'No data in the leaderboard'
+    SCORES_NOT_FOUND = 'No scores for this player'
+    QUESTIONS_NOT_FOUND = 'No questions present'
+    QUESTION_NOT_FOUND = 'Question not found'
+    QUIZ_NOT_FOUND = 'Quiz data not found'
+    TOKEN_REVOKED = 'The token has been revoked'
+    TOKEN_NOT_FRESH = 'The token is not fresh'
+    TOKEN_EXPIRED = 'The token has expired'
+    INVALID_TOKEN = 'Signature verification failed'
+    MISSING_TOKEN = 'Request does not contain an access token'
+    SERVER_ERROR = 'Something went wrong'
+    BAD_REQUEST = 'Invalid request syntax'
+    FORBIDDEN = 'Access denied'
 
 
 class Roles:
     '''Contains all the user roles'''
 
-    SUPER_ADMIN='super_admin'
-    ADMIN='admin'
-    PLAYER='player'
+    SUPER_ADMIN = 'super_admin'
+    ADMIN = 'admin'
+    PLAYER = 'player'
 
 
 class StatusCodes:
     'Contains all the status codes and messages'
 
-    OK=INFO(code=200, status='Ok')
-    CREATED=INFO(code=201, status='Created')
-    BAD_REQUEST=INFO(code=400, status='Bad Request')
-    UNAUTHORIZED=INFO(code=401, status='Unauthorized')
-    FORBIDDEN=INFO(code=403, status='Forbidden')
-    NOT_FOUND=INFO(code=404, status='Not Found')
-    CONFLICT=INFO(code=409, status='Conflict')
-    UNPROCESSABLE_ENTITY=INFO(code=422, status='Unprocessable Entity')
-    INTERNAL_SERVER_ERROR=INFO(code=500, status='Internal Server Error')
+    OK = INFO(code=200, status='Ok')
+    CREATED = INFO(code=201, status='Created')
+    BAD_REQUEST = INFO(code=400, status='Bad Request')
+    UNAUTHORIZED = INFO(code=401, status='Unauthorized')
+    FORBIDDEN = INFO(code=403, status='Forbidden')
+    NOT_FOUND = INFO(code=404, status='Not Found')
+    CONFLICT = INFO(code=409, status='Conflict')
+    UNPROCESSABLE_ENTITY = INFO(code=422, status='Unprocessable Entity')
+    INTERNAL_SERVER_ERROR = INFO(code=500, status='Internal Server Error')

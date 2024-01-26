@@ -1,15 +1,15 @@
 'Role Based Access'
 
+import functools
 import os
-from functools import wraps
 from pathlib import Path
 from typing import List
 
 from dotenv import load_dotenv
-from flask import jsonify
 from flask_jwt_extended import get_jwt, verify_jwt_in_request
 
-from config.message_prompts import Roles
+from config.message_prompts import ErrorMessage, Roles, StatusCodes
+from utils.custom_error import CustomError
 
 dotenv_path = Path('.env')
 load_dotenv(dotenv_path=dotenv_path)
@@ -20,10 +20,13 @@ ROLE_MAPPING = {
     Roles.PLAYER: os.getenv('PLAYER_MAPPING')
 }
 
+
 def access_level(roles: List):
     'A parameterised decorator to specify access levels'
+
     def decorator(func):
-        @wraps(func)
+
+        @functools.wraps(func)
         def wrapper(*args, **kwargs):
             verify_jwt_in_request()
             claims = get_jwt()
@@ -31,6 +34,9 @@ def access_level(roles: List):
 
             if claims["cap"] in mapped_roles:
                 return func(*args, **kwargs)
-            return jsonify(message="Forbidden"), 403
+            error = CustomError(StatusCodes.FORBIDDEN, message=ErrorMessage.FORBIDDEN)
+            return error.error_info, error.code
+
         return wrapper
+
     return decorator

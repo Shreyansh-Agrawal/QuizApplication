@@ -6,8 +6,8 @@ from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
 from config.message_prompts import Roles
-from controllers.question import QuestionController
-from controllers.user import UserController
+from controllers.question_controller import QuestionController
+from controllers.user_controller import UserController
 from database.database_access import DatabaseAccess
 from schemas.question import QuestionSchema, QuizDataSchema, QuestionUpdateSchema
 from utils.rbac import access_level

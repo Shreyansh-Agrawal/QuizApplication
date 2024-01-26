@@ -5,7 +5,7 @@ import mysql.connector
 import pytest
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage
-from controllers.quiz import QuizController
+from controllers.quiz_controller import QuizController
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
 
 

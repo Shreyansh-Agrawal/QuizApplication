@@ -12,7 +12,7 @@ class InitializationQueries:
             admin_id VARCHAR(10),
             category_name VARCHAR(50) UNIQUE
         )'''
-    CREATE_CREDENTIALS_TABLE= '''
+    CREATE_CREDENTIALS_TABLE = '''
         CREATE TABLE IF NOT EXISTS credentials (
             user_id VARCHAR(10) PRIMARY KEY,
             username VARCHAR(25) UNIQUE,

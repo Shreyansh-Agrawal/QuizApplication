@@ -27,11 +27,11 @@ from flask_smorest import Api
 
 from config.message_prompts import ErrorMessage, LogMessage, StatusCodes
 from database.database_access import DatabaseAccess
-from routes.auth import blp as AuthBlueprint
-from routes.category import blp as CategoryBlueprint
-from routes.question import blp as QuestionBlueprint
-from routes.quiz import blp as QuizBlueprint
-from routes.user import blp as UserBlueprint
+from routes.auth_routes import blp as AuthBlueprint
+from routes.category_routes import blp as CategoryBlueprint
+from routes.question_routes import blp as QuestionBlueprint
+from routes.quiz_routes import blp as QuizBlueprint
+from routes.user_routes import blp as UserBlueprint
 from utils.blocklist import BLOCKLIST
 from utils.custom_error import CustomError, ValidationError
 from utils.error_handlers import handle_internal_server_error, handle_validation_error, handle_bad_request
@@ -94,27 +94,27 @@ def create_app():
 
     @jwt.revoked_token_loader
     def revoked_token_callback(_jwt_header, _jwt_payload):
-        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.TokenRevoked)
+        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.TOKEN_REVOKED)
         return error.error_info, error.code
 
     @jwt.needs_fresh_token_loader
     def token_not_fresh_callback(_jwt_header, _jwt_payload):
-        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.TokenNotFresh)
+        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.TOKEN_NOT_FRESH)
         return error.error_info, error.code
 
     @jwt.expired_token_loader
     def expired_token_callback(_jwt_header, _jwt_payload):
-        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.TokenExpired)
+        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.TOKEN_EXPIRED)
         return error.error_info, error.code
 
     @jwt.invalid_token_loader
     def invalid_token_callback(_error):
-        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.InvalidToken)
+        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.INVALID_TOKEN)
         return error.error_info, error.code
 
     @jwt.unauthorized_loader
     def missing_token_callback(_error):
-        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.MissingToken)
+        error = CustomError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.MISSING_TOKEN)
         return error.error_info, error.code
 
     api.register_blueprint(AuthBlueprint, url_prefix='/v1')
