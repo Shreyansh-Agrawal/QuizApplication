@@ -83,7 +83,7 @@ def create_app():
 
     app.register_error_handler(400, handle_bad_request)
     app.register_error_handler(ValidationError, handle_validation_error)
-    app.register_error_handler(Exception, handle_internal_server_error)
+    # app.register_error_handler(Exception, handle_internal_server_error)
 
     api = Api(app)
     jwt = JWTManager(app)
