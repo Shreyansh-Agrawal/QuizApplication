@@ -16,7 +16,7 @@ class DatabaseAccess:
         '''Reads data from database.'''
 
         with DatabaseConnection() as connection:
-            cursor = connection.cursor(dictionary=True)
+            cursor = connection.cursor()
             if not data:
                 cursor.execute(query)
             else:
@@ -35,7 +35,7 @@ class DatabaseAccess:
                 cursor.execute(query, data)
             cursor.execute('SELECT ROW_COUNT()')
 
-            rows_affected = cursor.fetchone()[0]
+            rows_affected = cursor.fetchone()['ROW_COUNT()']
             if rows_affected:
                 return True
             return False

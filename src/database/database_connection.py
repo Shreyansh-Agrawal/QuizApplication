@@ -3,7 +3,7 @@
 import logging
 import os
 from pathlib import Path
-
+import pymysql
 import mysql.connector
 from dotenv import load_dotenv
 
@@ -26,8 +26,7 @@ class DatabaseConnection:
     MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
     MYSQL_HOST = os.getenv('MYSQL_HOST')
     MYSQL_DB = os.getenv('MYSQL_DB')
-    MYSQL_POOL_NAME = 'quizapp_pool'
-    MYSQL_POOL_SIZE = 3
+    MYSQL_PORT = int(os.getenv('MYSQL_PORT'))
 
     def __init__(self) -> None:
         self.connection = None
@@ -37,12 +36,17 @@ class DatabaseConnection:
     def setup_connection(self) -> None:
         'sets up connection to MySQL'
 
-        self.connection = mysql.connector.connect(
+        timeout = 10
+        self.connection = pymysql.connect(
+            charset="utf8mb4",
+            connect_timeout=timeout,
+            cursorclass=pymysql.cursors.DictCursor,
             user=DatabaseConnection.MYSQL_USER,
             password=DatabaseConnection.MYSQL_PASSWORD,
             host=DatabaseConnection.MYSQL_HOST,
-            pool_name=DatabaseConnection.MYSQL_POOL_NAME,
-            pool_size=DatabaseConnection.MYSQL_POOL_SIZE
+            port=DatabaseConnection.MYSQL_PORT,
+            read_timeout=timeout,
+            write_timeout=timeout,
         )
         self.cursor = self.connection.cursor()
         self.cursor.execute(InitializationQueries.CREATE_DATABASE.format(DatabaseConnection.MYSQL_DB))
