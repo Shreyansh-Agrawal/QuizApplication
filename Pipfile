@@ -15,6 +15,7 @@ flask-jwt-extended = "*"
 flask-smorest = "*"
 gunicorn = "*"
 pymysql = "*"
+cryptography = "*"
 
 [dev-packages]
 
