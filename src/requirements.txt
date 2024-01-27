@@ -1,6 +1,7 @@
 shortuuid
 python-dotenv
 mysql-connector-python
+pymysql
 flask
 flask-jwt-extended
 flask-smorest
