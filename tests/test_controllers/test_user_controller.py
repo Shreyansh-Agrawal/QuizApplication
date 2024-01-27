@@ -1,6 +1,6 @@
 '''Test file for user_controller.py'''
 
-import mysql.connector
+import pymysql
 import pytest
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage
@@ -64,7 +64,7 @@ class TestUserController:
         '''Test method to test create admin error'''
 
         mock_admin = mock_admin_class()
-        mock_admin.save_to_database.side_effect = mysql.connector.IntegrityError
+        mock_admin.save_to_database.side_effect = pymysql.err.IntegrityError
 
         with pytest.raises(LoginError):
             self.user_controller.create_admin(self.data)

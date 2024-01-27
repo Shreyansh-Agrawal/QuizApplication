@@ -4,7 +4,7 @@ import logging
 from dataclasses import astuple
 from typing import Dict, List
 
-import mysql.connector
+import pymysql
 
 from config.message_prompts import ErrorMessage, Headers, LogMessage, Roles, StatusCodes
 from config.queries import Queries
@@ -45,7 +45,7 @@ class UserBusiness:
         credentials = (astuple(entity)[0], ) + astuple(entity)[5:]
         username = self.db.read(Queries.GET_USERNAME, (entity.username, ))
         if username:
-            raise mysql.connector.IntegrityError
+            raise pymysql.err.IntegrityError
         self.db.write(Queries.INSERT_USER_DATA, user_data)
         self.db.write(Queries.INSERT_CREDENTIALS, credentials)
 
@@ -72,7 +72,7 @@ class UserBusiness:
         admin = Admin.get_instance(admin_data)
         try:
             self.save_user(admin)
-        except mysql.connector.IntegrityError as e:
+        except pymysql.err.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.USER_EXISTS) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.ADMIN)
@@ -113,12 +113,12 @@ class UserBusiness:
         try:
             if len(users_update_values) > 1:
                 self.db.write(users_query, tuple(users_update_values))
-        except mysql.connector.IntegrityError as e:
+        except pymysql.err.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.EMAIL_TAKEN) from e
         try:
             if len(credentials_update_values) > 1:
                 self.db.write(credentials_query, tuple(credentials_update_values))
-        except mysql.connector.IntegrityError as e:
+        except pymysql.err.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.USERNAME_TAKEN) from e
 
     def delete_user_by_id(self, user_id: str, role: str) -> None:

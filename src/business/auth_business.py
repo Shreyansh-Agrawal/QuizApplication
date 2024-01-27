@@ -3,7 +3,7 @@
 import logging
 from typing import Dict
 
-import mysql.connector
+import pymysql
 from flask_jwt_extended import create_access_token, create_refresh_token
 
 from business.user_business import UserBusiness
@@ -65,7 +65,7 @@ class AuthBusiness:
         player = Player.get_instance(player_data)
         try:
             self.user_business.save_user(player)
-        except mysql.connector.IntegrityError as e:
+        except pymysql.err.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.USER_EXISTS) from e
 
         logger.debug(LogMessage.SIGNUP_SUCCESS)

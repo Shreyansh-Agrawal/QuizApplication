@@ -4,7 +4,7 @@ import logging
 import os
 from pathlib import Path
 
-import mysql.connector
+import pymysql
 from dotenv import load_dotenv
 
 from business.user_business import UserBusiness
@@ -65,7 +65,7 @@ class Initializer:
 
         try:
             self.user_business.save_user(super_admin)
-        except mysql.connector.IntegrityError:
+        except pymysql.err.IntegrityError:
             logger.debug(LogMessage.SUPER_ADMIN_PRESENT)
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.SUPER_ADMIN)

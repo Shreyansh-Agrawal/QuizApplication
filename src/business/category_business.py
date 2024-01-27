@@ -3,7 +3,7 @@
 import logging
 from typing import Dict, List
 
-import mysql.connector
+import pymysql
 
 from config.message_prompts import ErrorMessage, Headers, LogMessage, StatusCodes
 from config.queries import Queries
@@ -48,7 +48,7 @@ class CategoryBusiness:
         category = Category.get_instance(category_data)
         try:
             self.save_category(category)
-        except mysql.connector.IntegrityError as e:
+        except pymysql.err.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.CATEGORY)
@@ -60,7 +60,7 @@ class CategoryBusiness:
 
         try:
             row_affected = self.db.write(Queries.UPDATE_CATEGORY_BY_ID, (new_category_name, category_id))
-        except mysql.connector.IntegrityError as e:
+        except pymysql.err.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
         if not row_affected:
             raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.CATEGORY_NOT_FOUND)

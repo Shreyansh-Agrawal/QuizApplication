@@ -1,6 +1,6 @@
 '''Test file for initialize_app.py'''
 
-import mysql.connector
+import pymysql
 
 import pytest
 
@@ -29,7 +29,7 @@ def test_create_super_admin_failure(mocker):
     '''Test function to test create_super_admin method failure'''
 
     mock_super_admin = mocker.patch('utils.initialize_app.SuperAdmin')
-    mock_super_admin().save_to_database.side_effect = mysql.connector.IntegrityError('Super Admin Already exists!')
+    mock_super_admin().save_to_database.side_effect = pymysql.err.IntegrityError('Super Admin Already exists!')
 
     with pytest.raises(DuplicateEntryError):
         Initializer.create_super_admin()

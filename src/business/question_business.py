@@ -3,7 +3,7 @@
 import logging
 from typing import Dict, List
 
-import mysql.connector
+import pymysql
 
 from config.message_prompts import ErrorMessage, Headers, LogMessage, StatusCodes
 from config.queries import Queries
@@ -135,7 +135,7 @@ class QuestionBusiness:
             question.add_option(option)
         try:
             self.save_question(question)
-        except mysql.connector.IntegrityError as e:
+        except pymysql.err.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.QUESTION_EXISTS) from e
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.QUES)
 
@@ -147,7 +147,7 @@ class QuestionBusiness:
             category_name = category_data['category']
             try:
                 self.db.write(Queries.INSERT_CATEGORY, (category_id, admin_id, category_name))
-            except mysql.connector.IntegrityError as e:
+            except pymysql.err.IntegrityError as e:
                 logger.debug(e)
 
             for question_data in category_data['question_data']:
@@ -169,14 +169,14 @@ class QuestionBusiness:
                             other_option = question_data['options']['other_options'][i]
 
                             self.db.write(Queries.INSERT_OPTION, (other_option_id, question_id, other_option, 0))
-                except mysql.connector.IntegrityError as e:
+                except pymysql.err.IntegrityError as e:
                     logger.debug(e)
 
     def update_question(self, question_id: str, new_ques_text: str) -> None:
         '''Update question text by question id'''
         try:
             row_affected = self.db.write(Queries.UPDATE_QUESTION_TEXT_BY_ID, (new_ques_text, question_id))
-        except mysql.connector.IntegrityError as e:
+        except pymysql.err.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, ErrorMessage.QUESTION_EXISTS) from e
         if not row_affected:
             raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTION_NOT_FOUND)

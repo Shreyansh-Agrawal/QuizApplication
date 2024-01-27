@@ -1,6 +1,6 @@
 '''Test file for quiz_controller.py'''
 
-import mysql.connector
+import pymysql
 
 import pytest
 
@@ -113,7 +113,7 @@ class TestQuizController:
         '''Test method to test create_category error'''
 
         mock_category = mock_category_class()
-        mock_category.save_to_database.side_effect = mysql.connector.IntegrityError
+        mock_category.save_to_database.side_effect = pymysql.err.IntegrityError
 
         with pytest.raises(DuplicateEntryError):
             self.quiz_controller.create_category(self.data)
@@ -137,7 +137,7 @@ class TestQuizController:
         mock_create_quiz_helper = mock_create_quiz_helper_class()
         mock_question = mocker.Mock()
         mock_create_quiz_helper.create_option.return_value = mock_question
-        mock_question.save_to_database.side_effect = mysql.connector.IntegrityError
+        mock_question.save_to_database.side_effect = pymysql.err.IntegrityError
 
         with pytest.raises(DuplicateEntryError):
             self.quiz_controller.create_question(self.username)
@@ -159,7 +159,7 @@ class TestQuizController:
     def test_update_category_by_name_error(self, caplog, mock_write):
         '''Test method to test update_category_by_name error'''
 
-        mock_write.side_effect = mysql.connector.IntegrityError
+        mock_write.side_effect = pymysql.err.IntegrityError
         with pytest.raises(DuplicateEntryError):
             self.quiz_controller.update_category_by_name(self.old_category_name, self.category_name)
         assert LogMessage.UPDATE_ENTITY, Headers.CATEGORY in caplog.text

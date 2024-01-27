@@ -4,7 +4,6 @@ import logging
 import os
 from pathlib import Path
 import pymysql
-import mysql.connector
 from dotenv import load_dotenv
 
 from config.queries import InitializationQueries
@@ -52,7 +51,7 @@ class DatabaseConnection:
         self.cursor.execute(InitializationQueries.CREATE_DATABASE.format(DatabaseConnection.MYSQL_DB))
         self.cursor.execute(InitializationQueries.USE_DATABASE.format(DatabaseConnection.MYSQL_DB))
 
-    def __enter__(self) -> mysql.connector.connection.MySQLConnection:
+    def __enter__(self):
         return self.connection
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:

@@ -1,6 +1,6 @@
 '''Test file for database_access.py'''
 
-import mysql.connector
+import pymysql
 
 import pytest
 
@@ -22,7 +22,7 @@ class TestDatabaseAccess:
         mock_connection = mocker.Mock()
         mock_connection.cursor.return_value = mock_cursor
         mocker.patch('database.database_access.FilePaths')
-        mocker.patch('mysql.connector.connect', return_value=mock_connection)
+        mocker.patch('pymysql.connect', return_value=mock_connection)
         db_access = DatabaseAccess()
 
         return db_access
@@ -43,7 +43,7 @@ class TestDatabaseAccess:
         '''Test method to test read error'''
 
         db_access = mock_db_access
-        db_access.cursor.execute.side_effect = mysql.connector.OperationalError('Mock Error')
+        db_access.cursor.execute.side_effect = pymysql.OperationalError('Mock Error')
         result = db_access.read(self.query)
 
         db_access.cursor.fetchall.assert_not_called()
@@ -70,7 +70,7 @@ class TestDatabaseAccess:
         '''Test method to test write error'''
 
         db_access = mock_db_access
-        db_access.cursor.execute.side_effect = mysql.connector.OperationalError('Mock Error')
+        db_access.cursor.execute.side_effect = pymysql.OperationalError('Mock Error')
         db_access.write(self.query)
 
         assert 'Mock Error' in caplog.text
@@ -78,7 +78,7 @@ class TestDatabaseAccess:
     def test_init_exception_handling(self, mocker):
         '''Test method to test __init__ exception handling'''
 
-        mock_connect = mocker.patch('mysql.connector.connect')
-        mock_connect.side_effect = mysql.connector.Error('Mocked error')
-        with pytest.raises(mysql.connector.Error):
+        mock_connect = mocker.patch('pymysql.connect')
+        mock_connect.side_effect = pymysql.Error('Mocked error')
+        with pytest.raises(pymysql.Error):
             DatabaseAccess()

@@ -1,6 +1,6 @@
 '''Test file for auth_controller.py'''
 
-import mysql.connector
+import pymysql
 
 import pytest
 from pytest_mock import mocker
@@ -85,7 +85,7 @@ class TestAuthController:
 
         mocker.patch('controllers.auth_controller.hash_password', return_value = 'hashed_password')
         mock_player = mocker.patch('controllers.auth_controller.Player')
-        mock_player().save_to_database.side_effect = mysql.connector.IntegrityError
+        mock_player().save_to_database.side_effect = pymysql.err.IntegrityError
 
         with pytest.raises(LoginError):
             self.auth_controller.signup(self.player_data)
