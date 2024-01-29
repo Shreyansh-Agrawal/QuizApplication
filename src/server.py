@@ -80,6 +80,7 @@ def create_app():
     app.config["OPENAPI_RAPIDOC_PATH"] = "/rapidoc"
     app.config["OPENAPI_RAPIDOC_URL"] = "https://unpkg.com/rapidoc/dist/rapidoc-min.js"
     app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
+    app.json.sort_keys = False
 
     app.register_error_handler(400, handle_bad_request)
     app.register_error_handler(ValidationError, handle_validation_error)
