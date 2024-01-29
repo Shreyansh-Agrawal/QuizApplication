@@ -4,7 +4,6 @@ import logging
 from typing import Dict
 
 import mysql.connector
-from flask_jwt_extended import create_access_token, create_refresh_token
 
 from business.user_business import UserBusiness
 from config.message_prompts import ErrorMessage, LogMessage, StatusCodes
@@ -15,6 +14,7 @@ from utils.blocklist import BLOCKLIST
 from utils.custom_error import DuplicateEntryError, InvalidCredentialsError
 from utils.password_hasher import hash_password
 from utils.rbac import ROLE_MAPPING
+from utils.token_handler import create_access_token, create_refresh_token
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ class AuthBusiness:
 
         logger.debug(LogMessage.LOGIN_INITIATED)
 
-        username, password = login_data.values()
+        username, password = login_data.username, login_data.password
         hashed_password = hash_password(password)
         user_data = self.db.read(Queries.GET_CREDENTIALS_BY_USERNAME, (username, ))
 
@@ -53,7 +53,7 @@ class AuthBusiness:
             additional_claims={'cap': mapped_role}
         )
         password_type = 'permanent' if is_password_changed else 'default'
-        token_data = {"access_token": access_token, "refresh_token": refresh_token, "password_type": password_type}
+        token_data = {'access_token': access_token, 'refresh_token': refresh_token, 'password_type': password_type}
         return token_data
 
     def register(self, player_data: Dict) -> None:
@@ -83,5 +83,5 @@ class AuthBusiness:
             fresh=False,
             additional_claims={'cap': mapped_role}
         )
-        token_data = {"access_token": new_access_token}
+        token_data = {'access_token': new_access_token}
         return token_data

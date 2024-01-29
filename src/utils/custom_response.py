@@ -5,7 +5,7 @@ from typing import Dict, NamedTuple
 
 
 @dataclass
-class SuccessMessage(Exception):
+class SuccessMessage:
     'A custom success message class for successful response'
 
     status: NamedTuple
@@ -21,4 +21,4 @@ class SuccessMessage(Exception):
             'status': self.status.status,
             'message': self.message,
             'data': self.data
-        }, self.status.code
+        }

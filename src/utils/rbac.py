@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import List
 
 from dotenv import load_dotenv
-from flask_jwt_extended import get_jwt, verify_jwt_in_request
+from fastapi import HTTPException
 
 from config.message_prompts import ErrorMessage, Roles, StatusCodes
 from utils.custom_error import CustomError
@@ -28,14 +28,12 @@ def access_level(roles: List):
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            verify_jwt_in_request()
-            claims = get_jwt()
+            claims = kwargs.get('claims')
             mapped_roles = [ROLE_MAPPING.get(role) for role in roles]
-
-            if claims["cap"] in mapped_roles:
+            if claims.get('cap') in mapped_roles:
                 return func(*args, **kwargs)
             error = CustomError(StatusCodes.FORBIDDEN, message=ErrorMessage.FORBIDDEN)
-            return error.error_info, error.code
+            raise HTTPException(status_code=error.code, detail=error.error_info)
 
         return wrapper
 

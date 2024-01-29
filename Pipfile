@@ -10,10 +10,8 @@ python-dotenv = "*"
 pytest-mock = "*"
 pytest-cov = "*"
 mysql-connector-python = "*"
-flask = "*"
-flask-jwt-extended = "*"
-flask-smorest = "*"
-gunicorn = "*"
+fastapi = {extras = ["all"], version = "*"}
+python-jose = {extras = ["cryptography"], version = "*"}
 
 [dev-packages]
 

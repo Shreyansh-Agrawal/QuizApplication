@@ -24,25 +24,25 @@ class QuizController:
         '''Return top 10 scores for leaderboard'''
 
         leaderboard_data = self.quiz_business.get_leaderboard()
-        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=leaderboard_data).message_info
+        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=leaderboard_data)
 
     @handle_custom_errors
     def get_player_scores(self, player_id: str):
         '''Return user's scores'''
 
         scores = self.quiz_business.get_player_scores(player_id)
-        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=scores).message_info
+        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=scores)
 
     @handle_custom_errors
     def get_random_questions(self, category_id: str = None):
         '''Return random questions in a category if category_id present else across all categories'''
 
         question_data = self.quiz_business.get_random_questions(category_id)
-        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=question_data).message_info
+        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=question_data)
 
     @handle_custom_errors
     def evaluate_player_answers(self, player_id: str, player_answers: List[Dict]):
         'Evaluate player answers and return score with correct answers'
 
         result = self.quiz_business.evaluate_player_answers(player_id, player_answers)
-        return SuccessMessage(status=StatusCodes.CREATED, message=Message.SUBMISSION_SUCCESS, data=result).message_info
+        return SuccessMessage(status=StatusCodes.CREATED, message=Message.SUBMISSION_SUCCESS, data=result)

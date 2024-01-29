@@ -1,20 +1,19 @@
 'Schema for Auth data'
 
-from marshmallow import fields, validate
+from pydantic import BaseModel, Field
 
 from config.regex_patterns import RegexPattern
-from schemas.config_schema import CustomSchema
 
 
-class LoginSchema(CustomSchema):
+class LoginSchema(BaseModel):
     'Schema for login'
 
-    username = fields.Str(required=True, validate=validate.Regexp(RegexPattern.USERNAME_PATTERN))
-    password = fields.Str(required=True, load_only=True)
+    username: str = Field(pattern=RegexPattern.USERNAME_PATTERN)
+    password: str = Field(min_length=6)
 
 
 class RegistrationSchema(LoginSchema):
     'Schema for registration'
 
-    name = fields.Str(required=True, validate=validate.Regexp(RegexPattern.NAME_PATTERN))
-    email = fields.Str(required=True, validate=validate.Regexp(RegexPattern.EMAIL_PATTERN))
+    name: str = Field(pattern=RegexPattern.NAME_PATTERN)
+    email: str = Field(pattern=RegexPattern.EMAIL_PATTERN)

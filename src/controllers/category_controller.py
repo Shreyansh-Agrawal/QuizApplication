@@ -24,7 +24,7 @@ class CategoryController:
         '''Return all Quiz Categories'''
 
         category_data = self.category_business.get_all_categories()
-        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=category_data).message_info
+        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=category_data)
 
     @handle_custom_errors
     def create_category(self, category_data: Dict, user_id: str):
@@ -32,7 +32,7 @@ class CategoryController:
 
         category_data['admin_id'] = user_id
         self.category_business.create_category(category_data)
-        return SuccessMessage(status=StatusCodes.CREATED, message=Message.CREATE_CATEGORY_SUCCESS).message_info
+        return SuccessMessage(status=StatusCodes.CREATED, message=Message.CREATE_CATEGORY_SUCCESS)
 
     @handle_custom_errors
     def update_category(self, category_data: Dict, category_id: str):
@@ -40,11 +40,11 @@ class CategoryController:
 
         updated_category_name = category_data.get('updated_category_name')
         self.category_business.update_category(category_id, updated_category_name)
-        return SuccessMessage(status=StatusCodes.OK, message=Message.UPDATE_CATEGORY_SUCCESS).message_info
+        return SuccessMessage(status=StatusCodes.OK, message=Message.UPDATE_CATEGORY_SUCCESS)
 
     @handle_custom_errors
     def delete_category(self, category_id: str):
         '''Delete a category by category id'''
 
         self.category_business.delete_category(category_id)
-        return SuccessMessage(status=StatusCodes.OK, message=Message.DELETE_CATEGORY_SUCCESS).message_info
+        return SuccessMessage(status=StatusCodes.OK, message=Message.DELETE_CATEGORY_SUCCESS)

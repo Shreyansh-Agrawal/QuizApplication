@@ -1,98 +1,83 @@
 'Routes for the User related functionalities'
 
-from flask.views import MethodView
-from flask_jwt_extended import get_jwt_identity
-from flask_smorest import Blueprint
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Response
 
 from config.message_prompts import Roles
 from controllers.user_controller import UserController
 from database.database_access import DatabaseAccess
-from schemas.user import UserSchema, UserUpdateSchema
+from schemas.user import AdminSchema, UserUpdateSchema
 from utils.rbac import access_level
+from utils.token_handler import get_jwt
 
-blp = Blueprint('User', __name__, description='Routes for the User related functionalities')
+router = APIRouter(tags=['User'])
 
 db = DatabaseAccess()
 user_controller = UserController(db)
+user_dependency = Annotated[dict, Depends(get_jwt)]
 
 
-@blp.route('/profile/me')
-class Profile(MethodView):
-    '''
-    Routes to:
-        View user profile
-        Update user profile
-    '''
-
-    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
-    def get(self):
-        'Get user profile data'
-        user_id = get_jwt_identity()
-        return user_controller.get_user_profile_data(user_id)
-
-    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
-    @blp.arguments(UserUpdateSchema)
-    def patch(self, user_data):
-        'Update user profile'
-        user_id = get_jwt_identity()
-        return user_controller.update_user_data(user_id, user_data)
+@router.get('/profile/me')
+@access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
+def get_user_profile_data(claims: user_dependency, response: Response):
+    'Get user profile data'
+    user_id = claims.get('sub')
+    res = user_controller.get_user_profile_data(user_id)
+    response.status_code = res.status.code
+    return res.message_info
 
 
-@blp.route('/players')
-class Player(MethodView):
-    '''
-    Routes to:
-        Get all player details
-    '''
-
-    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
-    def get(self):
-        'Get all player details'
-        return user_controller.get_all_players()
+@router.patch('/profile/me')
+@access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
+def update_user_data(claims: user_dependency, user_data: UserUpdateSchema, response: Response):
+    'Update user profile'
+    user_id = claims.get('sub')
+    res = user_controller.update_user_data(user_id, dict(user_data))
+    response.status_code = res.status.code
+    return res.message_info
 
 
-@blp.route('/admins')
-class Admin(MethodView):
-    '''
-    Routes to:
-        Get all admins details
-        Create a new admin account
-    '''
-
-    @access_level(roles=[Roles.SUPER_ADMIN])
-    def get(self):
-        'Get all admin details'
-        return user_controller.get_all_admins()
+@router.get('/players')
+@access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
+def get_all_players(claims: user_dependency, response: Response):
+    'Get all player details'
+    res = user_controller.get_all_players()
+    response.status_code = res.status.code
+    return res.message_info
 
 
-    @access_level(roles=[Roles.SUPER_ADMIN])
-    @blp.arguments(UserSchema)
-    def post(self, admin_data):
-        'Create a new admin account'
-        return user_controller.create_admin(admin_data)
+@router.get('/admins')
+@access_level(roles=[Roles.SUPER_ADMIN])
+def get_all_admins(claims: user_dependency, response: Response):
+    'Get all admin details'
+    res = user_controller.get_all_admins()
+    response.status_code = res.status.code
+    return res.message_info
 
 
-@blp.route('/admins/<string:admin_id>')
-class AdminById(MethodView):
-    '''
-    Routes to:
-        Delete an existing admin
-    '''
-
-    @access_level(roles=[Roles.SUPER_ADMIN])
-    def delete(self, admin_id):
-        'Delete an existing admin'
-        return user_controller.delete_admin_by_id(admin_id)
+@router.post('/admins')
+@access_level(roles=[Roles.SUPER_ADMIN])
+def create_admin(claims: user_dependency, admin_data: AdminSchema, response: Response):
+    'Create a new admin account'
+    res = user_controller.create_admin(dict(admin_data))
+    response.status_code = res.status.code
+    return res.message_info
 
 
-@blp.route('/players/<string:player_id>')
-class PlayerById(MethodView):
-    '''
-    Routes to:
-        Delete an existing player
-    '''
+@router.delete('/admins/{admin_id}')
+@access_level(roles=[Roles.SUPER_ADMIN])
+def delete_admin_by_id(claims: user_dependency, admin_id: str, response: Response):
+    'Delete an existing admin'
+    res = user_controller.delete_admin_by_id(admin_id)
+    response.status_code = res.status.code
+    return res.message_info
 
-    @access_level(roles=[Roles.ADMIN])
-    def delete(self, player_id):
-        'Delete an existing player'
-        return user_controller.delete_player_by_id(player_id)
+
+@router.delete('/players/{player_id}')
+@access_level(roles=[Roles.ADMIN])
+def delete_player_by_id(claims: user_dependency, player_id: str, response: Response):
+    'Delete an existing player'
+    res = user_controller.delete_player_by_id(player_id)
+    response.status_code = res.status.code
+    return res.message_info

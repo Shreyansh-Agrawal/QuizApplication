@@ -1,50 +1,51 @@
 'Schema for Question data'
 
-from marshmallow import fields, validate
+from typing import List
+
+from pydantic import BaseModel, Field
 
 from config.regex_patterns import RegexPattern
-from schemas.config_schema import CustomSchema
 
 
-class QuestionSchema(CustomSchema):
+class QuestionSchema(BaseModel):
     'Schema for Question data'
 
-    category_name = fields.Str(dump_only=True, validate=validate.Regexp(RegexPattern.NAME_PATTERN))
-    question_text = fields.Str(required=True, validate=validate.Regexp(RegexPattern.QUES_TEXT_PATTERN))
-    question_type = fields.Str(required=True)
-    answer = fields.Str(required=True, validate=validate.Regexp(RegexPattern.OPTION_TEXT_PATTERN))
-    other_options = fields.List(fields.Str)
+    category_name: str = Field(pattern=RegexPattern.NAME_PATTERN)
+    question_text: str = Field(pattern=RegexPattern.QUES_TEXT_PATTERN)
+    question_type: str
+    answer: str = Field(pattern=RegexPattern.OPTION_TEXT_PATTERN)
+    other_options: List[str]
 
 
-class QuestionOptionsSchema(CustomSchema):
+class QuestionOptionsSchema(BaseModel):
     'Schema for Options data'
 
-    answer = fields.Str(required=True)
-    other_options = fields.List(fields.Str(), missing=[])
+    answer: str
+    other_options: List = []
 
 
-class QuizQuestionSchema(CustomSchema):
+class QuizQuestionSchema(BaseModel):
     'Schema for Quiz Question data'
 
-    question_text = fields.Str(required=True)
-    question_type = fields.Str(required=True)
-    options = fields.Nested(QuestionOptionsSchema, required=True)
+    question_text: str
+    question_type: str
+    options: QuestionOptionsSchema
 
 
-class QuizCategorySchema(CustomSchema):
+class QuizCategorySchema(BaseModel):
     'Schema for Quiz Category data'
 
-    category = fields.Str(required=True)
-    question_data = fields.List(fields.Nested(QuizQuestionSchema), required=True)
+    category: str
+    question_data: List[QuizQuestionSchema]
 
 
-class QuizDataSchema(CustomSchema):
+class QuizDataSchema(BaseModel):
     'Schema for Quiz data'
 
-    quiz_data = fields.List(fields.Nested(QuizCategorySchema), required=True)
+    quiz_data: List[QuizCategorySchema]
 
 
-class QuestionUpdateSchema(CustomSchema):
+class QuestionUpdateSchema(BaseModel):
     'Schema for updating a Question'
 
-    question_text = fields.Str(required=True)
+    question_text: str

@@ -24,21 +24,21 @@ class QuestionController:
         '''Return the quiz data in a specified category or across all categories'''
 
         quiz_data = self.question_business.get_quiz_data(category_id)
-        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=quiz_data).message_info
+        return SuccessMessage(status=StatusCodes.OK, message=Message.SUCCESS, data=quiz_data)
 
     @handle_custom_errors
     def create_question(self, category_id: str, question_data: Dict, admin_id: str):
         '''Add Questions in a Category'''
 
         self.question_business.create_question(category_id, question_data, admin_id)
-        return SuccessMessage(status=StatusCodes.CREATED, message=Message.QUESTION_CREATED).message_info
+        return SuccessMessage(status=StatusCodes.CREATED, message=Message.QUESTION_CREATED)
 
     @handle_custom_errors
     def post_quiz_data(self, quiz_data: Dict, admin_id: str):
         '''Posts quiz data to the database'''
 
         self.question_business.post_quiz_data(quiz_data, admin_id)
-        return SuccessMessage(status=StatusCodes.CREATED, message=Message.QUIZ_POSTED).message_info
+        return SuccessMessage(status=StatusCodes.CREATED, message=Message.QUIZ_POSTED)
 
     @handle_custom_errors
     def update_question(self, question_id: str, question_data: Dict):
@@ -46,11 +46,11 @@ class QuestionController:
 
         new_ques_text = question_data.get('question_text')
         self.question_business.update_question(question_id, new_ques_text)
-        return SuccessMessage(status=StatusCodes.OK, message=Message.QUESTION_UPDATED).message_info
+        return SuccessMessage(status=StatusCodes.OK, message=Message.QUESTION_UPDATED)
 
     @handle_custom_errors
     def delete_question(self, question_id: str):
         '''Delete a question and its options by question id'''
 
         self.question_business.delete_question(question_id)
-        return SuccessMessage(status=StatusCodes.OK, message=Message.QUESTION_DELETED).message_info
+        return SuccessMessage(status=StatusCodes.OK, message=Message.QUESTION_DELETED)

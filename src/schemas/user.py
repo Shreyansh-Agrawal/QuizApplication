@@ -1,25 +1,21 @@
 'Schema for User data'
 
-from marshmallow import fields, validate
+from pydantic import BaseModel, Field
 
 from config.regex_patterns import RegexPattern
-from schemas.config_schema import CustomSchema
 
 
-class UserSchema(CustomSchema):
+class AdminSchema(BaseModel):
     'Schema for admin and player data'
 
-    user_id = fields.Str(dump_only=True, validate=validate.Regexp(RegexPattern.ID_PATTERN))
-    username = fields.Str(required=True, validate=validate.Regexp(RegexPattern.USERNAME_PATTERN))
-    name = fields.Str(required=True, validate=validate.Regexp(RegexPattern.NAME_PATTERN))
-    email = fields.Str(required=True, validate=validate.Regexp(RegexPattern.EMAIL_PATTERN))
-    registration_date = fields.Str(dump_only=True)
-    password = fields.Str(load_only=True)
+    username: str = Field(pattern=RegexPattern.USERNAME_PATTERN)
+    name: str = Field(pattern=RegexPattern.NAME_PATTERN)
+    email: str = Field(pattern=RegexPattern.EMAIL_PATTERN)
 
-class UserUpdateSchema(CustomSchema):
+class UserUpdateSchema(BaseModel):
     'Schema for update profile'
 
-    username = fields.Str(load_only=True, validate=validate.Regexp(RegexPattern.USERNAME_PATTERN))
-    name = fields.Str(load_only=True, validate=validate.Regexp(RegexPattern.NAME_PATTERN))
-    email = fields.Str(load_only=True, validate=validate.Regexp(RegexPattern.EMAIL_PATTERN))
-    password = fields.Str(load_only=True)
+    username: str = Field(pattern=RegexPattern.USERNAME_PATTERN)
+    name: str = Field(pattern=RegexPattern.NAME_PATTERN)
+    email: str = Field(pattern=RegexPattern.EMAIL_PATTERN)
+    password: str

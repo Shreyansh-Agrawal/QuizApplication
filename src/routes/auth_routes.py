@@ -1,58 +1,52 @@
 'Routes for the Authentication related functionalities'
 
-from flask.views import MethodView
-from flask_jwt_extended import get_jwt, jwt_required
-from flask_smorest import Blueprint
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Response
+from fastapi.security import OAuth2PasswordRequestForm
 
 from controllers.auth_controller import AuthController
 from database.database_access import DatabaseAccess
 from schemas.auth import LoginSchema, RegistrationSchema
+from utils.token_handler import get_jwt
 
-blp = Blueprint('Auth', __name__, description='Routes for the Authentication related functionalities')
+router = APIRouter(tags=['Auth'])
 
 db = DatabaseAccess()
 auth_controller = AuthController(db)
+user_dependency = Annotated[dict, Depends(get_jwt)]
 
 
-@blp.route('/register')
-class Register(MethodView):
-    'Routes to register a new user'
-
-    @blp.arguments(RegistrationSchema)
-    def post(self, player_data):
-        'Register a new user'
-        return auth_controller.register(player_data)
+@router.post('/register')
+def register(player_data: RegistrationSchema, response: Response):
+    'Register a new user'
+    res = auth_controller.register(dict(player_data))
+    response.status_code = res.status.code
+    return res.message_info
 
 
-@blp.route('/login')
-class Login(MethodView):
-    'Routes to login an existing user'
-
-    @blp.arguments(LoginSchema)
-    def post(self, login_data):
-        'Login an existing user'
-        return auth_controller.login(login_data)
+@router.post('/login')
+def login(login_data: Annotated[OAuth2PasswordRequestForm, Depends()], response: Response):
+    'Login an existing user'
+    res = auth_controller.login(login_data)
+    response.status_code = res.status.code
+    return res.message_info
 
 
-@blp.route('/logout')
-class Logout(MethodView):
-    'Routes to logout a logged in user'
-
-    @jwt_required()
-    def post(self):
-        'Logout a logged in user'
-        jti = get_jwt().get('jti')
-        return auth_controller.logout(jti)
+@router.post('/logout')
+def logout(claims: user_dependency, response: Response):
+    'Logout a logged in user'
+    jti = claims.get('jti')
+    res = auth_controller.logout(jti)
+    response.status_code = res.status.code
+    return res.message_info
 
 
-@blp.route('/refresh')
-class Refresh(MethodView):
-    'Routes to get a non fresh access token'
-
-    @jwt_required(refresh=True)
-    def post(self):
-        'Issue a non fresh access token'
-        claims = get_jwt()
-        user_id = claims.get('sub')
-        mapped_role = claims.get('cap')
-        return auth_controller.refresh(user_id, mapped_role)
+@router.post('/refresh')
+def refresh(claims: user_dependency, response: Response):
+    'Issue a non fresh access token'
+    user_id = claims.get('sub')
+    mapped_role = claims.get('cap')
+    res = auth_controller.refresh(user_id, mapped_role)
+    response.status_code = res.status.code
+    return res.message_info
