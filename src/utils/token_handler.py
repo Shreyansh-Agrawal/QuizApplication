@@ -22,7 +22,7 @@ JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
 ALGORITHM = 'HS256'
-oauth2_bearer = OAuth2PasswordBearer(tokenUrl='/v1/login')
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl='v1/login')
 
 
 def create_access_token(identity: str, fresh: bool, additional_claims: Dict):

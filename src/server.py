@@ -61,7 +61,14 @@ def create_app():
     '''Creates and configures the FastAPI app'''
 
     initialize_quiz_app()
-    app = FastAPI()
+    app = FastAPI(
+        title='QuizApplication',
+        summary='''
+            A FastAPI-based Python Quiz REST API that facilitates the creation, management, 
+            and completion of quizzes with a focus on data security and user satisfaction.
+        ''',
+        version='v1'
+    )
 
     app.add_exception_handler(RequestValidationError, handle_validation_error)
     app.add_exception_handler(HTTPException, handle_http_exception)
