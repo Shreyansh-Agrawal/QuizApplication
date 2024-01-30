@@ -8,7 +8,7 @@ from flask_smorest import Blueprint
 from config.message_prompts import Roles
 from controllers.quiz_controller import QuizController
 from database.database_access import DatabaseAccess
-from schemas.quiz import AnswerSchema
+from schemas.quiz import AnswerSchema, QuizParamsSchema
 from utils.rbac import access_level
 
 blp = Blueprint('Quiz', __name__, description='Routes for the Quiz related functionalities')
@@ -51,13 +51,13 @@ class Quiz(MethodView):
     '''
 
     @access_level(roles=[Roles.PLAYER])
-    def get(self):
+    @blp.arguments(QuizParamsSchema, location='query')
+    def get(self, query_params):
         '''
         Get random questions for quiz
-        Query Parameters: category_id
+        Query Parameters: category_id, question_type, limit
         '''
-        category_id = request.args.get('category_id')
-        return quiz_controller.get_random_questions(category_id)
+        return quiz_controller.get_random_questions(**query_params)
 
 
 @blp.route('/quiz/answers')

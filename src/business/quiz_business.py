@@ -35,12 +35,14 @@ class QuizBusiness:
             raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.SCORES_NOT_FOUND)
         return data
 
-    def get_random_questions(self, category_id: str = None) -> List[Dict]:
-        '''Return random questions in a category if category_id present else across all categories'''
+    def get_random_questions(self, category_id: str = None, question_type: str = None, limit: int = 10) -> List[Dict]:
+        '''
+        Return random questions for quiz
+        Filters: category_id, question_type, limit
+        '''
+        question_data = self.db.read(Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY, (category_id, category_id, question_type, question_type, limit))
 
-        query = Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY if category_id else Queries.GET_RANDOM_QUESTIONS
-        question_data = self.db.read(query, (category_id, ) if category_id else ())
-        if len(question_data) < 10:
+        if len(question_data) < limit:
             raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTIONS_NOT_FOUND)
 
         # Organize the data into the desired format

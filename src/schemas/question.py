@@ -48,3 +48,9 @@ class QuestionUpdateSchema(CustomSchema):
     'Schema for updating a Question'
 
     question_text = fields.Str(required=True)
+
+
+class QuestionParamSchema(CustomSchema):
+    'Schema for query parameters in get quiz data'
+
+    category_id = fields.Str(validate=validate.Regexp(RegexPattern.ID_PATTERN), required=False)

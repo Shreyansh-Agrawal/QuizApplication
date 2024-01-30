@@ -59,7 +59,7 @@ To run the application, use the following command:
 
 ```bash
 cd .\src\
-python -m flask --app server run
+python -m flask --app server run --debug
 ```
 
 ### Run the Tests

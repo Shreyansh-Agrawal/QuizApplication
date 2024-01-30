@@ -9,7 +9,7 @@ from config.message_prompts import Roles
 from controllers.question_controller import QuestionController
 from controllers.user_controller import UserController
 from database.database_access import DatabaseAccess
-from schemas.question import QuestionSchema, QuizDataSchema, QuestionUpdateSchema
+from schemas.question import QuestionSchema, QuizDataSchema, QuestionUpdateSchema, QuestionParamSchema
 from utils.rbac import access_level
 
 blp = Blueprint('Question', __name__, description='Routes for the Question related functionalities')
@@ -23,18 +23,18 @@ user_controller = UserController(db)
 class Question(MethodView):
     '''
     Routes to:
-        Get all questions in a specified category or across all categories
+        Get quiz data in a specified category or across all categories
         Post quiz data including questions, categories and options
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
-    def get(self):
+    @blp.arguments(QuestionParamSchema, location='query')
+    def get(self, query_params):
         '''
         Get quiz data in a specified category or across all categories
         Query Parameters: category_id
         '''
-        category_id = request.args.get('category_id')
-        return question_controller.get_quiz_data(category_id)
+        return question_controller.get_quiz_data(**query_params)
 
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuizDataSchema)

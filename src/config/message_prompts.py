@@ -326,3 +326,5 @@ class StatusCodes:
     CONFLICT = INFO(code=409, status='Conflict')
     UNPROCESSABLE_ENTITY = INFO(code=422, status='Unprocessable Entity')
     INTERNAL_SERVER_ERROR = INFO(code=500, status='Internal Server Error')
+
+QUESTION_TYPES = ['mcq', 't/f', 'one word']

@@ -113,20 +113,14 @@ class Queries:
         INNER JOIN options ON questions.question_id = options.question_id
         WHERE options.isCorrect = 1 AND categories.category_id = %s
     '''
-    GET_RANDOM_QUESTIONS = '''
-        SELECT q.question_id, q.question_text, q.question_type, GROUP_CONCAT(o.option_text) as options
-        FROM Questions q
-        LEFT JOIN Options o ON q.question_id = o.question_id
-        GROUP BY q.question_id
-        ORDER BY RAND() LIMIT 10;
-    '''
     GET_RANDOM_QUESTIONS_BY_CATEGORY = '''
         SELECT q.question_id, q.question_text, q.question_type, GROUP_CONCAT(o.option_text) as options
         FROM Questions q
         LEFT JOIN Options o ON q.question_id = o.question_id
-        WHERE q.category_id = %s
+        WHERE (q.category_id = %s OR %s IS NULL OR q.category_id IS NULL)
+        AND (q.question_type = %s OR %s IS NULL OR q.question_type IS NULL)
         GROUP BY q.question_id
-        ORDER BY RAND() LIMIT 10;
+        ORDER BY RAND() LIMIT %s;
     '''
     GET_USER_BY_ROLE = '''
         SELECT users.user_id, username, name, email, registration_date
