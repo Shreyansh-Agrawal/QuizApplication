@@ -1,6 +1,6 @@
 'Routes for the Quiz related functionalities'
 
-from typing import Annotated
+from typing import Annotated, List
 
 from fastapi import APIRouter, Depends, Response
 
@@ -51,9 +51,9 @@ def get_random_questions(claims: user_dependency, response: Response, category_i
 
 @router.post('/quiz/answers')
 @access_level(roles=[Roles.PLAYER])
-def evaluate_player_answers(claims: user_dependency, player_answers: AnswerSchema, response: Response):
+def evaluate_player_answers(claims: user_dependency, player_answers: List[AnswerSchema], response: Response):
     'Post player responses to the questions'
     user_id = claims.get('sub')
-    res = quiz_controller.evaluate_player_answers(user_id, dict(player_answers))
+    res = quiz_controller.evaluate_player_answers(user_id, player_answers)
     response.status_code = res.status.code
     return res.message_info

@@ -10,7 +10,6 @@ from config.regex_patterns import RegexPattern
 class QuestionSchema(BaseModel):
     'Schema for Question data'
 
-    category_name: str = Field(pattern=RegexPattern.NAME_PATTERN)
     question_text: str = Field(pattern=RegexPattern.QUES_TEXT_PATTERN)
     question_type: str
     answer: str = Field(pattern=RegexPattern.OPTION_TEXT_PATTERN)

@@ -67,6 +67,8 @@ class QuizBusiness:
     def evaluate_player_answers(self, player_id: str, player_answers: List[Dict]) -> Dict:
         'Evaluate player answers and return score with correct answers'
 
+        player_answers = map(dict, player_answers)
+        player_answers = list(player_answers)
         question_ids = tuple(response['question_id'] for response in player_answers)
         formatted_query = Queries.GET_QUESTION_DATA_BY_QUESTION_ID % (', '.join(['%s'] * len(question_ids)))
         question_data = self.db.read(formatted_query, question_ids)
