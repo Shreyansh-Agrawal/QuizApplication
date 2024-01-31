@@ -69,7 +69,7 @@ class QuestionById(MethodView):
 
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuestionUpdateSchema)
-    def patch(self, question_data, question_id):
+    def put(self, question_data, question_id):
         'Update a question text'
         return question_controller.update_question(question_id, question_data)
 

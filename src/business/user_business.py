@@ -10,7 +10,7 @@ from config.message_prompts import ErrorMessage, Headers, LogMessage, Roles, Sta
 from config.queries import Queries
 from models.users.admin import Admin
 from models.users.user import User
-from utils.custom_error import DataNotFoundError, DuplicateEntryError
+from utils.custom_error import DataNotFoundError, DuplicateEntryError, InvalidCredentialsError
 from utils.password_hasher import hash_password
 from utils.password_generator import generate_password
 
@@ -80,46 +80,29 @@ class UserBusiness:
     def update_user_data(self, user_id: str, user_data: Dict) -> None:
         '''Update user profile'''
 
-        users_query = 'UPDATE users SET '
-        credentials_query = 'UPDATE credentials SET '
-        users_update_values = []
-        credentials_update_values = []
-
-        if 'name' in user_data:
-            users_query += 'name = %s, '
-            users_update_values.append(user_data['name'])
-
-        if 'email' in user_data:
-            users_query += 'email = %s, '
-            users_update_values.append(user_data['email'])
-
-        if 'username' in user_data:
-            credentials_query += 'username = %s, '
-            credentials_update_values.append(user_data['username'])
-
-        if 'password' in user_data:
-            credentials_query += 'password = %s, '
-            credentials_query += 'isPasswordChanged = 1, '
-            credentials_update_values.append(hash_password(user_data['password']))
-
-        # Remove the trailing comma and space
-        users_query = users_query.rstrip(', ')
-        credentials_query = credentials_query.rstrip(', ')
-
-        users_query += ' WHERE user_id = %s'
-        credentials_query += ' WHERE user_id = %s'
-        users_update_values.append(user_id)
-        credentials_update_values.append(user_id)
+        name, email, username = user_data['name'], user_data['email'], user_data['username']
         try:
-            if len(users_update_values) > 1:
-                self.db.write(users_query, tuple(users_update_values))
+            self.db.write(Queries.UPDATE_USER_PROFILE, (name, email, user_id))
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.EMAIL_TAKEN) from e
         try:
-            if len(credentials_update_values) > 1:
-                self.db.write(credentials_query, tuple(credentials_update_values))
+            self.db.write(Queries.UPDATE_USERNAME, (username, user_id))
         except mysql.connector.IntegrityError as e:
             raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.USERNAME_TAKEN) from e
+
+    def update_user_password(self, user_id: str, password_data: Dict) -> None:
+        '''Update user password'''
+
+        current_password, new_password = password_data['current_password'], password_data['new_password']
+        hashed_current_password = hash_password(current_password)
+        user_password_data = self.db.read(Queries.GET_PASSWORD_BY_USER_ID, (user_id, ))
+        user_password = user_password_data[0]['password']
+
+        if user_password not in (current_password, hashed_current_password):
+            raise InvalidCredentialsError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.INVALID_CREDENTIALS)
+
+        new_password = hash_password(new_password)
+        self.db.write(Queries.UPDATE_USER_PASSWORD, (new_password, user_id))
 
     def delete_user_by_id(self, user_id: str, role: str) -> None:
         '''Delete a user by id and role'''

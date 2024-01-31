@@ -97,6 +97,7 @@ class Queries:
         FROM credentials INNER JOIN users ON credentials.user_id = users.user_id 
         WHERE username = %s
     '''
+    GET_PASSWORD_BY_USER_ID = '''SELECT password FROM credentials WHERE user_id = %s'''
     GET_LEADERBOARD = '''
         SELECT player_id, username, MAX(score) as score, MIN(timestamp) as timestamp
         FROM scores
@@ -160,6 +161,9 @@ class Queries:
     UPDATE_CATEGORY_BY_NAME = 'UPDATE categories SET category_name = %s WHERE category_name = %s'
     UPDATE_CATEGORY_BY_ID = 'UPDATE categories SET category_name = %s WHERE category_id = %s'
     UPDATE_QUESTION_TEXT_BY_ID = 'UPDATE questions SET question_text = %s WHERE question_id = %s'
+    UPDATE_USER_PROFILE = 'UPDATE users SET name = %s, email = %s WHERE user_id = %s'
+    UPDATE_USERNAME = 'UPDATE credentials SET username = %s WHERE user_id = %s'
+    UPDATE_USER_PASSWORD = 'UPDATE credentials SET password = %s, isPasswordChanged = 1 WHERE user_id = %s'
     DELETE_CATEGORY_BY_NAME = 'DELETE FROM categories WHERE category_name = %s'
     DELETE_CATEGORY_BY_ID = 'DELETE FROM categories WHERE category_id = %s'
     DELETE_QUESTION_BY_ID = 'DELETE FROM questions WHERE question_id = %s'

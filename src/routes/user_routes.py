@@ -7,7 +7,7 @@ from flask_smorest import Blueprint
 from config.message_prompts import Roles
 from controllers.user_controller import UserController
 from database.database_access import DatabaseAccess
-from schemas.user import UserSchema, UserUpdateSchema
+from schemas.user import UserSchema, UserUpdateSchema, PasswordUpdateSchema
 from utils.rbac import access_level
 
 blp = Blueprint('User', __name__, description='Routes for the User related functionalities')
@@ -32,10 +32,25 @@ class Profile(MethodView):
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
     @blp.arguments(UserUpdateSchema)
-    def patch(self, user_data):
+    def put(self, user_data):
         'Update user profile'
         user_id = get_jwt_identity()
         return user_controller.update_user_data(user_id, user_data)
+
+
+@blp.route('/profile/password/me')
+class Password(MethodView):
+    '''
+    Routes to:
+        Update user password
+    '''
+
+    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
+    @blp.arguments(PasswordUpdateSchema)
+    def put(self, password_data):
+        'Update user password'
+        user_id = get_jwt_identity()
+        return user_controller.update_user_password(user_id, password_data)
 
 
 @blp.route('/players')

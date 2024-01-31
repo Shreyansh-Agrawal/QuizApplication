@@ -81,7 +81,8 @@ class Message:
     PLAYER_DELETED = 'Player deleted successfully'
     QUESTION_DELETED = 'Question deleted successfully'
     QUESTION_UPDATED = 'Question updated successfully'
-    PROFILE_UPDATED = 'User data updated successfully'
+    PROFILE_UPDATED = 'Profile updated successfully'
+    PASSWORD_UPDATED = 'Password updated successfully'
     SUBMISSION_SUCCESS = 'Response submitted successfully'
 
 

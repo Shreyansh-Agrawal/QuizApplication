@@ -54,6 +54,13 @@ class UserController:
         return SuccessMessage(status=StatusCodes.OK, message=Message.PROFILE_UPDATED).message_info
 
     @handle_custom_errors
+    def update_user_password(self, user_id: str, password_data: Dict):
+        '''Update user password'''
+
+        self.user_business.update_user_password(user_id, password_data)
+        return SuccessMessage(status=StatusCodes.OK, message=Message.PASSWORD_UPDATED).message_info
+
+    @handle_custom_errors
     def delete_admin_by_id(self, admin_id: str):
         '''Delete a Admin'''
 

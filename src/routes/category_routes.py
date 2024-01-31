@@ -47,7 +47,7 @@ class CategoryById(MethodView):
 
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(CategoryUpdateSchema)
-    def patch(self, category_data, category_id):
+    def put(self, category_data, category_id):
         'Update an existing category'
         return category_controller.update_category(category_data, category_id)
 

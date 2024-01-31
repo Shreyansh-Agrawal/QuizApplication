@@ -31,7 +31,7 @@ class AuthBusiness:
 
         logger.debug(LogMessage.LOGIN_INITIATED)
 
-        username, password = login_data.values()
+        username, password = login_data['username'], login_data['password']
         hashed_password = hash_password(password)
         user_data = self.db.read(Queries.GET_CREDENTIALS_BY_USERNAME, (username, ))
 
