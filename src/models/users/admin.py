@@ -2,6 +2,7 @@
 
 from typing import Dict
 
+from config.message_prompts import Roles
 from models.users.user import User
 
 
@@ -20,4 +21,4 @@ class Admin(User):
     def get_instance(cls, user_data: Dict[str, str], role: str=None) -> 'Admin':
         'Factory method to create a new instance of Admin model.'
 
-        return super().get_instance(user_data, role='admin')
+        return super().get_instance(user_data, role=Roles.ADMIN)

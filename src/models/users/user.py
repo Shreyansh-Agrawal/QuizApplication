@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Dict
 
+from config.message_prompts import Roles
 from utils.id_generator import generate_id
 
 
@@ -33,7 +34,7 @@ class User(ABC):
     is_password_changed: int = field(init=False)
 
     def __post_init__(self) -> None:
-        self.is_password_changed = 0 if self.role == 'admin' else 1
+        self.is_password_changed = 0 if self.role == Roles.ADMIN else 1
         self.user_id = generate_id(entity=self.role)
         self.registration_date = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 

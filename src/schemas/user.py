@@ -3,7 +3,7 @@
 from marshmallow import fields, validate
 
 from config.regex_patterns import RegexPattern
-from schemas.config_schema import CustomSchema
+from schemas.config_schema import CustomSchema, ResponseSchema
 
 
 class UserSchema(CustomSchema):
@@ -28,3 +28,15 @@ class PasswordUpdateSchema(CustomSchema):
 
     current_password = fields.Str(required=True)
     new_password = fields.Str(required=True)
+
+
+class ProfileResponseSchema(ResponseSchema):
+    'Schema for view profile response'
+    
+    data = fields.Nested(UserSchema)
+
+
+class UserResponseSchema(ProfileResponseSchema):
+    'Schema for view users response'
+    
+    data = fields.Nested(UserSchema, many=True)

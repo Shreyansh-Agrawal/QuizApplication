@@ -3,7 +3,7 @@
 from marshmallow import fields, validate
 
 from config.regex_patterns import RegexPattern
-from schemas.config_schema import CustomSchema
+from schemas.config_schema import CustomSchema, ResponseSchema
 
 
 class QuestionSchema(CustomSchema):
@@ -13,28 +13,32 @@ class QuestionSchema(CustomSchema):
     question_text = fields.Str(required=True, validate=validate.Regexp(RegexPattern.QUES_TEXT_PATTERN))
     question_type = fields.Str(required=True)
     answer = fields.Str(required=True, validate=validate.Regexp(RegexPattern.OPTION_TEXT_PATTERN))
-    other_options = fields.List(fields.Str)
+    other_options = fields.List(fields.Str(validate=validate.Regexp(RegexPattern.OPTION_TEXT_PATTERN)))
 
 
 class QuestionOptionsSchema(CustomSchema):
     'Schema for Options data'
 
-    answer = fields.Str(required=True)
-    other_options = fields.List(fields.Str(), missing=[])
+    answer = fields.Str(required=True, validate=validate.Regexp(RegexPattern.OPTION_TEXT_PATTERN))
+    other_options = fields.List(fields.Str(validate=validate.Regexp(RegexPattern.OPTION_TEXT_PATTERN)), missing=[])
 
 
 class QuizQuestionSchema(CustomSchema):
     'Schema for Quiz Question data'
 
-    question_text = fields.Str(required=True)
+    question_id = fields.Str(dump_only=True, validate=validate.Regexp(RegexPattern.ID_PATTERN))
+    question_text = fields.Str(required=True, validate=validate.Regexp(RegexPattern.QUES_TEXT_PATTERN))
     question_type = fields.Str(required=True)
+    created_by = fields.Str(dump_only=True, validate=validate.Regexp(RegexPattern.ID_PATTERN))
     options = fields.Nested(QuestionOptionsSchema, required=True)
 
 
 class QuizCategorySchema(CustomSchema):
     'Schema for Quiz Category data'
 
-    category = fields.Str(required=True)
+    category_id = fields.Str(dump_only=True, validate=validate.Regexp(RegexPattern.ID_PATTERN))
+    category = fields.Str(required=True, validate=validate.Regexp(RegexPattern.NAME_PATTERN))
+    created_by = fields.Str(dump_only=True, validate=validate.Regexp(RegexPattern.ID_PATTERN))
     question_data = fields.List(fields.Nested(QuizQuestionSchema), required=True)
 
 
@@ -54,3 +58,9 @@ class QuestionParamSchema(CustomSchema):
     'Schema for query parameters in get quiz data'
 
     category_id = fields.Str(validate=validate.Regexp(RegexPattern.ID_PATTERN), required=False)
+
+
+class QuizResponseSchema(ResponseSchema):
+    'Schema for Quiz data response'
+    
+    data = fields.List(fields.Nested(QuizCategorySchema), required=True)

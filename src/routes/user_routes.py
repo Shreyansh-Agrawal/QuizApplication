@@ -7,7 +7,8 @@ from flask_smorest import Blueprint
 from config.message_prompts import Roles
 from controllers.user_controller import UserController
 from database.database_access import DatabaseAccess
-from schemas.user import UserSchema, UserUpdateSchema, PasswordUpdateSchema
+from schemas.config_schema import ResponseSchema
+from schemas.user import ProfileResponseSchema, UserResponseSchema, UserSchema, UserUpdateSchema, PasswordUpdateSchema
 from utils.rbac import access_level
 
 blp = Blueprint('User', __name__, description='Routes for the User related functionalities')
@@ -25,6 +26,7 @@ class Profile(MethodView):
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
+    @blp.response(200, ProfileResponseSchema)
     def get(self):
         'Get user profile data'
         user_id = get_jwt_identity()
@@ -32,6 +34,7 @@ class Profile(MethodView):
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
     @blp.arguments(UserUpdateSchema)
+    @blp.response(200, ResponseSchema)
     def put(self, user_data):
         'Update user profile'
         user_id = get_jwt_identity()
@@ -47,6 +50,7 @@ class Password(MethodView):
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
     @blp.arguments(PasswordUpdateSchema)
+    @blp.response(200, ResponseSchema)
     def put(self, password_data):
         'Update user password'
         user_id = get_jwt_identity()
@@ -61,6 +65,7 @@ class Player(MethodView):
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
+    @blp.response(200, UserResponseSchema)
     def get(self):
         'Get all player details'
         return user_controller.get_all_players()
@@ -75,6 +80,7 @@ class Admin(MethodView):
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN])
+    @blp.response(200, UserResponseSchema)
     def get(self):
         'Get all admin details'
         return user_controller.get_all_admins()
@@ -82,6 +88,7 @@ class Admin(MethodView):
 
     @access_level(roles=[Roles.SUPER_ADMIN])
     @blp.arguments(UserSchema)
+    @blp.response(201, ResponseSchema)
     def post(self, admin_data):
         'Create a new admin account'
         return user_controller.create_admin(admin_data)
@@ -95,6 +102,7 @@ class AdminById(MethodView):
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN])
+    @blp.response(200, ResponseSchema)
     def delete(self, admin_id):
         'Delete an existing admin'
         return user_controller.delete_admin_by_id(admin_id)
@@ -108,6 +116,7 @@ class PlayerById(MethodView):
     '''
 
     @access_level(roles=[Roles.ADMIN])
+    @blp.response(200, ResponseSchema)
     def delete(self, player_id):
         'Delete an existing player'
         return user_controller.delete_player_by_id(player_id)

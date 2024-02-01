@@ -44,7 +44,7 @@ class QuestionBusiness:
             entity.question_type
         )
         if not entity.options:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.NO_OPTIONS)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.NO_OPTIONS)
 
         self.db.write(Queries.INSERT_QUESTION, question_data)
         for option in entity.options:
@@ -62,7 +62,7 @@ class QuestionBusiness:
         query += ' ORDER BY c.category_id, q.question_id, o.option_id'
         data = self.db.read(query, params)
         if not data:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.QUIZ_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.QUIZ_NOT_FOUND)
 
         quiz_data = []
         current_category = None
@@ -136,7 +136,7 @@ class QuestionBusiness:
         try:
             self.save_question(question)
         except mysql.connector.IntegrityError as e:
-            raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.QUESTION_EXISTS) from e
+            raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.QUESTION_EXISTS) from e
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.QUES)
 
     def post_quiz_data(self, quiz_data: Dict, admin_id: str) -> None:
@@ -177,13 +177,13 @@ class QuestionBusiness:
         try:
             row_affected = self.db.write(Queries.UPDATE_QUESTION_TEXT_BY_ID, (new_ques_text, question_id))
         except mysql.connector.IntegrityError as e:
-            raise DuplicateEntryError(StatusCodes.CONFLICT, ErrorMessage.QUESTION_EXISTS) from e
+            raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.QUESTION_EXISTS) from e
         if not row_affected:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTION_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTION_NOT_FOUND)
 
     def delete_question(self, question_id: str) -> None:
         '''Delete a question and its options by question id'''
 
         row_affected = self.db.write(Queries.DELETE_QUESTION_BY_ID, (question_id, ))
         if not row_affected:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTION_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTION_NOT_FOUND)

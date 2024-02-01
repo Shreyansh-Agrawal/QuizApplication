@@ -34,7 +34,7 @@ def access_level(roles: List):
 
             if claims["cap"] in mapped_roles:
                 return func(*args, **kwargs)
-            error = CustomError(StatusCodes.FORBIDDEN, message=ErrorMessage.FORBIDDEN)
+            error = CustomError(status=StatusCodes.FORBIDDEN, message=ErrorMessage.FORBIDDEN)
             return error.error_info, error.code
 
         return wrapper

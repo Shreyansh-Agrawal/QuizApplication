@@ -6,10 +6,10 @@ from typing import Dict
 import mysql.connector
 from flask_jwt_extended import create_access_token, create_refresh_token
 
-from business.user_business import UserBusiness
 from config.message_prompts import ErrorMessage, LogMessage, StatusCodes
 from config.queries import Queries
 from database.database_access import DatabaseAccess
+from helpers.user_helper import UserHelper
 from models.users.player import Player
 from utils.blocklist import BLOCKLIST
 from utils.custom_error import DuplicateEntryError, InvalidCredentialsError
@@ -24,7 +24,7 @@ class AuthBusiness:
 
     def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
-        self.user_business = UserBusiness(self.db)
+        self.user_helper = UserHelper(self.db)
 
     def login(self, login_data: Dict) -> Dict:
         '''Method for user login'''
@@ -36,11 +36,11 @@ class AuthBusiness:
         user_data = self.db.read(Queries.GET_CREDENTIALS_BY_USERNAME, (username, ))
 
         if not user_data:
-            raise InvalidCredentialsError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.INVALID_CREDENTIALS)
+            raise InvalidCredentialsError(status=StatusCodes.UNAUTHORIZED, message=ErrorMessage.INVALID_CREDENTIALS)
         user_id, user_password, role, is_password_changed = user_data[0].values()
 
         if user_password not in (password, hashed_password):
-            raise InvalidCredentialsError(StatusCodes.UNAUTHORIZED, message=ErrorMessage.INVALID_CREDENTIALS)
+            raise InvalidCredentialsError(status=StatusCodes.UNAUTHORIZED, message=ErrorMessage.INVALID_CREDENTIALS)
 
         mapped_role = ROLE_MAPPING.get(role)
         access_token = create_access_token(
@@ -64,9 +64,9 @@ class AuthBusiness:
         player_data['password'] = hash_password(player_data['password'])
         player = Player.get_instance(player_data)
         try:
-            self.user_business.save_user(player)
+            self.user_helper.save_user(player)
         except mysql.connector.IntegrityError as e:
-            raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.USER_EXISTS) from e
+            raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.USER_EXISTS) from e
 
         logger.debug(LogMessage.SIGNUP_SUCCESS)
 

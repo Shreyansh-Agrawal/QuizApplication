@@ -13,17 +13,17 @@ from utils.custom_error import (
 
 def handle_bad_request(_err):
     '''Function to handle bad request'''
-    error = CustomError(StatusCodes.BAD_REQUEST, message=ErrorMessage.BAD_REQUEST)
+    error = CustomError(status=StatusCodes.BAD_REQUEST, message=ErrorMessage.BAD_REQUEST)
     return error.error_info, error.code
 
 def handle_validation_error(err):
     '''Function to handle validation errors'''
-    error = CustomError(StatusCodes.UNPROCESSABLE_ENTITY, message=str(err.message))
+    error = CustomError(status=StatusCodes.UNPROCESSABLE_ENTITY, message=str(err.message))
     return error.error_info, error.code
 
 def handle_internal_server_error(_err):
     '''Function to handle server side errors'''
-    error = CustomError(StatusCodes.INTERNAL_SERVER_ERROR, message=ErrorMessage.SERVER_ERROR)
+    error = CustomError(status=StatusCodes.INTERNAL_SERVER_ERROR, message=ErrorMessage.SERVER_ERROR)
     return error.error_info, error.code
 
 

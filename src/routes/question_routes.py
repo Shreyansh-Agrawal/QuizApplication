@@ -9,7 +9,8 @@ from config.message_prompts import Roles
 from controllers.question_controller import QuestionController
 from controllers.user_controller import UserController
 from database.database_access import DatabaseAccess
-from schemas.question import QuestionSchema, QuizDataSchema, QuestionUpdateSchema, QuestionParamSchema
+from schemas.config_schema import ResponseSchema
+from schemas.question import QuestionSchema, QuizDataSchema, QuestionUpdateSchema, QuestionParamSchema, QuizResponseSchema
 from utils.rbac import access_level
 
 blp = Blueprint('Question', __name__, description='Routes for the Question related functionalities')
@@ -29,6 +30,7 @@ class Question(MethodView):
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
     @blp.arguments(QuestionParamSchema, location='query')
+    @blp.response(200, QuizResponseSchema)
     def get(self, query_params):
         '''
         Get quiz data in a specified category or across all categories
@@ -38,8 +40,9 @@ class Question(MethodView):
 
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuizDataSchema)
+    @blp.response(201, ResponseSchema)
     def post(self, quiz_data):
-        'Upload quiz data including questions, categories and options'
+        'Post quiz data including questions, categories and options'
         admin_id= get_jwt_identity()
         return question_controller.post_quiz_data(quiz_data, admin_id)
 
@@ -53,6 +56,7 @@ class QuestionByCategoryId(MethodView):
 
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuestionSchema)
+    @blp.response(201, ResponseSchema)
     def post(self, question_data, category_id):
         'Create a question in a specified category'
         admin_id = get_jwt_identity()
@@ -69,11 +73,13 @@ class QuestionById(MethodView):
 
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuestionUpdateSchema)
+    @blp.response(200, ResponseSchema)
     def put(self, question_data, question_id):
         'Update a question text'
         return question_controller.update_question(question_id, question_data)
 
     @access_level(roles=[Roles.ADMIN])
+    @blp.response(200, ResponseSchema)
     def delete(self, question_id):
         'Delete a question and its options'
         return question_controller.delete_question(question_id)

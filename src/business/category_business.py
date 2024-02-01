@@ -37,7 +37,7 @@ class CategoryBusiness:
 
         data = self.db.read(Queries.GET_ALL_CATEGORIES)
         if not data:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.NO_CATEGORY)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.NO_CATEGORY)
         return data
 
     def create_category(self, category_data: Dict) -> None:
@@ -49,7 +49,7 @@ class CategoryBusiness:
         try:
             self.save_category(category)
         except mysql.connector.IntegrityError as e:
-            raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
+            raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.CATEGORY)
 
@@ -61,9 +61,9 @@ class CategoryBusiness:
         try:
             row_affected = self.db.write(Queries.UPDATE_CATEGORY_BY_ID, (new_category_name, category_id))
         except mysql.connector.IntegrityError as e:
-            raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
+            raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
         if not row_affected:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.CATEGORY_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.CATEGORY_NOT_FOUND)
 
         logger.debug(LogMessage.UPDATE_CATEGORY_SUCCESS, category_id, new_category_name)
 
@@ -74,6 +74,6 @@ class CategoryBusiness:
 
         row_affected = self.db.write(Queries.DELETE_CATEGORY_BY_ID, (category_id, ))
         if not row_affected:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.CATEGORY_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.CATEGORY_NOT_FOUND)
 
         logger.debug(LogMessage.DELETE_CATEGORY_SUCCESS, category_id)

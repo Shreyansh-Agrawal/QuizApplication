@@ -8,7 +8,7 @@ from flask_smorest import Blueprint
 from config.message_prompts import Roles
 from controllers.quiz_controller import QuizController
 from database.database_access import DatabaseAccess
-from schemas.quiz import AnswerSchema, QuizParamsSchema
+from schemas.quiz import AnswerSchema, LeaderboardResponseSchema, QuizAnswerResponseSchema, QuizParamsSchema, QuizQuestionResponseSchema, ScoreResponseSchema
 from utils.rbac import access_level
 
 blp = Blueprint('Quiz', __name__, description='Routes for the Quiz related functionalities')
@@ -24,6 +24,7 @@ class Leaderboard(MethodView):
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
+    @blp.response(200, LeaderboardResponseSchema)
     def get(self):
         'Get leaderboard details'
         return quiz_controller.get_leaderboard()
@@ -37,6 +38,7 @@ class Score(MethodView):
     '''
 
     @access_level(roles=[Roles.PLAYER])
+    @blp.response(200, ScoreResponseSchema)
     def get(self):
         'Get past scores of a player'
         player_id = get_jwt_identity()
@@ -52,6 +54,7 @@ class Quiz(MethodView):
 
     @access_level(roles=[Roles.PLAYER])
     @blp.arguments(QuizParamsSchema, location='query')
+    @blp.response(200, QuizQuestionResponseSchema)
     def get(self, query_params):
         '''
         Get random questions for quiz
@@ -69,6 +72,7 @@ class QuizAnswer(MethodView):
 
     @access_level(roles=[Roles.PLAYER])
     @blp.arguments(AnswerSchema(many=True))
+    @blp.response(201, QuizAnswerResponseSchema)
     def post(self, player_answers):
         'Post player responses to the questions'
         player_id = get_jwt_identity()

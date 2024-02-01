@@ -5,7 +5,7 @@ import mysql.connector
 import pytest
 
 from config.message_prompts import DisplayMessage, Headers, LogMessage
-from utils.initialize_app import InitializeDatabase, Initializer
+from config.initialize_app import InitializeDatabase, Initializer
 from utils.custom_error import DuplicateEntryError
 
 

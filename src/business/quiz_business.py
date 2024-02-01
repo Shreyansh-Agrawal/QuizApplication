@@ -24,7 +24,7 @@ class QuizBusiness:
 
         data = self.db.read(Queries.GET_LEADERBOARD)
         if not data:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.LEADERBOARD_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.LEADERBOARD_NOT_FOUND)
         return data
 
     def get_player_scores(self, player_id: str) -> List[Dict]:
@@ -32,7 +32,7 @@ class QuizBusiness:
 
         data = self.db.read(Queries.GET_PLAYER_SCORES_BY_ID, (player_id, ))
         if not data:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.SCORES_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.SCORES_NOT_FOUND)
         return data
 
     def get_random_questions(self, category_id: str = None, question_type: str = None, limit: int = 10) -> List[Dict]:
@@ -43,7 +43,7 @@ class QuizBusiness:
         question_data = self.db.read(Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY, (category_id, category_id, question_type, question_type, limit))
 
         if len(question_data) < limit:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTIONS_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTIONS_NOT_FOUND)
 
         # Organize the data into the desired format
         result = [
