@@ -66,8 +66,8 @@ class Initializer:
 
         try:
             self.user_helper.save_user(super_admin)
-        except mysql.connector.IntegrityError:
-            logger.debug(LogMessage.SUPER_ADMIN_PRESENT)
+        except mysql.connector.IntegrityError as e:
+            logger.exception(e)
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.SUPER_ADMIN)
 

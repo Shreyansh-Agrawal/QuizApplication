@@ -26,6 +26,8 @@ class UserBusiness:
     def get_all_users_by_role(self, role: str) -> List[Dict]:
         '''Return all users with their details'''
 
+        logger.debug(LogMessage.GET_ALL_USERS, role)
+
         data = self.db.read(Queries.GET_USER_BY_ROLE, (role, ))
         if not data:
             raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.USER_NOT_FOUND)
@@ -33,6 +35,8 @@ class UserBusiness:
 
     def get_user_profile_data(self, user_id: str) -> str:
         '''Return user's profile data'''
+
+        logger.debug(LogMessage.GET_PROFILE_DATA)
 
         data = self.db.read(Queries.GET_USER_BY_USER_ID, (user_id, ))
         if not data:
@@ -42,11 +46,14 @@ class UserBusiness:
     def create_admin(self, admin_data: Dict) -> None:
         '''Create a new Admin Account'''
 
+        logger.debug(LogMessage.CREATE_ENTITY, Headers.ADMIN)
+
         admin_data['password'] = generate_password()
         admin = Admin.get_instance(admin_data)
         try:
             self.user_helper.save_user(admin)
         except mysql.connector.IntegrityError as e:
+            logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.USER_EXISTS) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.ADMIN)
@@ -54,18 +61,26 @@ class UserBusiness:
     def update_user_data(self, user_id: str, user_data: Dict) -> None:
         '''Update user profile'''
 
+        logger.debug(LogMessage.UPDATE_ENTITY, Headers.PROFILE)
+
         name, email, username = user_data['name'], user_data['email'], user_data['username']
         try:
             self.db.write(Queries.UPDATE_USER_PROFILE, (name, email, user_id))
         except mysql.connector.IntegrityError as e:
+            logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.EMAIL_TAKEN) from e
         try:
             self.db.write(Queries.UPDATE_USERNAME, (username, user_id))
         except mysql.connector.IntegrityError as e:
+            logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.USERNAME_TAKEN) from e
+
+        logger.debug(LogMessage.UPDATE_SUCCESS, Headers.PROFILE)
 
     def update_user_password(self, user_id: str, password_data: Dict) -> None:
         '''Update user password'''
+
+        logger.debug(LogMessage.UPDATE_ENTITY, Headers.PASSWORD)
 
         current_password, new_password = password_data['current_password'], password_data['new_password']
         hashed_current_password = hash_password(current_password)
@@ -78,8 +93,12 @@ class UserBusiness:
         new_password = hash_password(new_password)
         self.db.write(Queries.UPDATE_USER_PASSWORD, (new_password, user_id))
 
+        logger.debug(LogMessage.UPDATE_SUCCESS, Headers.PASSWORD)
+
     def delete_user_by_id(self, user_id: str, role: str) -> None:
         '''Delete a user by id and role'''
+
+        logger.warning(LogMessage.DELETE_ENTITY, Headers.PLAYER)
 
         row_affected = self.db.write(Queries.DELETE_USER_BY_ID_ROLE, (user_id, role))
         if not row_affected:

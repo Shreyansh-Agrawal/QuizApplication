@@ -31,6 +31,7 @@ class Question(MethodView):
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
     @blp.arguments(QuestionParamSchema, location='query')
     @blp.response(200, QuizResponseSchema)
+
     def get(self, query_params):
         '''
         Get quiz data in a specified category or across all categories
@@ -41,6 +42,7 @@ class Question(MethodView):
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuizDataSchema)
     @blp.response(201, ResponseSchema)
+
     def post(self, quiz_data):
         'Post quiz data including questions, categories and options'
         admin_id= get_jwt_identity()
@@ -57,6 +59,7 @@ class QuestionByCategoryId(MethodView):
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuestionSchema)
     @blp.response(201, ResponseSchema)
+
     def post(self, question_data, category_id):
         'Create a question in a specified category'
         admin_id = get_jwt_identity()
@@ -74,12 +77,14 @@ class QuestionById(MethodView):
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuestionUpdateSchema)
     @blp.response(200, ResponseSchema)
+
     def put(self, question_data, question_id):
         'Update a question text'
         return question_controller.update_question(question_id, question_data)
 
     @access_level(roles=[Roles.ADMIN])
     @blp.response(200, ResponseSchema)
+
     def delete(self, question_id):
         'Delete a question and its options'
         return question_controller.delete_question(question_id)

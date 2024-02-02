@@ -21,6 +21,7 @@ class Register(MethodView):
 
     @blp.arguments(RegistrationSchema)
     @blp.response(201, ResponseSchema)
+
     def post(self, player_data):
         'Register a new user'
         return auth_controller.register(player_data)
@@ -32,6 +33,7 @@ class Login(MethodView):
 
     @blp.arguments(LoginSchema)
     @blp.response(200, LoginResponseSchema)
+
     def post(self, login_data):
         'Login an existing user'
         return auth_controller.login(login_data)
@@ -43,6 +45,7 @@ class Logout(MethodView):
 
     @jwt_required()
     @blp.response(200, ResponseSchema)
+
     def post(self):
         'Logout a logged in user'
         jti = get_jwt().get('jti')
@@ -55,6 +58,7 @@ class Refresh(MethodView):
 
     @jwt_required(refresh=True)
     @blp.response(200, RefreshResponseSchema)
+
     def post(self):
         'Issue a non fresh access token'
         claims = get_jwt()

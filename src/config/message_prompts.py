@@ -86,127 +86,6 @@ class Message:
     SUBMISSION_SUCCESS = 'Response submitted successfully'
 
 
-class Prompts:
-    '''Contains all the prompts as class variables'''
-
-    AUTH_PROMPTS = '''
-Enter -
-        1> Login
-        2> Signup
-        
-        Press q to Quit
-
-Enter your choice: '''
-
-    SUPER_ADMIN_PROMPTS = '''
-Enter -
-        1> Create Admin
-        2> View All Admins
-        3> Delete Admin
-        
-        Press q to Logout
-
-Enter your choice: '''
-
-    ADMIN_PROMPTS = '''
-Enter -
-        1> Manage Players
-        2> Manage Quizzes
-        
-        Press q to Logout
-
-Enter your choice: '''
-
-    ADMIN_MANAGE_PLAYER_PROMPTS = '''
-Enter -
-        1> View All Players
-        2> Delete a Player
-
-        Press q to Go Back
-
-Enter your choice: '''
-
-    ADMIN_MANAGE_QUIZZES_PROMPTS = '''
-Enter -
-        1> Manage Categories
-        2> Manage Questions
-        
-        Press q to Go Back
-
-Enter your choice: '''
-
-    ADMIN_MANAGE_CATEGORIES_PROMPTS = '''
-Enter -
-        1> View All Categories
-        2> Add a New Category
-        3> Update a Category
-        4> Delete a Category
-        
-        Press q to Go Back
-
-Enter your choice: '''
-
-    ADMIN_MANAGE_QUESTIONS_PROMPTS = '''
-Enter -
-        1> View All Questions
-        2> View Questions By Category
-        3> Add a Question
-        4> Load Questions from JSON File
-        
-        Press q to Go Back
-
-Enter your choice: '''
-
-    PLAYER_PROMPTS = '''
-Enter -
-        1> Take a Quiz
-        2> View Leaderboard
-        3> View Scores History
-        
-        Press q to Logout
-
-Enter your choice: '''
-
-    QUESTION_TYPE_PROMPTS = '''
-Enter -
-        1> Multiple Choice Question Type
-        2> True or False Type
-        3> One Word Type
-
-Select Question Type: '''
-
-    SELECT_MODE_PROMPTS = '''
-Enter -
-        1> Simple (Choose a Category)
-        2> Random (Questions Across All Categories)
-
-        Press q to Go Back
-
-Select Mode: '''
-
-    USERNAME_PROMPT = 'Enter your username: '
-    CREATE_USERNAME_PROMPT = 'Create your username: '
-    PASSWORD_PROMPT = 'Enter your password: '
-    CREATE_PASSWORD_PROMPT = 'Create your password: '
-    CONFIRM_PASSWORD_PROMPT = 'Confirm Password: '
-    NEW_PASSWORD_PROMPT = 'Enter New Password: '
-    NAME_PROMPT = 'Enter your name: '
-    EMAIL_PROMPT = 'Enter your email: '
-    SELECT_CATEGORY_PROMPT = 'Choose a Category: '
-    NEW_CATEGORY_NAME_PROMPT = 'Enter New Category Name: '
-    UPDATED_CATEGORY_NAME_PROMPT = 'Enter updated category name: '
-    ADMIN_NAME_PROMPT = 'Enter admin name: '
-    ADMIN_EMAIL_PROMPT = 'Enter admin email: '
-    ADMIN_USERNAME_PROMPT = 'Create admin username: '
-    USER_EMAIL_PROMPT = 'Enter {role} Email: '
-    QUES_TEXT_PROMPT = 'Enter Question Text: '
-    ANS_PROMPT = 'Enter Answer: '
-    OPTION_PROMPT = 'Enter Other Option: '
-    SELECT_OPTION_PROMPT = 'Choose an option: '
-    ANS_INPUT_PROMPT = '-> Enter your answer: '
-    ATTEMPT_LIMIT = 3
-
-
 class Headers:
     '''Contains all the headings as class variables'''
 
@@ -230,6 +109,7 @@ class Headers:
     ADMIN = 'Admin'
     PLAYER = 'Player'
     QUIZZES = 'Quizzes'
+    PROFILE = 'Profile'
 
 
 class LogMessage:
@@ -237,6 +117,8 @@ class LogMessage:
 
     LOGIN_INITIATED = 'Login Initiated'
     LOGIN_SUCCESS = 'Login Successful'
+    LOGOUT_INITIATED = 'Logout Initiated'
+    LOGOUT_SUCCESS = 'Logout Successful, Token added to blocklist'
     SIGNUP_INITIATED = 'Signup Initiated'
     SIGNUP_SUCCESS = 'Signup Successful'
     SYSTEM_START = 'System Started'
@@ -268,11 +150,22 @@ class LogMessage:
     DISPLAY_QUES_BY_CATEGORY = 'Display Questions By Category'
     INVALID_QUES_TYPE = 'Invalid Ques Type!'
     LOGIN_ATTEMPTS_EXHAUSTED = 'Login attempts exhausted'
+    GET_LEADERBOARD = 'Fetching leaderboard data'
     LEADERBOARD_DATA_NOT_FOUND = 'No Data in Leaderboard'
     QUES_DATA_NOT_FOUND = 'No Questions added'
     RUNNING_ADMIN_MENU = 'Running Admin: Manage %s Menu'
     LOAD_QUIZ_DATA_FROM_JSON = 'Loading Quiz Data from JSON'
     GET_ALL_CATEGORIES = 'Fetching all categories'
+    TOKEN_CREATED = 'Access token created'
+    REFRESH_INITIATED = 'Creating a non fresh access token'
+    GET_QUIZ_DATA = 'Fetching the quiz data'
+    POST_QUIZ_DATA = 'Posting quiz data'
+    GET_PROFILE_DATA = 'Getting profile data'
+    GET_PROFILE_DATA = 'Getting profile data'
+    GET_ALL_USERS = 'Getting all users with role: %s'
+    EVALUATE_RESPONSE = 'Evaluating answers for player_id: %s'
+    GET_QUES_FOR_QUIZ = 'Fetching questions for quiz'
+    GET_SCORES = 'Fetching scores for player_id: %s'
 
 
 class ErrorMessage:
@@ -327,5 +220,6 @@ class StatusCodes:
     CONFLICT = INFO(code=409, status='Conflict')
     UNPROCESSABLE_ENTITY = INFO(code=422, status='Unprocessable Entity')
     INTERNAL_SERVER_ERROR = INFO(code=500, status='Internal Server Error')
+
 
 QUESTION_TYPES = ['mcq', 't/f', 'one word']

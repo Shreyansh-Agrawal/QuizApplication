@@ -27,6 +27,7 @@ class Category(MethodView):
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
     @blp.response(200, CategoryResponseSchema)
+
     def get(self):
         'Get all categories details'
         return category_controller.get_all_categories()
@@ -34,6 +35,7 @@ class Category(MethodView):
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(CategorySchema)
     @blp.response(201, ResponseSchema)
+
     def post(self, category_data):
         'Create a new category'
         user_id = get_jwt_identity()
@@ -51,12 +53,14 @@ class CategoryById(MethodView):
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(CategoryUpdateSchema)
     @blp.response(200, ResponseSchema)
+
     def put(self, category_data, category_id):
         'Update an existing category'
         return category_controller.update_category(category_data, category_id)
 
     @access_level(roles=[Roles.ADMIN])
     @blp.response(200, ResponseSchema)
+
     def delete(self, category_id):
         'Delete an existing category'
         return category_controller.delete_category(category_id)

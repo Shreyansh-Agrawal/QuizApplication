@@ -1,6 +1,7 @@
 'Role Based Access'
 
 import functools
+import logging
 import os
 from pathlib import Path
 from typing import List
@@ -11,6 +12,7 @@ from flask_jwt_extended import get_jwt, verify_jwt_in_request
 from config.message_prompts import ErrorMessage, Roles, StatusCodes
 from utils.custom_error import CustomError
 
+logger = logging.getLogger(__name__)
 dotenv_path = Path('.env')
 load_dotenv(dotenv_path=dotenv_path)
 
@@ -35,6 +37,7 @@ def access_level(roles: List):
             if claims["cap"] in mapped_roles:
                 return func(*args, **kwargs)
             error = CustomError(status=StatusCodes.FORBIDDEN, message=ErrorMessage.FORBIDDEN)
+            logger.error(error.message)
             return error.error_info, error.code
 
         return wrapper

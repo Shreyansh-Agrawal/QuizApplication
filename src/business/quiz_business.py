@@ -4,7 +4,7 @@ import logging
 from datetime import datetime, timezone
 from typing import Dict, List
 
-from config.message_prompts import ErrorMessage, StatusCodes
+from config.message_prompts import ErrorMessage, LogMessage, StatusCodes
 from config.queries import Queries
 from database.database_access import DatabaseAccess
 from utils.custom_error import DataNotFoundError
@@ -22,6 +22,8 @@ class QuizBusiness:
     def get_leaderboard(self) -> List[Dict]:
         '''Return top 10 scores for leaderboard'''
 
+        logger.debug(LogMessage.GET_LEADERBOARD)
+
         data = self.db.read(Queries.GET_LEADERBOARD)
         if not data:
             raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.LEADERBOARD_NOT_FOUND)
@@ -29,6 +31,8 @@ class QuizBusiness:
 
     def get_player_scores(self, player_id: str) -> List[Dict]:
         '''Return user's scores'''
+
+        logger.debug(LogMessage.GET_SCORES, player_id)
 
         data = self.db.read(Queries.GET_PLAYER_SCORES_BY_ID, (player_id, ))
         if not data:
@@ -40,6 +44,9 @@ class QuizBusiness:
         Return random questions for quiz
         Filters: category_id, question_type, limit
         '''
+
+        logger.debug(LogMessage.GET_QUES_FOR_QUIZ)
+
         question_data = self.db.read(Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY, (category_id, category_id, question_type, question_type, limit))
 
         if len(question_data) < limit:
@@ -60,14 +67,19 @@ class QuizBusiness:
     def save_quiz_score(self, player_id: str, score: int) -> None:
         '''Save Player's Quiz Score'''
 
+        logger.debug(LogMessage.SAVE_QUIZ_SCORE, player_id)
+
         score_id = generate_id(entity='score')
         time = datetime.now(timezone.utc) # current utc time
         timestamp = time.strftime('%Y-%m-%d %H:%M:%S') # yyyy-mm-dd
 
         self.db.write(Queries.INSERT_PLAYER_QUIZ_SCORE, (score_id, player_id, score, timestamp))
+        logger.debug(LogMessage.SAVE_QUIZ_SCORE_SUCCESS, player_id)
 
     def evaluate_player_answers(self, player_id: str, player_answers: List[Dict]) -> Dict:
         'Evaluate player answers and return score with correct answers'
+
+        logger.debug(LogMessage.EVALUATE_RESPONSE, player_id)
 
         question_ids = tuple(response['question_id'] for response in player_answers)
         formatted_query = Queries.GET_QUESTION_DATA_BY_QUESTION_ID % (', '.join(['%s'] * len(question_ids)))

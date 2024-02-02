@@ -54,6 +54,8 @@ class AuthBusiness:
         )
         password_type = 'permanent' if is_password_changed else 'default'
         token_data = {"access_token": access_token, "refresh_token": refresh_token, "password_type": password_type}
+
+        logger.debug(LogMessage.TOKEN_CREATED)
         return token_data
 
     def register(self, player_data: Dict) -> None:
@@ -66,6 +68,7 @@ class AuthBusiness:
         try:
             self.user_helper.save_user(player)
         except mysql.connector.IntegrityError as e:
+            logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.USER_EXISTS) from e
 
         logger.debug(LogMessage.SIGNUP_SUCCESS)
@@ -73,10 +76,14 @@ class AuthBusiness:
     def logout(self, token_id: str) -> None:
         '''Method to logout an authenticated user'''
 
+        logger.debug(LogMessage.LOGOUT_INITIATED)
         BLOCKLIST.add(token_id)
+        logger.debug(LogMessage.LOGOUT_SUCCESS)
 
     def refresh(self, user_id: str, mapped_role: str) -> Dict:
         '''Method to get a non fresh access token'''
+
+        logger.debug(LogMessage.REFRESH_INITIATED)
 
         new_access_token = create_access_token(
             identity=user_id,
@@ -84,4 +91,6 @@ class AuthBusiness:
             additional_claims={'cap': mapped_role}
         )
         token_data = {"access_token": new_access_token}
+
+        logger.debug(LogMessage.TOKEN_CREATED)
         return token_data
