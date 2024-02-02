@@ -11,4 +11,4 @@ class RegexPattern:
     OPTION_TEXT_PATTERN = r'.{1,50}'
     NUMERIC_PATTERN = r'^[0-9]+'
     PASSWORD_PATTERN = r'.{6,}'
-    ID_PATTERN = r'[a-zA-z2-9]{6}'
+    ID_PATTERN = r'^[a-zA-z2-9]{6}$'

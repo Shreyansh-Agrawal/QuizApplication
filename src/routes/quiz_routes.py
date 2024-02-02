@@ -1,14 +1,20 @@
 'Routes for the Quiz related functionalities'
 
-from flask import request
 from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
-from config.message_prompts import Roles
+from config.string_constants import AUTHORIZATION_HEADER, Roles
 from controllers.quiz_controller import QuizController
 from database.database_access import DatabaseAccess
-from schemas.quiz import AnswerSchema
+from schemas.quiz import (
+    AnswerSchema,
+    LeaderboardResponseSchema,
+    QuizAnswerResponseSchema,
+    QuizParamsSchema,
+    QuizQuestionResponseSchema,
+    ScoreResponseSchema
+)
 from utils.rbac import access_level
 
 blp = Blueprint('Quiz', __name__, description='Routes for the Quiz related functionalities')
@@ -24,6 +30,9 @@ class Leaderboard(MethodView):
     '''
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
+    @blp.response(200, LeaderboardResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
+
     def get(self):
         'Get leaderboard details'
         return quiz_controller.get_leaderboard()
@@ -37,6 +46,9 @@ class Score(MethodView):
     '''
 
     @access_level(roles=[Roles.PLAYER])
+    @blp.response(200, ScoreResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
+
     def get(self):
         'Get past scores of a player'
         player_id = get_jwt_identity()
@@ -51,13 +63,16 @@ class Quiz(MethodView):
     '''
 
     @access_level(roles=[Roles.PLAYER])
-    def get(self):
+    @blp.arguments(QuizParamsSchema, location='query')
+    @blp.response(200, QuizQuestionResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
+
+    def get(self, query_params):
         '''
         Get random questions for quiz
-        Query Parameters: category_id
+        Query Parameters: category_id, question_type, limit
         '''
-        category_id = request.args.get('category_id')
-        return quiz_controller.get_random_questions(category_id)
+        return quiz_controller.get_random_questions(**query_params)
 
 
 @blp.route('/quiz/answers')
@@ -69,6 +84,9 @@ class QuizAnswer(MethodView):
 
     @access_level(roles=[Roles.PLAYER])
     @blp.arguments(AnswerSchema(many=True))
+    @blp.response(201, QuizAnswerResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
+
     def post(self, player_answers):
         'Post player responses to the questions'
         player_id = get_jwt_identity()

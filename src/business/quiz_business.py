@@ -4,8 +4,8 @@ import logging
 from datetime import datetime, timezone
 from typing import Dict, List
 
-from config.message_prompts import ErrorMessage, StatusCodes
 from config.queries import Queries
+from config.string_constants import ErrorMessage, LogMessage, StatusCodes
 from database.database_access import DatabaseAccess
 from utils.custom_error import DataNotFoundError
 from utils.id_generator import generate_id
@@ -22,26 +22,36 @@ class QuizBusiness:
     def get_leaderboard(self) -> List[Dict]:
         '''Return top 10 scores for leaderboard'''
 
+        logger.debug(LogMessage.GET_LEADERBOARD)
+
         data = self.db.read(Queries.GET_LEADERBOARD)
         if not data:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.LEADERBOARD_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.LEADERBOARD_NOT_FOUND)
         return data
 
     def get_player_scores(self, player_id: str) -> List[Dict]:
         '''Return user's scores'''
 
+        logger.debug(LogMessage.GET_SCORES, player_id)
+
         data = self.db.read(Queries.GET_PLAYER_SCORES_BY_ID, (player_id, ))
         if not data:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.SCORES_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.SCORES_NOT_FOUND)
         return data
 
-    def get_random_questions(self, category_id: str = None) -> List[Dict]:
-        '''Return random questions in a category if category_id present else across all categories'''
+    def get_random_questions(self, category_id: str = None, question_type: str = None, limit: int = 10) -> List[Dict]:
+        '''
+        Return random questions for quiz
+        Filters: category_id, question_type, limit
+        '''
 
-        query = Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY if category_id else Queries.GET_RANDOM_QUESTIONS
-        question_data = self.db.read(query, (category_id, ) if category_id else ())
-        if len(question_data) < 10:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTIONS_NOT_FOUND)
+        logger.debug(LogMessage.GET_QUES_FOR_QUIZ)
+
+        question_data = self.db.read(
+            Queries.GET_RANDOM_QUESTIONS_BY_CATEGORY, (category_id, category_id, question_type, question_type, limit)
+        )
+        if len(question_data) < limit:
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTIONS_NOT_FOUND)
 
         # Organize the data into the desired format
         result = [
@@ -55,28 +65,33 @@ class QuizBusiness:
         ]
         return result
 
-    def save_quiz_score(self, player_id: str, score: int) -> None:
-        '''Save Player's Quiz Score'''
-
-        score_id = generate_id(entity='score')
-        time = datetime.now(timezone.utc) # current utc time
-        timestamp = time.strftime('%Y-%m-%d %H:%M:%S') # yyyy-mm-dd
-
-        self.db.write(Queries.INSERT_PLAYER_QUIZ_SCORE, (score_id, player_id, score, timestamp))
-
     def evaluate_player_answers(self, player_id: str, player_answers: List[Dict]) -> Dict:
         'Evaluate player answers and return score with correct answers'
 
+        logger.debug(LogMessage.EVALUATE_RESPONSE, player_id)
+
         question_ids = tuple(response['question_id'] for response in player_answers)
-        formatted_query = Queries.GET_QUESTION_DATA_BY_QUESTION_ID % (', '.join(['%s'] * len(question_ids)))
+        no_of_questions = len(question_ids)
+        formatted_query = Queries.GET_QUESTION_DATA_BY_QUESTION_ID % (', '.join(['%s'] * no_of_questions))
         question_data = self.db.read(formatted_query, question_ids)
+
+        question_data = sorted(question_data, key=lambda x: x['question_id'])
+        player_answers = sorted(player_answers, key=lambda x: x['question_id'])
+
+        result = self.__format_result(question_data, player_answers)
+        normalized_score = self.__normalize_score(result['score'], no_of_questions)
+        result['score'] = normalized_score
+
+        self.__save_quiz_score(player_id, normalized_score)
+        return result
+
+    def __format_result(self, question_data, player_answers):
+        'Organize the result into the desired format'
+
         result = {
             'score': 0,
             'responses': []
         }
-        question_data = sorted(question_data, key=lambda x: x['question_id'])
-        player_answers = sorted(player_answers, key=lambda x: x['question_id'])
-
         for question_data, player_answers in zip(question_data, player_answers):
             correct_answer = question_data['correct_answer']
             is_correct = player_answers['user_answer'].lower() == correct_answer.lower()
@@ -88,7 +103,24 @@ class QuizBusiness:
                 'is_correct': is_correct
             })
             if is_correct:
-                result['score'] += 10
+                result['score'] += 1
 
-        self.save_quiz_score(player_id, result['score'])
         return result
+
+    def __normalize_score(self, score: int, no_of_questions):
+        'Normalize the score obtained on a scale of [0, 100]'
+
+        normalized_score = (score/no_of_questions) * 100
+        return normalized_score
+
+    def __save_quiz_score(self, player_id: str, score: int) -> None:
+        '''Save Player's Quiz Score'''
+
+        logger.debug(LogMessage.SAVE_QUIZ_SCORE, player_id)
+
+        score_id = generate_id(entity='score')
+        time = datetime.now(timezone.utc) # current utc time
+        timestamp = time.strftime('%Y-%m-%d %H:%M:%S') # yyyy-mm-dd
+
+        self.db.write(Queries.INSERT_PLAYER_QUIZ_SCORE, (score_id, player_id, score, timestamp))
+        logger.debug(LogMessage.SAVE_QUIZ_SCORE_SUCCESS, player_id)

@@ -5,8 +5,13 @@ from typing import Dict, List
 
 import pymysql
 
-from config.message_prompts import ErrorMessage, Headers, LogMessage, StatusCodes
 from config.queries import Queries
+from config.string_constants import (
+    ErrorMessage,
+    Headers,
+    LogMessage,
+    StatusCodes
+)
 from database.database_access import DatabaseAccess
 from models.quiz.option import Option
 from models.quiz.question import Question
@@ -22,17 +27,6 @@ class QuestionBusiness:
     def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
 
-    def save_option(self, entity: Option) -> None:
-        '''Adds the option to the database.'''
-
-        option_data = (
-            entity.entity_id,
-            entity.question_id,
-            entity.text,
-            entity.is_correct
-        )
-        self.db.write(Queries.INSERT_OPTION, option_data)
-
     def save_question(self, entity: Question) -> None:
         '''Adds the question to the database.'''
 
@@ -44,14 +38,27 @@ class QuestionBusiness:
             entity.question_type
         )
         if not entity.options:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.NO_OPTIONS)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.NO_OPTIONS)
 
         self.db.write(Queries.INSERT_QUESTION, question_data)
         for option in entity.options:
-            self.save_option(option)
+            self.__save_option(option)
+
+    def __save_option(self, entity: Option) -> None:
+        '''Adds the option to the database.'''
+
+        option_data = (
+            entity.entity_id,
+            entity.question_id,
+            entity.text,
+            entity.is_correct
+        )
+        self.db.write(Queries.INSERT_OPTION, option_data)
 
     def get_quiz_data(self, category_id: str = None) -> List[Dict]:
         '''Return the quiz data in a specified category or across all categories'''
+
+        logger.debug(LogMessage.GET_QUIZ_DATA)
 
         query = Queries.GET_QUIZ_DATA
         params = ()
@@ -62,11 +69,18 @@ class QuestionBusiness:
         query += ' ORDER BY c.category_id, q.question_id, o.option_id'
         data = self.db.read(query, params)
         if not data:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.QUIZ_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.QUIZ_NOT_FOUND)
+
+        quiz_data = self.__format_quiz_data(data)
+        return quiz_data
+
+    def __format_quiz_data(self, data):
+        '''Organize the data into the desired format'''
 
         quiz_data = []
         current_category = None
         current_question = None
+
         for question_data in data:
             if question_data['category_id'] != current_category:
                 # New category
@@ -116,6 +130,8 @@ class QuestionBusiness:
     def create_question(self, category_id: str, question_data: Dict, admin_id: str) -> None:
         '''Add Questions in a Category'''
 
+        logger.debug(LogMessage.CREATE_ENTITY, Headers.QUES)
+
         question_data['category_id'] = category_id
         question_data['admin_id'] = admin_id
         question = Question.get_instance(question_data)
@@ -127,6 +143,7 @@ class QuestionBusiness:
         option = Option.get_instance(option_data)
         question.add_option(option)
 
+        # Organize the data into the desired format
         for option in question_data.get('other_options'):
             option_data['question_id'] = question.entity_id
             option_data['option_text'] = option
@@ -135,13 +152,18 @@ class QuestionBusiness:
             question.add_option(option)
         try:
             self.save_question(question)
-        except pymysql.err.IntegrityError as e:
-            raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.QUESTION_EXISTS) from e
+        except mysql.connector.IntegrityError as e:
+            logger.exception(e)
+            raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.QUESTION_EXISTS) from e
+
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.QUES)
 
     def post_quiz_data(self, quiz_data: Dict, admin_id: str) -> None:
         '''Posts quiz data to the database'''
 
+        logger.debug(LogMessage.POST_QUIZ_DATA)
+
+        # Organize the data into the desired format
         for category_data in quiz_data['quiz_data']:
             category_id = generate_id(entity='category')
             category_name = category_data['category']
@@ -174,16 +196,26 @@ class QuestionBusiness:
 
     def update_question(self, question_id: str, new_ques_text: str) -> None:
         '''Update question text by question id'''
+
+        logger.debug(LogMessage.UPDATE_ENTITY, Headers.QUES)
+
         try:
             row_affected = self.db.write(Queries.UPDATE_QUESTION_TEXT_BY_ID, (new_ques_text, question_id))
-        except pymysql.err.IntegrityError as e:
-            raise DuplicateEntryError(StatusCodes.CONFLICT, ErrorMessage.QUESTION_EXISTS) from e
+        except mysql.connector.IntegrityError as e:
+            logger.exception(e)
+            raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.QUESTION_EXISTS) from e
         if not row_affected:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTION_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTION_NOT_FOUND)
+
+        logger.debug(LogMessage.UPDATE_SUCCESS, Headers.QUES)
 
     def delete_question(self, question_id: str) -> None:
         '''Delete a question and its options by question id'''
 
+        logger.warning(LogMessage.DELETE_ENTITY, Headers.QUES)
+
         row_affected = self.db.write(Queries.DELETE_QUESTION_BY_ID, (question_id, ))
         if not row_affected:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTION_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTION_NOT_FOUND)
+
+        logger.debug(LogMessage.DELETE_SUCCESS, Headers.QUES)

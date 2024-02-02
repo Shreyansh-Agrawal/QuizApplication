@@ -97,6 +97,7 @@ class Queries:
         FROM credentials INNER JOIN users ON credentials.user_id = users.user_id 
         WHERE username = %s
     '''
+    GET_PASSWORD_BY_USER_ID = '''SELECT password FROM credentials WHERE user_id = %s'''
     GET_LEADERBOARD = '''
         SELECT player_id, username, MAX(score) as score, MIN(timestamp) as timestamp
         FROM scores
@@ -113,20 +114,14 @@ class Queries:
         INNER JOIN options ON questions.question_id = options.question_id
         WHERE options.isCorrect = 1 AND categories.category_id = %s
     '''
-    GET_RANDOM_QUESTIONS = '''
-        SELECT q.question_id, q.question_text, q.question_type, GROUP_CONCAT(o.option_text) as options
-        FROM Questions q
-        LEFT JOIN Options o ON q.question_id = o.question_id
-        GROUP BY q.question_id
-        ORDER BY RAND() LIMIT 10;
-    '''
     GET_RANDOM_QUESTIONS_BY_CATEGORY = '''
         SELECT q.question_id, q.question_text, q.question_type, GROUP_CONCAT(o.option_text) as options
         FROM Questions q
         LEFT JOIN Options o ON q.question_id = o.question_id
-        WHERE q.category_id = %s
+        WHERE (q.category_id = %s OR %s IS NULL OR q.category_id IS NULL)
+        AND (q.question_type = %s OR %s IS NULL OR q.question_type IS NULL)
         GROUP BY q.question_id
-        ORDER BY RAND() LIMIT 10;
+        ORDER BY RAND() LIMIT %s;
     '''
     GET_USER_BY_ROLE = '''
         SELECT users.user_id, username, name, email, registration_date
@@ -166,6 +161,9 @@ class Queries:
     UPDATE_CATEGORY_BY_NAME = 'UPDATE categories SET category_name = %s WHERE category_name = %s'
     UPDATE_CATEGORY_BY_ID = 'UPDATE categories SET category_name = %s WHERE category_id = %s'
     UPDATE_QUESTION_TEXT_BY_ID = 'UPDATE questions SET question_text = %s WHERE question_id = %s'
+    UPDATE_USER_PROFILE = 'UPDATE users SET name = %s, email = %s WHERE user_id = %s'
+    UPDATE_USERNAME = 'UPDATE credentials SET username = %s WHERE user_id = %s'
+    UPDATE_USER_PASSWORD = 'UPDATE credentials SET password = %s, isPasswordChanged = 1 WHERE user_id = %s'
     DELETE_CATEGORY_BY_NAME = 'DELETE FROM categories WHERE category_name = %s'
     DELETE_CATEGORY_BY_ID = 'DELETE FROM categories WHERE category_id = %s'
     DELETE_QUESTION_BY_ID = 'DELETE FROM questions WHERE question_id = %s'

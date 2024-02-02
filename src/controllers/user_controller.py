@@ -4,7 +4,7 @@ import logging
 from typing import Dict
 
 from business.user_business import UserBusiness
-from config.message_prompts import Message, Roles, StatusCodes
+from config.string_constants import Message, Roles, StatusCodes
 from utils.custom_response import SuccessMessage
 from utils.error_handlers import handle_custom_errors
 
@@ -52,6 +52,13 @@ class UserController:
 
         self.user_business.update_user_data(user_id, user_data)
         return SuccessMessage(status=StatusCodes.OK, message=Message.PROFILE_UPDATED).message_info
+
+    @handle_custom_errors
+    def update_user_password(self, user_id: str, password_data: Dict):
+        '''Update user password'''
+
+        self.user_business.update_user_password(user_id, password_data)
+        return SuccessMessage(status=StatusCodes.OK, message=Message.PASSWORD_UPDATED).message_info
 
     @handle_custom_errors
     def delete_admin_by_id(self, admin_id: str):

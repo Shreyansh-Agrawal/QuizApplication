@@ -4,13 +4,13 @@ import logging
 import os
 from pathlib import Path
 
-import pymysql
+import mysql.connector
 from dotenv import load_dotenv
 
-from business.user_business import UserBusiness
-from config.message_prompts import Headers, LogMessage, Roles
+from config.string_constants import Headers, LogMessage, Roles
 from config.queries import Queries
 from database.database_access import DatabaseAccess
+from helpers.user_helper import UserHelper
 from models.users.super_admin import SuperAdmin
 from utils.password_hasher import hash_password
 
@@ -31,7 +31,7 @@ class Initializer:
 
     def __init__(self, db: DatabaseAccess) -> None:
         self.db = db
-        self.user_business = UserBusiness(self.db)
+        self.user_helper = UserHelper(self.db)
 
     def create_super_admin(self) -> None:
         '''
@@ -64,9 +64,9 @@ class Initializer:
         super_admin = SuperAdmin.get_instance(super_admin_data)
 
         try:
-            self.user_business.save_user(super_admin)
-        except pymysql.err.IntegrityError:
-            logger.debug(LogMessage.SUPER_ADMIN_PRESENT)
+            self.user_helper.save_user(super_admin)
+        except mysql.connector.IntegrityError as e:
+            logger.exception(e)
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.SUPER_ADMIN)
 

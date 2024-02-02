@@ -59,7 +59,7 @@ To run the application, use the following command:
 
 ```bash
 cd .\src\
-python -m flask --app server run
+python -m flask --app server run --debug
 ```
 
 ### Run the Tests
@@ -88,6 +88,8 @@ QuizApplication/
 │   │   ├── user_business.py
 │   ├── config/
 │   │   ├── file_paths.py
+│   │   ├── flask_config.py
+│   │   ├── initialize_app.py
 │   │   ├── message_prompts.py
 │   │   ├── queries.py
 │   │   ├── quiz_data.json
@@ -131,7 +133,6 @@ QuizApplication/
 │   │   ├── custom_response.py
 │   │   ├── error_handlers.py
 │   │   ├── id_generator.py
-│   │   ├── initialize_app.py
 │   │   ├── password_generator.py
 │   │   ├── password_hasher.py
 │   │   ├── rbac.py

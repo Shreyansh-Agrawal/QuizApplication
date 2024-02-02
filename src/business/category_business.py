@@ -5,8 +5,13 @@ from typing import Dict, List
 
 import pymysql
 
-from config.message_prompts import ErrorMessage, Headers, LogMessage, StatusCodes
 from config.queries import Queries
+from config.string_constants import (
+    ErrorMessage,
+    Headers,
+    LogMessage,
+    StatusCodes
+)
 from database.database_access import DatabaseAccess
 from models.quiz.category import Category
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
@@ -20,16 +25,6 @@ class CategoryBusiness:
     def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
 
-    def save_category(self, entity: Category) -> None:
-        '''Adds the category to the database.'''
-
-        category_data = (
-            entity.entity_id,
-            entity.admin_id,
-            entity.text
-        )
-        self.db.write(Queries.INSERT_CATEGORY, category_data)
-
     def get_all_categories(self) -> List[Dict]:
         '''Return all Quiz Categories'''
 
@@ -37,7 +32,7 @@ class CategoryBusiness:
 
         data = self.db.read(Queries.GET_ALL_CATEGORIES)
         if not data:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.NO_CATEGORY)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.NO_CATEGORY)
         return data
 
     def create_category(self, category_data: Dict) -> None:
@@ -47,11 +42,22 @@ class CategoryBusiness:
 
         category = Category.get_instance(category_data)
         try:
-            self.save_category(category)
-        except pymysql.err.IntegrityError as e:
-            raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
+            self.__save_category(category)
+        except mysql.connector.IntegrityError as e:
+            logger.exception(e)
+            raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.CATEGORY)
+
+    def __save_category(self, entity: Category) -> None:
+        '''Adds the category to the database.'''
+
+        category_data = (
+            entity.entity_id,
+            entity.admin_id,
+            entity.text
+        )
+        self.db.write(Queries.INSERT_CATEGORY, category_data)
 
     def update_category(self, category_id: str, new_category_name: str) -> None:
         '''Update a category name by category id'''
@@ -60,10 +66,11 @@ class CategoryBusiness:
 
         try:
             row_affected = self.db.write(Queries.UPDATE_CATEGORY_BY_ID, (new_category_name, category_id))
-        except pymysql.err.IntegrityError as e:
-            raise DuplicateEntryError(StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
+        except mysql.connector.IntegrityError as e:
+            logger.exception(e)
+            raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
         if not row_affected:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.CATEGORY_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.CATEGORY_NOT_FOUND)
 
         logger.debug(LogMessage.UPDATE_CATEGORY_SUCCESS, category_id, new_category_name)
 
@@ -74,6 +81,6 @@ class CategoryBusiness:
 
         row_affected = self.db.write(Queries.DELETE_CATEGORY_BY_ID, (category_id, ))
         if not row_affected:
-            raise DataNotFoundError(StatusCodes.NOT_FOUND, message=ErrorMessage.CATEGORY_NOT_FOUND)
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.CATEGORY_NOT_FOUND)
 
         logger.debug(LogMessage.DELETE_CATEGORY_SUCCESS, category_id)

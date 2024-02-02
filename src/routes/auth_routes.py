@@ -3,10 +3,17 @@
 from flask.views import MethodView
 from flask_jwt_extended import get_jwt, jwt_required
 from flask_smorest import Blueprint
+from config.string_constants import AUTHORIZATION_HEADER
 
 from controllers.auth_controller import AuthController
 from database.database_access import DatabaseAccess
-from schemas.auth import LoginSchema, RegistrationSchema
+from schemas.auth import (
+    LoginResponseSchema,
+    LoginSchema,
+    RefreshResponseSchema,
+    RegistrationSchema
+)
+from schemas.config_schema import ResponseSchema
 
 blp = Blueprint('Auth', __name__, description='Routes for the Authentication related functionalities')
 
@@ -19,6 +26,8 @@ class Register(MethodView):
     'Routes to register a new user'
 
     @blp.arguments(RegistrationSchema)
+    @blp.response(201, ResponseSchema)
+
     def post(self, player_data):
         'Register a new user'
         return auth_controller.register(player_data)
@@ -29,6 +38,8 @@ class Login(MethodView):
     'Routes to login an existing user'
 
     @blp.arguments(LoginSchema)
+    @blp.response(200, LoginResponseSchema)
+
     def post(self, login_data):
         'Login an existing user'
         return auth_controller.login(login_data)
@@ -39,6 +50,9 @@ class Logout(MethodView):
     'Routes to logout a logged in user'
 
     @jwt_required()
+    @blp.response(200, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
+
     def post(self):
         'Logout a logged in user'
         jti = get_jwt().get('jti')
@@ -50,6 +64,9 @@ class Refresh(MethodView):
     'Routes to get a non fresh access token'
 
     @jwt_required(refresh=True)
+    @blp.response(200, RefreshResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
+
     def post(self):
         'Issue a non fresh access token'
         claims = get_jwt()
