@@ -3,6 +3,7 @@
 from flask.views import MethodView
 from flask_jwt_extended import get_jwt, jwt_required
 from flask_smorest import Blueprint
+from config.string_constants import AUTHORIZATION_HEADER
 
 from controllers.auth_controller import AuthController
 from database.database_access import DatabaseAccess
@@ -50,6 +51,7 @@ class Logout(MethodView):
 
     @jwt_required()
     @blp.response(200, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def post(self):
         'Logout a logged in user'
@@ -63,6 +65,7 @@ class Refresh(MethodView):
 
     @jwt_required(refresh=True)
     @blp.response(200, RefreshResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def post(self):
         'Issue a non fresh access token'

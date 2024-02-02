@@ -1,11 +1,10 @@
 'Routes for the Quiz related functionalities'
 
-from flask import request
 from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
-from config.string_constants import Roles
+from config.string_constants import AUTHORIZATION_HEADER, Roles
 from controllers.quiz_controller import QuizController
 from database.database_access import DatabaseAccess
 from schemas.quiz import (
@@ -32,6 +31,7 @@ class Leaderboard(MethodView):
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
     @blp.response(200, LeaderboardResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def get(self):
         'Get leaderboard details'
@@ -47,6 +47,7 @@ class Score(MethodView):
 
     @access_level(roles=[Roles.PLAYER])
     @blp.response(200, ScoreResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def get(self):
         'Get past scores of a player'
@@ -64,6 +65,7 @@ class Quiz(MethodView):
     @access_level(roles=[Roles.PLAYER])
     @blp.arguments(QuizParamsSchema, location='query')
     @blp.response(200, QuizQuestionResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def get(self, query_params):
         '''
@@ -83,6 +85,7 @@ class QuizAnswer(MethodView):
     @access_level(roles=[Roles.PLAYER])
     @blp.arguments(AnswerSchema(many=True))
     @blp.response(201, QuizAnswerResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def post(self, player_answers):
         'Post player responses to the questions'

@@ -56,7 +56,7 @@ class QuizQuestionDataSchema(CustomSchema):
 
     question_id = fields.Str(dump_only=True, validate=validate.Regexp(RegexPattern.ID_PATTERN))
     question_text = fields.Str(required=True, validate=validate.Regexp(RegexPattern.QUES_TEXT_PATTERN))
-    question_type = fields.Str(required=True)
+    question_type = fields.Str(required=True, validate=validate.OneOf(QUESTION_TYPES))
     options = fields.List(fields.Str(validate=validate.Regexp(RegexPattern.OPTION_TEXT_PATTERN)))
 
 

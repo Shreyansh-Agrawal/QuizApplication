@@ -1,11 +1,10 @@
 'Routes for the Question related functionalities'
 
-from flask import request
 from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
-from config.string_constants import Roles
+from config.string_constants import AUTHORIZATION_HEADER, Roles
 from controllers.question_controller import QuestionController
 from controllers.user_controller import UserController
 from database.database_access import DatabaseAccess
@@ -37,6 +36,7 @@ class Question(MethodView):
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
     @blp.arguments(QuestionParamSchema, location='query')
     @blp.response(200, QuizResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def get(self, query_params):
         '''
@@ -48,6 +48,7 @@ class Question(MethodView):
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuizDataSchema)
     @blp.response(201, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def post(self, quiz_data):
         'Post quiz data including questions, categories and options'
@@ -65,6 +66,7 @@ class QuestionByCategoryId(MethodView):
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuestionSchema)
     @blp.response(201, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def post(self, question_data, category_id):
         'Create a question in a specified category'
@@ -83,6 +85,7 @@ class QuestionById(MethodView):
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(QuestionUpdateSchema)
     @blp.response(200, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def put(self, question_data, question_id):
         'Update a question text'
@@ -90,6 +93,7 @@ class QuestionById(MethodView):
 
     @access_level(roles=[Roles.ADMIN])
     @blp.response(200, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def delete(self, question_id):
         'Delete a question and its options'

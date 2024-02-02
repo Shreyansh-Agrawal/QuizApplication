@@ -4,7 +4,7 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
-from config.string_constants import Roles
+from config.string_constants import AUTHORIZATION_HEADER, Roles
 from controllers.user_controller import UserController
 from database.database_access import DatabaseAccess
 from schemas.config_schema import ResponseSchema
@@ -33,6 +33,7 @@ class Profile(MethodView):
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
     @blp.response(200, ProfileResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def get(self):
         'Get user profile data'
@@ -42,6 +43,7 @@ class Profile(MethodView):
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
     @blp.arguments(UserUpdateSchema)
     @blp.response(200, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def put(self, user_data):
         'Update user profile'
@@ -59,6 +61,7 @@ class Password(MethodView):
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
     @blp.arguments(PasswordUpdateSchema)
     @blp.response(200, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def put(self, password_data):
         'Update user password'
@@ -75,6 +78,7 @@ class Player(MethodView):
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN])
     @blp.response(200, UserResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def get(self):
         'Get all player details'
@@ -91,6 +95,7 @@ class Admin(MethodView):
 
     @access_level(roles=[Roles.SUPER_ADMIN])
     @blp.response(200, UserResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def get(self):
         'Get all admin details'
@@ -100,6 +105,7 @@ class Admin(MethodView):
     @access_level(roles=[Roles.SUPER_ADMIN])
     @blp.arguments(UserSchema)
     @blp.response(201, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def post(self, admin_data):
         'Create a new admin account'
@@ -115,6 +121,7 @@ class AdminById(MethodView):
 
     @access_level(roles=[Roles.SUPER_ADMIN])
     @blp.response(200, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def delete(self, admin_id):
         'Delete an existing admin'
@@ -130,6 +137,7 @@ class PlayerById(MethodView):
 
     @access_level(roles=[Roles.ADMIN])
     @blp.response(200, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def delete(self, player_id):
         'Delete an existing player'

@@ -4,7 +4,7 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
-from config.string_constants import Roles
+from config.string_constants import AUTHORIZATION_HEADER, Roles
 from controllers.category_controller import CategoryController
 from database.database_access import DatabaseAccess
 from schemas.category import (
@@ -31,6 +31,7 @@ class Category(MethodView):
 
     @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
     @blp.response(200, CategoryResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def get(self):
         'Get all categories details'
@@ -39,6 +40,7 @@ class Category(MethodView):
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(CategorySchema)
     @blp.response(201, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def post(self, category_data):
         'Create a new category'
@@ -57,6 +59,7 @@ class CategoryById(MethodView):
     @access_level(roles=[Roles.ADMIN])
     @blp.arguments(CategoryUpdateSchema)
     @blp.response(200, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def put(self, category_data, category_id):
         'Update an existing category'
@@ -64,6 +67,7 @@ class CategoryById(MethodView):
 
     @access_level(roles=[Roles.ADMIN])
     @blp.response(200, ResponseSchema)
+    @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
     def delete(self, category_id):
         'Delete an existing category'

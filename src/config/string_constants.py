@@ -223,3 +223,11 @@ class StatusCodes:
 
 
 QUESTION_TYPES = ['mcq', 't/f', 'one word']
+
+
+AUTHORIZATION_HEADER = {
+    "name": "Authorization",
+    "in": "header",
+    "description": "Bearer <access_token>",
+    "required": "true",
+}
