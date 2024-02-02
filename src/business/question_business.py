@@ -5,8 +5,13 @@ from typing import Dict, List
 
 import mysql.connector
 
-from config.string_constants import ErrorMessage, Headers, LogMessage, StatusCodes
 from config.queries import Queries
+from config.string_constants import (
+    ErrorMessage,
+    Headers,
+    LogMessage,
+    StatusCodes
+)
 from database.database_access import DatabaseAccess
 from models.quiz.option import Option
 from models.quiz.question import Question
@@ -21,17 +26,6 @@ class QuestionBusiness:
 
     def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
-
-    def save_option(self, entity: Option) -> None:
-        '''Adds the option to the database.'''
-
-        option_data = (
-            entity.entity_id,
-            entity.question_id,
-            entity.text,
-            entity.is_correct
-        )
-        self.db.write(Queries.INSERT_OPTION, option_data)
 
     def save_question(self, entity: Question) -> None:
         '''Adds the question to the database.'''
@@ -48,7 +42,18 @@ class QuestionBusiness:
 
         self.db.write(Queries.INSERT_QUESTION, question_data)
         for option in entity.options:
-            self.save_option(option)
+            self.__save_option(option)
+
+    def __save_option(self, entity: Option) -> None:
+        '''Adds the option to the database.'''
+
+        option_data = (
+            entity.entity_id,
+            entity.question_id,
+            entity.text,
+            entity.is_correct
+        )
+        self.db.write(Queries.INSERT_OPTION, option_data)
 
     def get_quiz_data(self, category_id: str = None) -> List[Dict]:
         '''Return the quiz data in a specified category or across all categories'''
@@ -66,9 +71,16 @@ class QuestionBusiness:
         if not data:
             raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.QUIZ_NOT_FOUND)
 
+        quiz_data = self.__format_quiz_data(data)
+        return quiz_data
+
+    def __format_quiz_data(self, data):
+        '''Organize the data into the desired format'''
+
         quiz_data = []
         current_category = None
         current_question = None
+
         for question_data in data:
             if question_data['category_id'] != current_category:
                 # New category
@@ -131,6 +143,7 @@ class QuestionBusiness:
         option = Option.get_instance(option_data)
         question.add_option(option)
 
+        # Organize the data into the desired format
         for option in question_data.get('other_options'):
             option_data['question_id'] = question.entity_id
             option_data['option_text'] = option
@@ -150,6 +163,7 @@ class QuestionBusiness:
 
         logger.debug(LogMessage.POST_QUIZ_DATA)
 
+        # Organize the data into the desired format
         for category_data in quiz_data['quiz_data']:
             category_id = generate_id(entity='category')
             category_name = category_data['category']

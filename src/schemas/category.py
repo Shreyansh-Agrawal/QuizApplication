@@ -22,5 +22,5 @@ class CategoryUpdateSchema(CustomSchema):
 
 class CategoryResponseSchema(ResponseSchema):
     'Schema for response data of get all categories'
-    
+
     data = fields.Nested(CategorySchema, many=True)

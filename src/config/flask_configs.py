@@ -13,7 +13,7 @@ from routes.question_routes import blp as QuestionBlueprint
 from routes.quiz_routes import blp as QuizBlueprint
 from routes.user_routes import blp as UserBlueprint
 from utils.blocklist import BLOCKLIST
-from utils.custom_error import CustomError,ValidationError
+from utils.custom_error import CustomError, ValidationError
 from utils.error_handlers import (
     handle_bad_request,
     handle_internal_server_error,

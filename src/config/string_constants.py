@@ -222,7 +222,7 @@ class StatusCodes:
     INTERNAL_SERVER_ERROR = INFO(code=500, status='Internal Server Error')
 
 
-QUESTION_TYPES = ['mcq', 't/f', 'one word']
+QUESTION_TYPES = ['mcq', 't/f', 'one word', 'MCQ', 'T/F', 'ONE WORD']
 
 
 AUTHORIZATION_HEADER = {

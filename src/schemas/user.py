@@ -32,11 +32,11 @@ class PasswordUpdateSchema(CustomSchema):
 
 class ProfileResponseSchema(ResponseSchema):
     'Schema for view profile response'
-    
+
     data = fields.Nested(UserSchema)
 
 
 class UserResponseSchema(ProfileResponseSchema):
     'Schema for view users response'
-    
+
     data = fields.Nested(UserSchema, many=True)

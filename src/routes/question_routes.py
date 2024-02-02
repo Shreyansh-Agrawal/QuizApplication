@@ -91,7 +91,7 @@ class QuestionById(MethodView):
         'Update a question text'
         return question_controller.update_question(question_id, question_data)
 
-    @access_level(roles=[Roles.ADMIN])
+    @access_level(roles=[Roles.ADMIN], check_fresh=True)
     @blp.response(200, ResponseSchema)
     @blp.doc(parameters=[AUTHORIZATION_HEADER])
 

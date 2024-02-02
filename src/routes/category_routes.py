@@ -65,7 +65,7 @@ class CategoryById(MethodView):
         'Update an existing category'
         return category_controller.update_category(category_data, category_id)
 
-    @access_level(roles=[Roles.ADMIN])
+    @access_level(roles=[Roles.ADMIN], check_fresh=True)
     @blp.response(200, ResponseSchema)
     @blp.doc(parameters=[AUTHORIZATION_HEADER])
 

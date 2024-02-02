@@ -16,7 +16,7 @@ class AnswerSchema(CustomSchema):
 
 class QuizParamsSchema(CustomSchema):
     'Schema for query parameters while fetching questions for quiz'
-    
+
     category_id = fields.Str(required=False, validate=validate.Regexp(RegexPattern.ID_PATTERN))
     question_type = fields.Str(required=False, validate=validate.OneOf(QUESTION_TYPES))
     limit = fields.Int(required=False, validate=validate.Range(min=1))
@@ -33,7 +33,7 @@ class LeaderboardDataSchema(CustomSchema):
 
 class LeaderboardResponseSchema(ResponseSchema):
     'Schema for leaderboard response'
-    
+
     data = fields.Nested(LeaderboardDataSchema, many=True)
 
 
@@ -47,7 +47,7 @@ class ScoreDataSchema(CustomSchema):
 
 class ScoreResponseSchema(ResponseSchema):
     'Schema for score response'
-    
+
     data = fields.Nested(ScoreDataSchema, many=True)
 
 
@@ -62,7 +62,7 @@ class QuizQuestionDataSchema(CustomSchema):
 
 class QuizQuestionResponseSchema(ResponseSchema):
     'Schema for quiz questions response'
-    
+
     data = fields.Nested(QuizQuestionDataSchema, many=True)
 
 
@@ -85,5 +85,5 @@ class QuizAnswerDataSchema(CustomSchema):
 
 class QuizAnswerResponseSchema(ResponseSchema):
     'Schema for quiz answers response'
-    
+
     data = fields.Nested(QuizAnswerDataSchema)

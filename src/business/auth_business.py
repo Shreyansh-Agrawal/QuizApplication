@@ -6,8 +6,8 @@ from typing import Dict
 import mysql.connector
 from flask_jwt_extended import create_access_token, create_refresh_token
 
-from config.string_constants import ErrorMessage, LogMessage, StatusCodes
 from config.queries import Queries
+from config.string_constants import ErrorMessage, LogMessage, StatusCodes
 from database.database_access import DatabaseAccess
 from helpers.user_helper import UserHelper
 from models.users.player import Player
@@ -35,6 +35,18 @@ class AuthBusiness:
         hashed_password = hash_password(password)
         user_data = self.db.read(Queries.GET_CREDENTIALS_BY_USERNAME, (username, ))
 
+        user_id, role, is_password_changed = self.__verify_credentials(user_data, password, hashed_password)
+        mapped_role = ROLE_MAPPING.get(role)
+        password_type = 'permanent' if is_password_changed else 'default'
+
+        token_data = self.__generate_token_data(user_id, mapped_role, password_type)
+
+        logger.debug(LogMessage.TOKEN_CREATED)
+        return token_data
+
+    def __verify_credentials(self, user_data, password, hashed_password):
+        '''Match the password'''
+
         if not user_data:
             raise InvalidCredentialsError(status=StatusCodes.UNAUTHORIZED, message=ErrorMessage.INVALID_CREDENTIALS)
         user_id, user_password, role, is_password_changed = user_data[0].values()
@@ -42,7 +54,11 @@ class AuthBusiness:
         if user_password not in (password, hashed_password):
             raise InvalidCredentialsError(status=StatusCodes.UNAUTHORIZED, message=ErrorMessage.INVALID_CREDENTIALS)
 
-        mapped_role = ROLE_MAPPING.get(role)
+        return user_id, role, is_password_changed
+
+    def __generate_token_data(self, user_id, mapped_role, password_type):
+        '''Generate token data containing access and refresh tokens'''
+
         access_token = create_access_token(
             identity=user_id,
             fresh=True,
@@ -52,10 +68,7 @@ class AuthBusiness:
             identity=user_id,
             additional_claims={'cap': mapped_role}
         )
-        password_type = 'permanent' if is_password_changed else 'default'
         token_data = {"access_token": access_token, "refresh_token": refresh_token, "password_type": password_type}
-
-        logger.debug(LogMessage.TOKEN_CREATED)
         return token_data
 
     def register(self, player_data: Dict) -> None:

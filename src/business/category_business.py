@@ -5,8 +5,13 @@ from typing import Dict, List
 
 import mysql.connector
 
-from config.string_constants import ErrorMessage, Headers, LogMessage, StatusCodes
 from config.queries import Queries
+from config.string_constants import (
+    ErrorMessage,
+    Headers,
+    LogMessage,
+    StatusCodes
+)
 from database.database_access import DatabaseAccess
 from models.quiz.category import Category
 from utils.custom_error import DataNotFoundError, DuplicateEntryError
@@ -19,16 +24,6 @@ class CategoryBusiness:
 
     def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
-
-    def save_category(self, entity: Category) -> None:
-        '''Adds the category to the database.'''
-
-        category_data = (
-            entity.entity_id,
-            entity.admin_id,
-            entity.text
-        )
-        self.db.write(Queries.INSERT_CATEGORY, category_data)
 
     def get_all_categories(self) -> List[Dict]:
         '''Return all Quiz Categories'''
@@ -47,12 +42,22 @@ class CategoryBusiness:
 
         category = Category.get_instance(category_data)
         try:
-            self.save_category(category)
+            self.__save_category(category)
         except mysql.connector.IntegrityError as e:
             logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
 
         logger.debug(LogMessage.CREATE_SUCCESS, Headers.CATEGORY)
+
+    def __save_category(self, entity: Category) -> None:
+        '''Adds the category to the database.'''
+
+        category_data = (
+            entity.entity_id,
+            entity.admin_id,
+            entity.text
+        )
+        self.db.write(Queries.INSERT_CATEGORY, category_data)
 
     def update_category(self, category_id: str, new_category_name: str) -> None:
         '''Update a category name by category id'''

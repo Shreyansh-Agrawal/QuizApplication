@@ -63,5 +63,5 @@ class QuestionParamSchema(CustomSchema):
 
 class QuizResponseSchema(ResponseSchema):
     'Schema for Quiz data response'
-    
+
     data = fields.List(fields.Nested(QuizCategorySchema), required=True)

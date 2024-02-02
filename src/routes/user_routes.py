@@ -58,7 +58,7 @@ class Password(MethodView):
         Update user password
     '''
 
-    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER])
+    @access_level(roles=[Roles.SUPER_ADMIN, Roles.ADMIN, Roles.PLAYER], check_fresh=True)
     @blp.arguments(PasswordUpdateSchema)
     @blp.response(200, ResponseSchema)
     @blp.doc(parameters=[AUTHORIZATION_HEADER])
@@ -119,7 +119,7 @@ class AdminById(MethodView):
         Delete an existing admin
     '''
 
-    @access_level(roles=[Roles.SUPER_ADMIN])
+    @access_level(roles=[Roles.SUPER_ADMIN], check_fresh=True)
     @blp.response(200, ResponseSchema)
     @blp.doc(parameters=[AUTHORIZATION_HEADER])
 
@@ -135,7 +135,7 @@ class PlayerById(MethodView):
         Delete an existing player
     '''
 
-    @access_level(roles=[Roles.ADMIN])
+    @access_level(roles=[Roles.ADMIN], check_fresh=True)
     @blp.response(200, ResponseSchema)
     @blp.doc(parameters=[AUTHORIZATION_HEADER])
 

@@ -1,6 +1,5 @@
 'Schema for Auth data'
 
-from dataclasses import field
 from marshmallow import fields, validate
 
 from config.regex_patterns import RegexPattern

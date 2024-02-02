@@ -2,8 +2,7 @@
 
 import pytest
 
-from config.file_paths import FilePaths
-from config.string_constants import DisplayMessage, Headers, LogMessage, Prompts, ErrorMessage
+from config.string_constants import Headers, LogMessage, ErrorMessage
 from config.queries import InitializationQueries, Queries
 
 
