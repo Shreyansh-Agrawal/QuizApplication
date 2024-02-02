@@ -5,7 +5,7 @@ from typing import Dict, List
 
 import mysql.connector
 
-from config.message_prompts import ErrorMessage, Headers, LogMessage, Roles, StatusCodes
+from config.string_constants import ErrorMessage, Headers, LogMessage, Roles, StatusCodes
 from config.queries import Queries
 from models.users.admin import Admin
 from helpers.user_helper import UserHelper

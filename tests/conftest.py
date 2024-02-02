@@ -3,7 +3,7 @@
 import pytest
 
 from config.file_paths import FilePaths
-from config.message_prompts import DisplayMessage, Headers, LogMessage, Prompts, ErrorMessage
+from config.string_constants import DisplayMessage, Headers, LogMessage, Prompts, ErrorMessage
 from config.queries import InitializationQueries, Queries
 
 

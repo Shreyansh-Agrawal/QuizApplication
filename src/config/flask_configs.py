@@ -1,11 +1,12 @@
 'Manages all the configurations for the flask app'
 
+import logging
 import os
 
 from flask_jwt_extended import JWTManager
 from flask_smorest import Api
 
-from config.message_prompts import ErrorMessage, StatusCodes
+from config.string_constants import ErrorMessage, StatusCodes
 from routes.auth_routes import blp as AuthBlueprint
 from routes.category_routes import blp as CategoryBlueprint
 from routes.question_routes import blp as QuestionBlueprint
@@ -18,6 +19,8 @@ from utils.error_handlers import (
     handle_internal_server_error,
     handle_validation_error
 )
+
+logger = logging.getLogger(__name__)
 
 
 def set_app_configs(app):
@@ -61,6 +64,8 @@ def set_jwt_configs(app):
     def revoked_token_callback(_jwt_header, _jwt_payload):
         'Returns a custom response if a revoked token is encountered'
         error = CustomError(status=StatusCodes.UNAUTHORIZED, message=ErrorMessage.TOKEN_REVOKED)
+
+        logger.error(error.error_info)
         return error.error_info, error.code
 
     @jwt.needs_fresh_token_loader
@@ -70,23 +75,31 @@ def set_jwt_configs(app):
         used on an endpoint that is marked as fresh=True
         '''
         error = CustomError(status=StatusCodes.UNAUTHORIZED, message=ErrorMessage.TOKEN_NOT_FRESH)
+
+        logger.error(error.error_info)
         return error.error_info, error.code
 
     @jwt.expired_token_loader
     def expired_token_callback(_jwt_header, _jwt_payload):
         'Returns a custom response when an expired token is encountered'
         error = CustomError(status=StatusCodes.UNAUTHORIZED, message=ErrorMessage.TOKEN_EXPIRED)
+
+        logger.error(error.error_info)
         return error.error_info, error.code
 
     @jwt.invalid_token_loader
-    def invalid_token_callback(_error):
+    def invalid_token_callback(err):
         'Returns a custom response when an invalid token is encountered'
+        logger.error(err)
+
         error = CustomError(status=StatusCodes.UNAUTHORIZED, message=ErrorMessage.INVALID_TOKEN)
         return error.error_info, error.code
 
     @jwt.unauthorized_loader
-    def missing_token_callback(_error):
+    def missing_token_callback(err):
         'Returns a custom response when no token is present'
+        logger.error(err)
+
         error = CustomError(status=StatusCodes.UNAUTHORIZED, message=ErrorMessage.MISSING_TOKEN)
         return error.error_info, error.code
 

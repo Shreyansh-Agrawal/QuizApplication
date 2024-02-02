@@ -2,7 +2,7 @@
 
 from typing import Dict
 
-from config.message_prompts import Roles
+from config.string_constants import Roles
 from models.users.user import User
 
 

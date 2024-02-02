@@ -5,10 +5,17 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
-from config.message_prompts import Roles
+from config.string_constants import Roles
 from controllers.quiz_controller import QuizController
 from database.database_access import DatabaseAccess
-from schemas.quiz import AnswerSchema, LeaderboardResponseSchema, QuizAnswerResponseSchema, QuizParamsSchema, QuizQuestionResponseSchema, ScoreResponseSchema
+from schemas.quiz import (
+    AnswerSchema,
+    LeaderboardResponseSchema,
+    QuizAnswerResponseSchema,
+    QuizParamsSchema,
+    QuizQuestionResponseSchema,
+    ScoreResponseSchema
+)
 from utils.rbac import access_level
 
 blp = Blueprint('Quiz', __name__, description='Routes for the Quiz related functionalities')

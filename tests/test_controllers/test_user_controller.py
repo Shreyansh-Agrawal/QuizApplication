@@ -3,7 +3,7 @@
 import mysql.connector
 import pytest
 
-from config.message_prompts import DisplayMessage, Headers, LogMessage
+from config.string_constants import DisplayMessage, Headers, LogMessage
 from controllers.user_controller import UserController
 from utils.custom_error import LoginError
 

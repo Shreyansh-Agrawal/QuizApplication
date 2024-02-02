@@ -2,7 +2,7 @@
 
 from marshmallow import Schema, fields
 
-from config.message_prompts import StatusCodes
+from config.string_constants import StatusCodes
 from utils.custom_error import ValidationError
 
 

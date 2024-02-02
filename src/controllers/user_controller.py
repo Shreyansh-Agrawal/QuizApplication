@@ -4,7 +4,7 @@ import logging
 from typing import Dict
 
 from business.user_business import UserBusiness
-from config.message_prompts import Message, Roles, StatusCodes
+from config.string_constants import Message, Roles, StatusCodes
 from utils.custom_response import SuccessMessage
 from utils.error_handlers import handle_custom_errors
 

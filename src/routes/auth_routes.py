@@ -6,7 +6,12 @@ from flask_smorest import Blueprint
 
 from controllers.auth_controller import AuthController
 from database.database_access import DatabaseAccess
-from schemas.auth import LoginResponseSchema, LoginSchema, RefreshResponseSchema, RegistrationSchema
+from schemas.auth import (
+    LoginResponseSchema,
+    LoginSchema,
+    RefreshResponseSchema,
+    RegistrationSchema
+)
 from schemas.config_schema import ResponseSchema
 
 blp = Blueprint('Auth', __name__, description='Routes for the Authentication related functionalities')

@@ -4,7 +4,7 @@ import logging
 from datetime import datetime, timezone
 from typing import Dict, List
 
-from config.message_prompts import ErrorMessage, LogMessage, StatusCodes
+from config.string_constants import ErrorMessage, LogMessage, StatusCodes
 from config.queries import Queries
 from database.database_access import DatabaseAccess
 from utils.custom_error import DataNotFoundError

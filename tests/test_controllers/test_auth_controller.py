@@ -5,7 +5,7 @@ import mysql.connector
 import pytest
 from pytest_mock import mocker
 
-from config.message_prompts import DisplayMessage, LogMessage
+from config.string_constants import DisplayMessage, LogMessage
 from controllers.auth_controller import AuthController
 from utils.custom_error import LoginError
 

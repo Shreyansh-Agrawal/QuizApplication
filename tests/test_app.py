@@ -1,6 +1,6 @@
 '''Test file for app.py'''
 
-from config.message_prompts import DisplayMessage, LogMessage
+from config.string_constants import DisplayMessage, LogMessage
 from app import start_quiz_app
 
 

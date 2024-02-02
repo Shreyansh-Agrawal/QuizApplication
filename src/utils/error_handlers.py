@@ -3,7 +3,7 @@
 import functools
 import logging
 
-from config.message_prompts import ErrorMessage, StatusCodes
+from config.string_constants import ErrorMessage, StatusCodes
 from utils.custom_error import (
     CustomError,
     DataNotFoundError,

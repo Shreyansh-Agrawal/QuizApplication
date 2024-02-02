@@ -4,7 +4,7 @@ import logging
 from typing import Dict, List
 
 from business.quiz_business import QuizBusiness
-from config.message_prompts import Message, StatusCodes
+from config.string_constants import Message, StatusCodes
 from database.database_access import DatabaseAccess
 from utils.custom_response import SuccessMessage
 from utils.error_handlers import handle_custom_errors

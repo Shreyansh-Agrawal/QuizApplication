@@ -4,11 +4,17 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
-from config.message_prompts import Roles
+from config.string_constants import Roles
 from controllers.user_controller import UserController
 from database.database_access import DatabaseAccess
 from schemas.config_schema import ResponseSchema
-from schemas.user import ProfileResponseSchema, UserResponseSchema, UserSchema, UserUpdateSchema, PasswordUpdateSchema
+from schemas.user import (
+    PasswordUpdateSchema,
+    ProfileResponseSchema,
+    UserResponseSchema,
+    UserSchema,
+    UserUpdateSchema
+)
 from utils.rbac import access_level
 
 blp = Blueprint('User', __name__, description='Routes for the User related functionalities')

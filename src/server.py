@@ -29,7 +29,7 @@ from config.flask_configs import (
     set_jwt_configs
 )
 from config.initialize_app import Initializer
-from config.message_prompts import LogMessage
+from config.string_constants import LogMessage
 from database.database_access import DatabaseAccess
 
 logging.basicConfig(

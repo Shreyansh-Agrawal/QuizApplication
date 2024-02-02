@@ -1,7 +1,7 @@
 'Schema for Quiz data'
 
 from marshmallow import fields, validate
-from config.message_prompts import QUESTION_TYPES
+from config.string_constants import QUESTION_TYPES
 
 from config.regex_patterns import RegexPattern
 from schemas.config_schema import CustomSchema, ResponseSchema

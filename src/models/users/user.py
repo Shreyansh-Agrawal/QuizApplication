@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Dict
 
-from config.message_prompts import Roles
+from config.string_constants import Roles
 from utils.id_generator import generate_id
 
 

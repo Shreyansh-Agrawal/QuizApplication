@@ -5,12 +5,18 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
-from config.message_prompts import Roles
+from config.string_constants import Roles
 from controllers.question_controller import QuestionController
 from controllers.user_controller import UserController
 from database.database_access import DatabaseAccess
 from schemas.config_schema import ResponseSchema
-from schemas.question import QuestionSchema, QuizDataSchema, QuestionUpdateSchema, QuestionParamSchema, QuizResponseSchema
+from schemas.question import (
+    QuestionParamSchema,
+    QuestionSchema,
+    QuestionUpdateSchema,
+    QuizDataSchema,
+    QuizResponseSchema
+)
 from utils.rbac import access_level
 
 blp = Blueprint('Question', __name__, description='Routes for the Question related functionalities')

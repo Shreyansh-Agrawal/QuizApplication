@@ -5,7 +5,7 @@ from typing import Dict, List
 
 import mysql.connector
 
-from config.message_prompts import ErrorMessage, Headers, LogMessage, StatusCodes
+from config.string_constants import ErrorMessage, Headers, LogMessage, StatusCodes
 from config.queries import Queries
 from database.database_access import DatabaseAccess
 from models.quiz.category import Category

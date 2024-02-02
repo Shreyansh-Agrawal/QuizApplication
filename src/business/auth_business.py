@@ -6,7 +6,7 @@ from typing import Dict
 import mysql.connector
 from flask_jwt_extended import create_access_token, create_refresh_token
 
-from config.message_prompts import ErrorMessage, LogMessage, StatusCodes
+from config.string_constants import ErrorMessage, LogMessage, StatusCodes
 from config.queries import Queries
 from database.database_access import DatabaseAccess
 from helpers.user_helper import UserHelper
