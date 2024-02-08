@@ -10,6 +10,7 @@ from config.string_constants import (
     ErrorMessage,
     Headers,
     LogMessage,
+    QuestionTypes,
     StatusCodes
 )
 from database.database_access import DatabaseAccess
@@ -27,38 +28,10 @@ class QuestionBusiness:
     def __init__(self, database: DatabaseAccess) -> None:
         self.db = database
 
-    def save_question(self, entity: Question) -> None:
-        '''Adds the question to the database.'''
-
-        question_data = (
-            entity.entity_id,
-            entity.category_id,
-            entity.admin_id,
-            entity.text,
-            entity.question_type
-        )
-        if not entity.options:
-            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.NO_OPTIONS)
-
-        self.db.write(Queries.INSERT_QUESTION, question_data)
-        for option in entity.options:
-            self.__save_option(option)
-
-    def __save_option(self, entity: Option) -> None:
-        '''Adds the option to the database.'''
-
-        option_data = (
-            entity.entity_id,
-            entity.question_id,
-            entity.text,
-            entity.is_correct
-        )
-        self.db.write(Queries.INSERT_OPTION, option_data)
-
     def get_quiz_data(self, category_id: str = None) -> List[Dict]:
         '''Return the quiz data in a specified category or across all categories'''
 
-        logger.debug(LogMessage.GET_QUIZ_DATA)
+        logger.info(LogMessage.GET_QUIZ_DATA)
 
         query = Queries.GET_QUIZ_DATA
         params = ()
@@ -130,7 +103,7 @@ class QuestionBusiness:
     def create_question(self, category_id: str, question_data: Dict, admin_id: str) -> None:
         '''Add Questions in a Category'''
 
-        logger.debug(LogMessage.CREATE_ENTITY, Headers.QUES)
+        logger.info(LogMessage.CREATE_ENTITY, Headers.QUES)
 
         question_data['category_id'] = category_id
         question_data['admin_id'] = admin_id
@@ -151,17 +124,45 @@ class QuestionBusiness:
             option = Option.get_instance(option_data)
             question.add_option(option)
         try:
-            self.save_question(question)
+            self.__save_question(question)
         except mysql.connector.IntegrityError as e:
             logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.QUESTION_EXISTS) from e
 
-        logger.debug(LogMessage.CREATE_SUCCESS, Headers.QUES)
+        logger.info(LogMessage.CREATE_SUCCESS, Headers.QUES)
+
+    def __save_question(self, entity: Question) -> None:
+        '''Adds the question to the database.'''
+
+        question_data = (
+            entity.entity_id,
+            entity.category_id,
+            entity.admin_id,
+            entity.text,
+            entity.question_type
+        )
+        if not entity.options:
+            raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.NO_OPTIONS)
+
+        self.db.write(Queries.INSERT_QUESTION, question_data)
+        for option in entity.options:
+            self.__save_option(option)
+
+    def __save_option(self, entity: Option) -> None:
+        '''Adds the option to the database.'''
+
+        option_data = (
+            entity.entity_id,
+            entity.question_id,
+            entity.text,
+            entity.is_correct
+        )
+        self.db.write(Queries.INSERT_OPTION, option_data)
 
     def post_quiz_data(self, quiz_data: Dict, admin_id: str) -> None:
         '''Posts quiz data to the database'''
 
-        logger.debug(LogMessage.POST_QUIZ_DATA)
+        logger.info(LogMessage.POST_QUIZ_DATA)
 
         # Organize the data into the desired format
         for category_data in quiz_data['quiz_data']:
@@ -170,12 +171,12 @@ class QuestionBusiness:
             try:
                 self.db.write(Queries.INSERT_CATEGORY, (category_id, admin_id, category_name))
             except mysql.connector.IntegrityError as e:
-                logger.debug(e)
+                logger.info(e)
 
             for question_data in category_data['question_data']:
                 question_id = generate_id(entity='question')
                 question_text = question_data['question_text']
-                question_type = question_data['question_type'].upper()
+                question_type = question_data['question_type']
                 answer_id = generate_id(entity='option')
                 answer_text = question_data['options']['answer']
                 try:
@@ -185,19 +186,19 @@ class QuestionBusiness:
                     )
                     self.db.write(Queries.INSERT_OPTION, (answer_id, question_id, answer_text, 1))
 
-                    if question_type.lower() == 'mcq':
+                    if question_type.lower() == QuestionTypes.MCQ:
                         for i in range(3):
                             other_option_id = generate_id(entity='option')
                             other_option = question_data['options']['other_options'][i]
 
                             self.db.write(Queries.INSERT_OPTION, (other_option_id, question_id, other_option, 0))
                 except mysql.connector.IntegrityError as e:
-                    logger.debug(e)
+                    logger.info(e)
 
     def update_question(self, question_id: str, new_ques_text: str) -> None:
         '''Update question text by question id'''
 
-        logger.debug(LogMessage.UPDATE_ENTITY, Headers.QUES)
+        logger.info(LogMessage.UPDATE_ENTITY, Headers.QUES)
 
         try:
             row_affected = self.db.write(Queries.UPDATE_QUESTION_TEXT_BY_ID, (new_ques_text, question_id))
@@ -207,7 +208,7 @@ class QuestionBusiness:
         if not row_affected:
             raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTION_NOT_FOUND)
 
-        logger.debug(LogMessage.UPDATE_SUCCESS, Headers.QUES)
+        logger.info(LogMessage.UPDATE_SUCCESS, Headers.QUES)
 
     def delete_question(self, question_id: str) -> None:
         '''Delete a question and its options by question id'''
@@ -218,4 +219,4 @@ class QuestionBusiness:
         if not row_affected:
             raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.QUESTION_NOT_FOUND)
 
-        logger.debug(LogMessage.DELETE_SUCCESS, Headers.QUES)
+        logger.info(LogMessage.DELETE_SUCCESS, Headers.QUES)

@@ -1,7 +1,7 @@
 'Routes for the Authentication related functionalities'
 
 from flask.views import MethodView
-from flask_jwt_extended import get_jwt, jwt_required
+from flask_jwt_extended import get_jwt, get_jwt_identity, jwt_required
 from flask_smorest import Blueprint
 from config.string_constants import AUTHORIZATION_HEADER
 
@@ -55,8 +55,8 @@ class Logout(MethodView):
 
     def post(self):
         'Logout a logged in user'
-        jti = get_jwt().get('jti')
-        return auth_controller.logout(jti)
+        user_id = get_jwt_identity()
+        return auth_controller.logout(user_id)
 
 
 @blp.route('/refresh')

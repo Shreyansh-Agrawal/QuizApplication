@@ -51,6 +51,7 @@ class DatabaseAccess:
         - Categories
         - Questions
         - Options
+        - Tokens
 
         Returns: 
             None
@@ -63,3 +64,4 @@ class DatabaseAccess:
             cursor.execute(InitializationQueries.CREATE_CATEGORIES_TABLE)
             cursor.execute(InitializationQueries.CREATE_QUESTIONS_TABLE)
             cursor.execute(InitializationQueries.CREATE_OPTIONS_TABLE)
+            cursor.execute(InitializationQueries.CREATE_TOKEN_TABLE)

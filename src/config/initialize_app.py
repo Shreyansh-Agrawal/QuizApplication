@@ -2,10 +2,8 @@
 
 import logging
 import os
-from pathlib import Path
 
 import mysql.connector
-from dotenv import load_dotenv
 
 from config.string_constants import Headers, LogMessage, Roles
 from config.queries import Queries
@@ -13,9 +11,6 @@ from database.database_access import DatabaseAccess
 from helpers.user_helper import UserHelper
 from models.users.super_admin import SuperAdmin
 from utils.password_hasher import hash_password
-
-dotenv_path = Path('.env')
-load_dotenv(dotenv_path=dotenv_path)
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +48,7 @@ class Initializer:
         if user:
             return
 
-        logger.debug(LogMessage.CREATE_ENTITY, Headers.SUPER_ADMIN)
+        logger.info(LogMessage.CREATE_ENTITY, Headers.SUPER_ADMIN)
 
         super_admin_data = {}
         super_admin_data['name'] = os.getenv('SUPER_ADMIN_NAME')
@@ -68,7 +63,7 @@ class Initializer:
         except mysql.connector.IntegrityError as e:
             logger.exception(e)
 
-        logger.debug(LogMessage.CREATE_SUCCESS, Headers.SUPER_ADMIN)
+        logger.info(LogMessage.CREATE_SUCCESS, Headers.SUPER_ADMIN)
 
     def initialize_app(self) -> None:
         '''
@@ -79,4 +74,4 @@ class Initializer:
         self.db.create_tables()
         self.create_super_admin()
 
-        logger.debug(LogMessage.INITIALIZE_APP_SUCCESS)
+        logger.info(LogMessage.INITIALIZE_APP_SUCCESS)

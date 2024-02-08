@@ -3,18 +3,14 @@
 import functools
 import logging
 import os
-from pathlib import Path
 from typing import List
 
-from dotenv import load_dotenv
 from flask_jwt_extended import get_jwt, verify_jwt_in_request
 
 from config.string_constants import ErrorMessage, Roles, StatusCodes
 from utils.custom_error import CustomError
 
 logger = logging.getLogger(__name__)
-dotenv_path = Path('.env')
-load_dotenv(dotenv_path=dotenv_path)
 
 ROLE_MAPPING = {
     Roles.SUPER_ADMIN: os.getenv('SUPER_ADMIN_MAPPING'),

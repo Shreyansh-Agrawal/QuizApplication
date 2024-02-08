@@ -118,7 +118,7 @@ class LogMessage:
     LOGIN_INITIATED = 'Login Initiated'
     LOGIN_SUCCESS = 'Login Successful'
     LOGOUT_INITIATED = 'Logout Initiated'
-    LOGOUT_SUCCESS = 'Logout Successful, Token added to blocklist'
+    LOGOUT_SUCCESS = 'Logout Successful, Token revoked'
     SIGNUP_INITIATED = 'Signup Initiated'
     SIGNUP_SUCCESS = 'Signup Successful'
     SYSTEM_START = 'System Started'
@@ -222,7 +222,33 @@ class StatusCodes:
     INTERNAL_SERVER_ERROR = INFO(code=500, status='Internal Server Error')
 
 
-QUESTION_TYPES = ['mcq', 't/f', 'one word', 'MCQ', 'T/F', 'ONE WORD']
+class QuestionTypes:
+    '''Contains all the question types'''
+
+    MCQ = 'mcq'
+    TRUE_FALSE = 'true-false'
+    ONE_WORD = 'one-word'
+
+
+class PasswordTypes:
+    '''Contains password types'''
+
+    PERMANENT = 'permanent'
+    DEFAULT = 'default'
+
+
+class TokenInfo:
+    'Contains token related constants'
+
+    status = {
+        'active': True,
+        'revoked': False
+    }
+    TYPE_ACCESS = 'access'
+    TYPE_REFRESH = 'refresh'
+
+
+QUESTION_TYPES = [QuestionTypes.MCQ, QuestionTypes.TRUE_FALSE, QuestionTypes.ONE_WORD]
 
 
 AUTHORIZATION_HEADER = {

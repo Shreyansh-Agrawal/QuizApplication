@@ -17,16 +17,16 @@ class TestQuizController:
     old_category_name = 'test_old_category'
     username = 'test_username'
     question_data = [
-        ('Q030', 'What is the result of 6 squared?', 'ONE WORD', '36'),
+        ('Q030', 'What is the result of 6 squared?', 'one-word', '36'),
         ('Q108', 'Which strait separates Europe from Asia?', 'MCQ', 'Bosporus Strait'),
         ('Q110', 'Which river is often called the "Cradle of Civilization"?', 'MCQ', 'Tigris and Euphrates'),
-        ('Q043', 'What is the value of the mathematical constant "π" (pi) to two decimal places?', 'ONE WORD', '3.14'),
-        ('Q029', 'What is the next prime number after 7?', 'ONE WORD', '11'),
+        ('Q043', 'What is the value of the mathematical constant "π" (pi) to two decimal places?', 'one-word', '3.14'),
+        ('Q029', 'What is the next prime number after 7?', 'one-word', '11'),
         ('Q104', 'Which mountain range is considered the "Roof of the World"?', 'MCQ', 'Himalayas'),
         ('Q115', 'Which African country is located at the southernmost tip of the continent?', 'MCQ', 'South Africa'),
-        ('Q011', 'The process of converting sugar into alcohol is known as what?', 'ONE WORD', 'Fermentation'),
-        ('Q009', 'How many bones are there in the adult human body?', 'ONE WORD', '206'),
-        ('Q015', 'Is water a conductor of electricity? (True/False)', 'T/F', 'True')
+        ('Q011', 'The process of converting sugar into alcohol is known as what?', 'one-word', 'Fermentation'),
+        ('Q009', 'How many bones are there in the adult human body?', 'one-word', '206'),
+        ('Q015', 'Is water a conductor of electricity? (True/False)', 'true-false', 'True')
     ]
     option_data = [
         [('36',)],

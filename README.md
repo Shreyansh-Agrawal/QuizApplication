@@ -21,6 +21,7 @@ JWT_SECRET_KEY=YourSecretKey
 SUPER_ADMIN_MAPPING=YourSuperAdminMapping
 ADMIN_MAPPING=YourAdminMapping
 PLAYER_MAPPING=YourPlayerMapping
+LOG_TAIL_TOKEN=YourSourceToken
 ```
 
 ### Prerequisites
@@ -87,13 +88,13 @@ QuizApplication/
 │   │   ├── quiz_business.py
 │   │   ├── user_business.py
 │   ├── config/
-│   │   ├── file_paths.py
-│   │   ├── flask_config.py
+│   │   ├── flask_configs.py
 │   │   ├── initialize_app.py
-│   │   ├── message_prompts.py
+│   │   ├── log_configs.py
 │   │   ├── queries.py
 │   │   ├── quiz_data.json
 │   │   ├── regex_patterns.py
+│   │   ├── string_constants.py
 │   ├── controllers/
 │   │   ├── auth_controller.py
 │   │   ├── category_controller.py
@@ -128,7 +129,6 @@ QuizApplication/
 │   │   ├── quiz.py
 │   │   ├── user.py
 │   ├── utils/
-│   │   ├── blocklist.py
 │   │   ├── custom_error.py
 │   │   ├── custom_response.py
 │   │   ├── error_handlers.py

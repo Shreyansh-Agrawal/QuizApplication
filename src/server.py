@@ -29,15 +29,9 @@ from config.flask_configs import (
     set_jwt_configs
 )
 from config.initialize_app import Initializer
+from config.log_configs import set_log_configs
 from config.string_constants import LogMessage
 from database.database_access import DatabaseAccess
-
-logging.basicConfig(
-    format='%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)-d] %(message)s',
-    datefmt='%d-%m-%Y %H:%M:%S',
-    level=logging.DEBUG,
-    filename='logs.log'
-)
 
 logger = logging.getLogger(__name__)
 dotenv_path = Path('.env')
@@ -53,6 +47,7 @@ def create_app():
     Initializer(db).initialize_app()
     app = Flask(__name__)
 
+    set_log_configs()
     set_app_configs(app)
     register_error_handlers(app)
     set_jwt_configs(app)
