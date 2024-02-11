@@ -17,6 +17,7 @@ from routes.user_routes import blp as UserBlueprint
 from utils.custom_error import CustomError, ValidationError
 from utils.error_handlers import (
     handle_bad_request,
+    handle_invalid_url,
     handle_internal_server_error,
     handle_validation_error
 )
@@ -56,6 +57,7 @@ def register_error_handlers(app):
     'Register error handlers'
 
     app.register_error_handler(400, handle_bad_request)
+    app.register_error_handler(404, handle_invalid_url)
     app.register_error_handler(ValidationError, handle_validation_error)
     app.register_error_handler(Exception, handle_internal_server_error)
 

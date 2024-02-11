@@ -5,6 +5,7 @@ from dataclasses import astuple
 import mysql.connector
 
 from config.queries import Queries
+from config.string_constants import ErrorMessage
 from models.users.user import User
 
 
@@ -34,8 +35,8 @@ class UserHelper:
         '''
         user_data = astuple(entity)[:5]
         credentials = (astuple(entity)[0], ) + astuple(entity)[5:]
-        # username = self.db.read(Queries.GET_USERNAME, (entity.username, ))
-        # if username:
-        #     raise mysql.connector.IntegrityError
+        username = self.db.read(Queries.GET_USERNAME, (entity.username, ))
+        if username:
+            raise mysql.connector.IntegrityError(ErrorMessage.USER_EXISTS)
         self.db.write(Queries.INSERT_USER_DATA, user_data)
         self.db.write(Queries.INSERT_CREDENTIALS, credentials)

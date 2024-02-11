@@ -166,6 +166,7 @@ class LogMessage:
     EVALUATE_RESPONSE = 'Evaluating answers for player_id: %s'
     GET_QUES_FOR_QUIZ = 'Fetching questions for quiz'
     GET_SCORES = 'Fetching scores for player_id: %s'
+    FUNCTION_CALL = 'method: %s() called in module: %s.py'
 
 
 class ErrorMessage:
@@ -198,6 +199,7 @@ class ErrorMessage:
     SERVER_ERROR = 'Something went wrong'
     BAD_REQUEST = 'Invalid request syntax'
     FORBIDDEN = 'Access denied'
+    INVALID_URL = 'Invalid URL'
 
 
 class Roles:

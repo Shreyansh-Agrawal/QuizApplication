@@ -3,7 +3,7 @@
 import functools
 import logging
 
-from config.string_constants import ErrorMessage, StatusCodes
+from config.string_constants import ErrorMessage, LogMessage, StatusCodes
 from utils.custom_error import (
     CustomError,
     DataNotFoundError,
@@ -22,12 +22,22 @@ def handle_bad_request(err):
     error = CustomError(status=StatusCodes.BAD_REQUEST, message=ErrorMessage.BAD_REQUEST)
     return error.error_info, error.code
 
+
+def handle_invalid_url(err):
+    '''Function to handle invalid url'''
+
+    logger.exception(err)
+    error = CustomError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.INVALID_URL)
+    return error.error_info, error.code
+
+
 def handle_validation_error(err):
     '''Function to handle validation errors'''
 
     logger.exception(err)
     error = CustomError(status=StatusCodes.UNPROCESSABLE_ENTITY, message=str(err.message))
     return error.error_info, error.code
+
 
 def handle_internal_server_error(err):
     '''Function to handle server side errors'''
@@ -44,6 +54,7 @@ def handle_custom_errors(func):
     def wrapper(*args, **kwargs):
 
         try:
+            logger.info(LogMessage.FUNCTION_CALL, func.__name__, func.__module__)
             res = func(*args, **kwargs)
 
         except DuplicateEntryError as e:
