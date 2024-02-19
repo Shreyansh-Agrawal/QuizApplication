@@ -3,7 +3,7 @@
 import logging
 import os
 
-import mysql.connector
+import pymysql
 
 from config.queries import InitializationQueries
 

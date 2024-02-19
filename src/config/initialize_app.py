@@ -3,7 +3,7 @@
 import logging
 import os
 
-import mysql.connector
+import pymysql
 
 from config.string_constants import Headers, LogMessage, Roles
 from config.queries import Queries
@@ -60,7 +60,7 @@ class Initializer:
 
         try:
             self.user_helper.save_user(super_admin)
-        except mysql.connector.IntegrityError as e:
+        except pymysql.IntegrityError as e:
             logger.exception(e)
 
         logger.info(LogMessage.CREATE_SUCCESS, Headers.SUPER_ADMIN)

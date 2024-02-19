@@ -43,7 +43,7 @@ class CategoryBusiness:
         category = Category.get_instance(category_data)
         try:
             self.__save_category(category)
-        except mysql.connector.IntegrityError as e:
+        except pymysql.IntegrityError as e:
             logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
 
@@ -66,7 +66,7 @@ class CategoryBusiness:
 
         try:
             row_affected = self.db.write(Queries.UPDATE_CATEGORY_BY_ID, (new_category_name, category_id))
-        except mysql.connector.IntegrityError as e:
+        except pymysql.IntegrityError as e:
             logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
         if not row_affected:

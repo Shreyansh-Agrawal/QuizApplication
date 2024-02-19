@@ -62,7 +62,7 @@ class UserBusiness:
         admin = Admin.get_instance(admin_data)
         try:
             self.user_helper.save_user(admin)
-        except mysql.connector.IntegrityError as e:
+        except pymysql.IntegrityError as e:
             logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.USER_EXISTS) from e
 
@@ -76,12 +76,12 @@ class UserBusiness:
         name, email, username = user_data['name'], user_data['email'], user_data['username']
         try:
             self.db.write(Queries.UPDATE_USER_PROFILE, (name, email, user_id))
-        except mysql.connector.IntegrityError as e:
+        except pymysql.IntegrityError as e:
             logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.EMAIL_TAKEN) from e
         try:
             self.db.write(Queries.UPDATE_USERNAME, (username, user_id))
-        except mysql.connector.IntegrityError as e:
+        except pymysql.IntegrityError as e:
             logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.USERNAME_TAKEN) from e
 

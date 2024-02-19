@@ -3,7 +3,7 @@
 import logging
 from typing import Dict, Tuple
 
-import mysql.connector
+import pymysql
 
 from config.queries import Queries
 from config.string_constants import ErrorMessage, LogMessage, StatusCodes, PasswordTypes
@@ -70,7 +70,7 @@ class AuthBusiness:
         player = Player.get_instance(player_data)
         try:
             self.user_helper.save_user(player)
-        except mysql.connector.IntegrityError as e:
+        except pymysql.IntegrityError as e:
             logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.USER_EXISTS) from e
 

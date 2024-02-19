@@ -125,7 +125,7 @@ class QuestionBusiness:
             question.add_option(option)
         try:
             self.__save_question(question)
-        except mysql.connector.IntegrityError as e:
+        except pymysql.IntegrityError as e:
             logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.QUESTION_EXISTS) from e
 
@@ -170,7 +170,7 @@ class QuestionBusiness:
             category_name = category_data['category']
             try:
                 self.db.write(Queries.INSERT_CATEGORY, (category_id, admin_id, category_name))
-            except mysql.connector.IntegrityError as e:
+            except pymysql.IntegrityError as e:
                 logger.info(e)
             except pymysql.err.IntegrityError as e:
                 logger.debug(e)
@@ -194,7 +194,7 @@ class QuestionBusiness:
                             other_option = question_data['options']['other_options'][i]
 
                             self.db.write(Queries.INSERT_OPTION, (other_option_id, question_id, other_option, 0))
-                except mysql.connector.IntegrityError as e:
+                except pymysql.IntegrityError as e:
                     logger.info(e)
 
     def update_question(self, question_id: str, new_ques_text: str) -> None:
@@ -204,7 +204,7 @@ class QuestionBusiness:
 
         try:
             row_affected = self.db.write(Queries.UPDATE_QUESTION_TEXT_BY_ID, (new_ques_text, question_id))
-        except mysql.connector.IntegrityError as e:
+        except pymysql.IntegrityError as e:
             logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.QUESTION_EXISTS) from e
         if not row_affected:
