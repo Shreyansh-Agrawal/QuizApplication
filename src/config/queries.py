@@ -53,6 +53,15 @@ class InitializationQueries:
             role VARCHAR(20),
             registration_date VARCHAR(10)
         )'''
+    CREATE_TOKEN_TABLE = '''
+        CREATE TABLE IF NOT EXISTS tokens (
+            user_id VARCHAR(10),
+            access_token VARCHAR(100) PRIMARY KEY,
+            refresh_token VARCHAR(100) UNIQUE NOT NULL,
+            status VARCHAR(20) DEFAULT "active",
+            FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE CASCADE
+        )
+    '''
 
 
 class Queries:
@@ -64,6 +73,7 @@ class Queries:
     INSERT_QUESTION = 'INSERT INTO questions VALUES (%s, %s, %s, %s, %s)'
     INSERT_USER_DATA = 'INSERT INTO users VALUES (%s, %s, %s, %s, %s)'
     INSERT_PLAYER_QUIZ_SCORE = 'INSERT INTO scores VALUES (%s, %s, %s, %s)'
+    INSERT_TOKEN_DATA = 'INSERT INTO tokens (user_id, access_token, refresh_token) VALUES (%s, %s, %s)'
     GET_USERNAME = 'SELECT username FROM credentials WHERE username = %s'
     GET_ALL_CATEGORIES = '''
         SELECT *
@@ -153,6 +163,8 @@ class Queries:
         LEFT JOIN options o ON q.question_id = o.question_id AND o.isCorrect = 1
         WHERE q.question_id IN (%s)
     '''
+    GET_ACCESS_TOKEN_STATUS = 'SELECT status FROM tokens WHERE access_token = %s'
+    GET_REFRESH_TOKEN_STATUS = 'SELECT status FROM tokens WHERE refresh_token = %s'
     UPDATE_ADMIN_PASSWORD_BY_USERNAME = '''
         UPDATE credentials 
         SET password = %s, isPasswordChanged = %s 
@@ -164,6 +176,7 @@ class Queries:
     UPDATE_USER_PROFILE = 'UPDATE users SET name = %s, email = %s WHERE user_id = %s'
     UPDATE_USERNAME = 'UPDATE credentials SET username = %s WHERE user_id = %s'
     UPDATE_USER_PASSWORD = 'UPDATE credentials SET password = %s, isPasswordChanged = 1 WHERE user_id = %s'
+    UPDATE_TOKEN_STATUS = 'UPDATE tokens SET status = "revoked" WHERE user_id = %s'
     DELETE_CATEGORY_BY_NAME = 'DELETE FROM categories WHERE category_name = %s'
     DELETE_CATEGORY_BY_ID = 'DELETE FROM categories WHERE category_id = %s'
     DELETE_QUESTION_BY_ID = 'DELETE FROM questions WHERE question_id = %s'

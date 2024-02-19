@@ -28,7 +28,7 @@ class CategoryBusiness:
     def get_all_categories(self) -> List[Dict]:
         '''Return all Quiz Categories'''
 
-        logger.debug(LogMessage.GET_ALL_CATEGORIES)
+        logger.info(LogMessage.GET_ALL_CATEGORIES)
 
         data = self.db.read(Queries.GET_ALL_CATEGORIES)
         if not data:
@@ -38,7 +38,7 @@ class CategoryBusiness:
     def create_category(self, category_data: Dict) -> None:
         '''Add a Quiz Category'''
 
-        logger.debug(LogMessage.CREATE_ENTITY, Headers.CATEGORY)
+        logger.info(LogMessage.CREATE_ENTITY, Headers.CATEGORY)
 
         category = Category.get_instance(category_data)
         try:
@@ -47,7 +47,7 @@ class CategoryBusiness:
             logger.exception(e)
             raise DuplicateEntryError(status=StatusCodes.CONFLICT, message=ErrorMessage.CATEGORY_EXISTS) from e
 
-        logger.debug(LogMessage.CREATE_SUCCESS, Headers.CATEGORY)
+        logger.info(LogMessage.CREATE_SUCCESS, Headers.CATEGORY)
 
     def __save_category(self, entity: Category) -> None:
         '''Adds the category to the database.'''
@@ -62,7 +62,7 @@ class CategoryBusiness:
     def update_category(self, category_id: str, new_category_name: str) -> None:
         '''Update a category name by category id'''
 
-        logger.debug(LogMessage.UPDATE_ENTITY, Headers.CATEGORY)
+        logger.info(LogMessage.UPDATE_ENTITY, Headers.CATEGORY)
 
         try:
             row_affected = self.db.write(Queries.UPDATE_CATEGORY_BY_ID, (new_category_name, category_id))
@@ -72,7 +72,7 @@ class CategoryBusiness:
         if not row_affected:
             raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.CATEGORY_NOT_FOUND)
 
-        logger.debug(LogMessage.UPDATE_CATEGORY_SUCCESS, category_id, new_category_name)
+        logger.info(LogMessage.UPDATE_CATEGORY_SUCCESS, category_id, new_category_name)
 
     def delete_category(self, category_id: str) -> None:
         '''Delete a category by category id'''
@@ -83,4 +83,4 @@ class CategoryBusiness:
         if not row_affected:
             raise DataNotFoundError(status=StatusCodes.NOT_FOUND, message=ErrorMessage.CATEGORY_NOT_FOUND)
 
-        logger.debug(LogMessage.DELETE_CATEGORY_SUCCESS, category_id)
+        logger.info(LogMessage.DELETE_CATEGORY_SUCCESS, category_id)

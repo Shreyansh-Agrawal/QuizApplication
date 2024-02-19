@@ -146,7 +146,7 @@ def sample_json_data():
             {
                 "question_id": "Q001",
                 "question_text": "What is the chemical symbol for water?",
-                "question_type": "one word",
+                "question_type": "one-word",
                 "category_id": "C002",
                 "category": "Science",
                 "admin_id": "A002",

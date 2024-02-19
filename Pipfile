@@ -16,6 +16,7 @@ flask-smorest = "*"
 gunicorn = "*"
 pymysql = "*"
 cryptography = "*"
+logtail-python = "*"
 
 [dev-packages]
 

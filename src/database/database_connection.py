@@ -2,14 +2,11 @@
 
 import logging
 import os
-from pathlib import Path
-import pymysql
-from dotenv import load_dotenv
+
+import mysql.connector
 
 from config.queries import InitializationQueries
 
-dotenv_path = Path('.env')
-load_dotenv(dotenv_path=dotenv_path)
 logger = logging.getLogger(__name__)
 
 

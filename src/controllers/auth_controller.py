@@ -34,10 +34,10 @@ class AuthController:
         return SuccessMessage(status=StatusCodes.CREATED, message=Message.SIGNUP_SUCCESS).message_info
 
     @handle_custom_errors
-    def logout(self, token_id: str):
+    def logout(self, user_id: str):
         '''Method to logout an authenticated user'''
 
-        self.auth_business.logout(token_id)
+        self.auth_business.logout(user_id)
         return SuccessMessage(status=StatusCodes.OK, message=Message.LOGOUT_SUCCESS).message_info
 
     @handle_custom_errors

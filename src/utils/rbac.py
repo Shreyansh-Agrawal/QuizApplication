@@ -3,18 +3,14 @@
 import functools
 import logging
 import os
-from pathlib import Path
 from typing import List
 
-from dotenv import load_dotenv
 from flask_jwt_extended import get_jwt, verify_jwt_in_request
 
-from config.string_constants import ErrorMessage, Roles, StatusCodes
+from config.string_constants import ErrorMessage, LogMessage, Roles, StatusCodes
 from utils.custom_error import CustomError
 
 logger = logging.getLogger(__name__)
-dotenv_path = Path('.env')
-load_dotenv(dotenv_path=dotenv_path)
 
 ROLE_MAPPING = {
     Roles.SUPER_ADMIN: os.getenv('SUPER_ADMIN_MAPPING'),
@@ -34,12 +30,12 @@ def access_level(roles: List, check_fresh=False):
             claims = get_jwt()
             mapped_roles = [ROLE_MAPPING.get(role) for role in roles]
 
-            if claims["cap"] in mapped_roles:
-                return func(*args, **kwargs)
+            if claims["cap"] not in mapped_roles:
+                error = CustomError(status=StatusCodes.FORBIDDEN, message=ErrorMessage.FORBIDDEN)
+                return error.error_info, error.code
 
-            error = CustomError(status=StatusCodes.FORBIDDEN, message=ErrorMessage.FORBIDDEN)
-            logger.error(error.message)
-            return error.error_info, error.code
+            logger.info(LogMessage.FUNCTION_CALL, func.__name__, func.__module__)
+            return func(*args, **kwargs)
 
         return wrapper
 
