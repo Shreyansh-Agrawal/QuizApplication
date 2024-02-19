@@ -7,3 +7,4 @@ flask
 flask-jwt-extended
 flask-smorest
 gunicorn
+logtail-python
