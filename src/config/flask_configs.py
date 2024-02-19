@@ -59,7 +59,7 @@ def register_error_handlers(app):
     app.register_error_handler(400, handle_bad_request)
     app.register_error_handler(404, handle_invalid_url)
     app.register_error_handler(ValidationError, handle_validation_error)
-    app.register_error_handler(Exception, handle_internal_server_error)
+    # app.register_error_handler(Exception, handle_internal_server_error)
 
 
 def set_jwt_configs(app):
