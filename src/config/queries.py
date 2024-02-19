@@ -97,9 +97,9 @@ class Queries:
             q.question_type,
             o.option_text,
             o.isCorrect
-        FROM Categories c
-        JOIN Questions q ON c.category_id = q.category_id
-        LEFT JOIN Options o ON q.question_id = o.question_id
+        FROM categories c
+        JOIN questions q ON c.category_id = q.category_id
+        LEFT JOIN options o ON q.question_id = o.question_id
     '''
     GET_CATEGORY_ID_BY_NAME = 'SELECT category_id FROM categories WHERE category_name = %s'
     GET_CREDENTIALS_BY_USERNAME = '''
@@ -126,8 +126,8 @@ class Queries:
     '''
     GET_RANDOM_QUESTIONS_BY_CATEGORY = '''
         SELECT q.question_id, q.question_text, q.question_type, GROUP_CONCAT(o.option_text) as options
-        FROM Questions q
-        LEFT JOIN Options o ON q.question_id = o.question_id
+        FROM questions q
+        LEFT JOIN options o ON q.question_id = o.question_id
         WHERE (q.category_id = %s OR %s IS NULL OR q.category_id IS NULL)
         AND (q.question_type = %s OR %s IS NULL OR q.question_type IS NULL)
         GROUP BY q.question_id
