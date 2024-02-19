@@ -135,8 +135,10 @@ class Queries:
     '''
     GET_USER_BY_ROLE = '''
         SELECT users.user_id, username, name, email, registration_date
-        FROM users INNER JOIN credentials ON users.user_id = credentials.user_id
+        FROM users 
+        INNER JOIN credentials ON users.user_id = credentials.user_id
         WHERE role = %s
+        ORDER BY username
     '''
     GET_USER_BY_USER_ID = '''
         SELECT username, name, email, registration_date
